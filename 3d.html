@@ -185,6 +185,34 @@
         function animate() {
             // requestAnimationFrame creates a smooth animation loop.
             requestAnimationFrame(animate);
+            
+            // --- Apply Inertia ---
+            // Continue rotation even when not dragging
+            if (!isLeftMouseDown && (Math.abs(rotationVelocity.x) > 0.001 || Math.abs(rotationVelocity.y) > 0.001)) {
+                const deltaRotationQuaternion = new THREE.Quaternion()
+                    .setFromEuler(new THREE.Euler(
+                        toRadians(rotationVelocity.x * 50), // Scale up for smooth animation
+                        toRadians(rotationVelocity.y * 50),
+                        0,
+                        'XYZ'
+                    ));
+                cube.quaternion.multiplyQuaternions(deltaRotationQuaternion, cube.quaternion);
+                
+                // Apply friction to gradually slow down rotation
+                rotationVelocity.x *= friction;
+                rotationVelocity.y *= friction;
+            }
+            
+            // Continue position movement even when not dragging
+            if (!isRightMouseDown && (Math.abs(positionVelocity.x) > 0.0001 || Math.abs(positionVelocity.y) > 0.0001)) {
+                cube.position.x += positionVelocity.x * 20; // Scale up for smooth animation
+                cube.position.y += positionVelocity.y * 20;
+                
+                // Apply friction to gradually slow down movement
+                positionVelocity.x *= friction;
+                positionVelocity.y *= friction;
+            }
+            
             // Render the scene from the perspective of the camera.
             renderer.render(scene, camera);
         }
