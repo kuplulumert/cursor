@@ -553,29 +553,22 @@
                 </button>
             </div>
 
-            <!-- Mesh Properties -->
+            <!-- Cube Properties -->
             <div class="control-section">
-                <div class="section-title">Mesh Geometry</div>
+                <div class="section-title">Cube Geometry</div>
                 <div class="control-group">
                     <div class="control-item">
-                        <label class="control-label">Geometry Type</label>
-                        <select class="select" id="geometrySelect">
-                            <option value="cube">Cube (8 vertices, 12 faces)</option>
-                            <option value="sphere">Sphere (UV mapped)</option>
-                            <option value="icosahedron">Icosahedron (20 faces)</option>
-                            <option value="dodecahedron">Dodecahedron (12 faces)</option>
-                            <option value="octahedron">Octahedron (8 faces)</option>
-                            <option value="tetrahedron">Tetrahedron (4 faces)</option>
-                            <option value="torus">Torus (ring shape)</option>
-                            <option value="cylinder">Cylinder</option>
-                            <option value="cone">Cone</option>
-                        </select>
+                        <label class="control-label">Mesh Size (segments per side)</label>
+                        <input type="range" class="slider" id="meshSizeSlider" min="1" max="20" step="1" value="1">
+                        <div style="font-size: 0.75rem; color: var(--gray-500); margin-top: 0.25rem;">
+                            Segments: <span id="meshSizeValue">1</span> × <span id="meshSizeValue2">1</span> × <span id="meshSizeValue3">1</span>
+                        </div>
                     </div>
                     <div class="control-item">
-                        <label class="control-label">Subdivision Level</label>
-                        <input type="range" class="slider" id="subdivisionSlider" min="0" max="3" step="1" value="0">
+                        <label class="control-label">Cube Size</label>
+                        <input type="range" class="slider" id="cubeSizeSlider" min="0.5" max="4" step="0.1" value="2">
                         <div style="font-size: 0.75rem; color: var(--gray-500); margin-top: 0.25rem;">
-                            Level: <span id="subdivisionValue">0</span>
+                            Size: <span id="cubeSizeValue">2.0</span> units
                         </div>
                     </div>
                 </div>
@@ -585,6 +578,13 @@
             <div class="control-section">
                 <div class="section-title">Display Options</div>
                 <div class="control-group">
+                    <div class="control-item">
+                        <label class="control-label">Transparency</label>
+                        <input type="range" class="slider" id="transparencySlider" min="0" max="100" step="5" value="20">
+                        <div style="font-size: 0.75rem; color: var(--gray-500); margin-top: 0.25rem;">
+                            Opacity: <span id="transparencyValue">80</span>%
+                        </div>
+                    </div>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="wireframeCheck" class="checkbox" checked>
@@ -652,7 +652,7 @@
                 <!-- Info Panel -->
                 <div class="info-panel">
                     <div class="info-title">Mesh Information</div>
-                    <div class="info-grid">
+                                         <div class="info-grid">
                         <div class="info-item">
                             <div class="info-label">Vertices</div>
                             <div class="info-value" id="verticesCount">8</div>
@@ -662,8 +662,8 @@
                             <div class="info-value" id="facesCount">12</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">Triangles</div>
-                            <div class="info-value" id="trianglesCount">12</div>
+                            <div class="info-label">Elements</div>
+                            <div class="info-value" id="elementsCount">1</div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">FPS</div>
@@ -776,7 +776,12 @@
         let positionVelocity = { x: 0, y: 0 };
         let autoRotate = false;
         
-        // Parameters
+        // Cube parameters
+        let meshSize = 1;
+        let cubeSize = 2.0;
+        let transparency = 0.8; // 80% opacity (20% transparency)
+        
+        // Interaction parameters
         let rotationSpeed = 1;
         let sensitivity = 1;
         let damping = 0.95;
@@ -815,8 +820,8 @@
             // Lighting
             setupLighting();
 
-            // Create initial mesh
-            createMesh('cube');
+            // Create initial cube mesh
+            createCubeMesh();
 
             // Event listeners
             setupEventListeners();
@@ -849,7 +854,7 @@
             scene.add(fillLight);
         }
 
-        function createMesh(geometryType, subdivisions = 0) {
+        function createCubeMesh() {
             // Remove existing meshes
             if (mesh) scene.remove(mesh);
             if (wireframeMesh) scene.remove(wireframeMesh);
@@ -859,45 +864,14 @@
                 normalHelpers = [];
             }
 
-            let geometry;
-
-            switch(geometryType) {
-                case 'cube':
-                    geometry = new THREE.BoxGeometry(2, 2, 2, subdivisions+1, subdivisions+1, subdivisions+1);
-                    break;
-                case 'sphere':
-                    geometry = new THREE.SphereGeometry(1.5, 8 + subdivisions*8, 6 + subdivisions*6);
-                    break;
-                case 'icosahedron':
-                    geometry = new THREE.IcosahedronGeometry(1.5, subdivisions);
-                    break;
-                case 'dodecahedron':
-                    geometry = new THREE.DodecahedronGeometry(1.5, subdivisions);
-                    break;
-                case 'octahedron':
-                    geometry = new THREE.OctahedronGeometry(1.5, subdivisions);
-                    break;
-                case 'tetrahedron':
-                    geometry = new THREE.TetrahedronGeometry(1.5, subdivisions);
-                    break;
-                case 'torus':
-                    geometry = new THREE.TorusGeometry(1.2, 0.4, 8 + subdivisions*4, 16 + subdivisions*8);
-                    break;
-                case 'cylinder':
-                    geometry = new THREE.CylinderGeometry(1, 1, 2, 8 + subdivisions*8);
-                    break;
-                case 'cone':
-                    geometry = new THREE.ConeGeometry(1, 2, 8 + subdivisions*8);
-                    break;
-                default:
-                    geometry = new THREE.BoxGeometry(2, 2, 2);
-            }
+            // Create cube geometry with current parameters
+            const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize, meshSize, meshSize, meshSize);
 
             // Main mesh (faces)
             const material = new THREE.MeshLambertMaterial({ 
                 color: 0x4a90e2,
                 transparent: true,
-                opacity: 0.8
+                opacity: transparency
             });
             mesh = new THREE.Mesh(geometry, material);
             mesh.castShadow = true;
@@ -909,7 +883,7 @@
                 color: 0x2563eb,
                 wireframe: true,
                 transparent: true,
-                opacity: 0.7
+                opacity: 0.8
             });
             wireframeMesh = new THREE.Mesh(geometry.clone(), wireframeMaterial);
             scene.add(wireframeMesh);
@@ -939,28 +913,22 @@
         function updateMeshInfo(geometry) {
             const vertices = geometry.attributes.position.count;
             const faces = geometry.index ? geometry.index.count / 3 : vertices / 3;
+            const elements = meshSize * meshSize * meshSize; // Number of cube elements
 
             document.getElementById('verticesCount').textContent = vertices;
             document.getElementById('facesCount').textContent = Math.floor(faces);
-            document.getElementById('trianglesCount').textContent = Math.floor(faces);
+            document.getElementById('elementsCount').textContent = elements;
 
-            // Calculate approximate values for educational purposes
-            if (geometry.type === 'BoxGeometry') {
-                document.getElementById('surfaceArea').textContent = '24.00';
-                document.getElementById('volume').textContent = '8.00';
-                document.getElementById('boundingBox').textContent = '2×2×2';
-                document.getElementById('eulerChar').textContent = '2';
-                document.getElementById('genus').textContent = '0';
-            } else if (geometry.type === 'SphereGeometry') {
-                const r = 1.5;
-                document.getElementById('surfaceArea').textContent = (4 * Math.PI * r * r).toFixed(2);
-                document.getElementById('volume').textContent = (4/3 * Math.PI * r * r * r).toFixed(2);
-                document.getElementById('boundingBox').textContent = '3×3×3';
-                document.getElementById('eulerChar').textContent = '2';
-                document.getElementById('genus').textContent = '0';
-            }
+            // Calculate values for cube
+            const surfaceArea = 6 * cubeSize * cubeSize;
+            const volume = cubeSize * cubeSize * cubeSize;
             
+            document.getElementById('surfaceArea').textContent = surfaceArea.toFixed(2);
+            document.getElementById('volume').textContent = volume.toFixed(2);
+            document.getElementById('boundingBox').textContent = `${cubeSize.toFixed(1)}×${cubeSize.toFixed(1)}×${cubeSize.toFixed(1)}`;
             document.getElementById('centroid').textContent = '(0,0,0)';
+            document.getElementById('eulerChar').textContent = '2';
+            document.getElementById('genus').textContent = '0';
             document.getElementById('manifold').textContent = 'Yes';
             document.getElementById('watertight').textContent = 'Yes';
         }
@@ -980,17 +948,32 @@
         }
 
         function setupUI() {
-            // Geometry selector
-            document.getElementById('geometrySelect').addEventListener('change', (e) => {
-                const subdivisions = parseInt(document.getElementById('subdivisionSlider').value);
-                createMesh(e.target.value, subdivisions);
+            // Cube mesh size slider
+            document.getElementById('meshSizeSlider').addEventListener('input', (e) => {
+                meshSize = parseInt(e.target.value);
+                document.getElementById('meshSizeValue').textContent = meshSize;
+                document.getElementById('meshSizeValue2').textContent = meshSize;
+                document.getElementById('meshSizeValue3').textContent = meshSize;
+                createCubeMesh();
             });
 
-            // Subdivision slider
-            document.getElementById('subdivisionSlider').addEventListener('input', (e) => {
-                document.getElementById('subdivisionValue').textContent = e.target.value;
-                const geometryType = document.getElementById('geometrySelect').value;
-                createMesh(geometryType, parseInt(e.target.value));
+            // Cube size slider
+            document.getElementById('cubeSizeSlider').addEventListener('input', (e) => {
+                cubeSize = parseFloat(e.target.value);
+                document.getElementById('cubeSizeValue').textContent = cubeSize.toFixed(1);
+                createCubeMesh();
+            });
+
+            // Transparency slider
+            document.getElementById('transparencySlider').addEventListener('input', (e) => {
+                const transparencyPercent = parseInt(e.target.value);
+                transparency = (100 - transparencyPercent) / 100; // Convert to opacity
+                document.getElementById('transparencyValue').textContent = (100 - transparencyPercent);
+                
+                // Update mesh material opacity
+                if (mesh) {
+                    mesh.material.opacity = transparency;
+                }
             });
 
             // Display checkboxes
