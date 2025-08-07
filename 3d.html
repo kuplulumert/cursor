@@ -149,6 +149,14 @@
             </div>
         </div>
 
+        <div class="control-group">
+            <div class="control-title">Display</div>
+            <div class="control-item">
+                <label class="control-label">Transparency</label>
+                <input type="range" class="slider" id="transparency" min="0" max="90" step="5" value="15">
+                <div class="slider-value">Opacity: <span id="transparencyValue">85</span>%</div>
+            </div>
+        </div>
 
     </div>
 
@@ -247,13 +255,70 @@
             animate();
         }
 
+        function createTetrahedralMesh() {
+            // Create a tetrahedral mesh by arranging tetrahedra in a grid
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const indices = [];
+            
+            const step = meshSize / meshDensity;
+            let vertexIndex = 0;
+            
+            // Create tetrahedral elements in a grid
+            for (let x = 0; x < meshDensity; x++) {
+                for (let y = 0; y < meshDensity; y++) {
+                    for (let z = 0; z < meshDensity; z++) {
+                        const baseX = (x - meshDensity/2 + 0.5) * step;
+                        const baseY = (y - meshDensity/2 + 0.5) * step;
+                        const baseZ = (z - meshDensity/2 + 0.5) * step;
+                        
+                        // Create a tetrahedron at this position
+                        const tetraVertices = [
+                            [baseX, baseY + step*0.3, baseZ],           // top
+                            [baseX - step*0.3, baseY - step*0.2, baseZ + step*0.3],  // front left
+                            [baseX + step*0.3, baseY - step*0.2, baseZ + step*0.3],  // front right
+                            [baseX, baseY - step*0.2, baseZ - step*0.3]   // back
+                        ];
+                        
+                        // Add vertices
+                        tetraVertices.forEach(v => {
+                            vertices.push(v[0], v[1], v[2]);
+                        });
+                        
+                        // Add faces (4 triangular faces for tetrahedron)
+                        const base = vertexIndex;
+                        indices.push(
+                            base, base + 1, base + 2,    // bottom face
+                            base, base + 2, base + 3,    // right face
+                            base, base + 3, base + 1,    // left face
+                            base + 1, base + 3, base + 2 // back face
+                        );
+                        
+                        vertexIndex += 4;
+                    }
+                }
+            }
+            
+            geometry.setIndex(indices);
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.computeVertexNormals();
+            
+            return geometry;
+        }
+
         function createMesh() {
             // Remove existing mesh
             if (cube) scene.remove(cube);
             if (wireframe) scene.remove(wireframe);
 
-            // Create geometry
-            const geometry = new THREE.BoxGeometry(meshSize, meshSize, meshSize, meshDensity, meshDensity, meshDensity);
+            // Create geometry based on mesh type
+            let geometry;
+            if (meshType === 'tetra') {
+                geometry = createTetrahedralMesh();
+            } else {
+                // Default to box geometry for hexa and poly
+                geometry = new THREE.BoxGeometry(meshSize, meshSize, meshSize, meshDensity, meshDensity, meshDensity);
+            }
 
             // Premium cube material with better lighting
             const cubeMaterial = new THREE.MeshPhysicalMaterial({
@@ -293,14 +358,18 @@
 
         function updateInfo() {
             const elements = meshDensity * meshDensity * meshDensity;
-            const nodes = (meshDensity + 1) * (meshDensity + 1) * (meshDensity + 1);
             
-            let faces;
-            if (meshType === 'hexa') {
+            let nodes, faces;
+            if (meshType === 'tetra') {
+                // For tetrahedral mesh, each element has 4 nodes and 4 faces
+                nodes = elements * 4; // Each tetrahedron has 4 vertices
+                faces = elements * 4; // Each tetrahedron has 4 triangular faces
+            } else if (meshType === 'hexa') {
+                // For hexahedral (cube) mesh
+                nodes = (meshDensity + 1) * (meshDensity + 1) * (meshDensity + 1);
                 faces = elements * 6; // Each hex has 6 faces
-            } else if (meshType === 'tetra') {
-                faces = elements * 4; // Each tetrahedron has 4 faces
             } else { // poly
+                nodes = (meshDensity + 1) * (meshDensity + 1) * (meshDensity + 1);
                 faces = elements * Math.floor(Math.random() * 6) + 4; // Variable faces for poly
             }
 
@@ -330,7 +399,17 @@
                 createMesh();
             });
 
-
+            // Transparency slider
+            document.getElementById('transparency').addEventListener('input', (e) => {
+                const transparencyPercent = parseInt(e.target.value);
+                const opacity = (100 - transparencyPercent) / 100;
+                document.getElementById('transparencyValue').textContent = (100 - transparencyPercent);
+                
+                // Update cube opacity
+                if (cube) {
+                    cube.material.opacity = opacity;
+                }
+            });
 
             // Mouse controls
             const canvas = renderer.domElement;
