@@ -147,6 +147,15 @@
                 <div class="slider-value">Size: <span id="sizeValue">2.0</span></div>
             </div>
         </div>
+
+        <div class="control-group">
+            <div class="control-title">Display</div>
+            <div class="control-item">
+                <label class="control-label">Transparency</label>
+                <input type="range" class="slider" id="transparency" min="0" max="100" step="5" value="30">
+                <div class="slider-value">Opacity: <span id="transparencyValue">70</span>%</div>
+            </div>
+        </div>
     </div>
 
     <div class="main-view">
@@ -283,6 +292,18 @@
                 meshSize = parseFloat(e.target.value);
                 document.getElementById('sizeValue').textContent = meshSize.toFixed(1);
                 createMesh();
+            });
+
+            // Transparency slider
+            document.getElementById('transparency').addEventListener('input', (e) => {
+                const transparencyPercent = parseInt(e.target.value);
+                const opacity = (100 - transparencyPercent) / 100;
+                document.getElementById('transparencyValue').textContent = (100 - transparencyPercent);
+                
+                // Update cube opacity
+                if (cube) {
+                    cube.material.opacity = opacity;
+                }
             });
 
             // Mouse controls
