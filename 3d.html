@@ -156,6 +156,11 @@
                 <input type="range" class="slider" id="transparency" min="0" max="90" step="5" value="15">
                 <div class="slider-value">Opacity: <span id="transparencyValue">85</span>%</div>
             </div>
+            <div class="control-item">
+                <label class="control-label">Clipping Plane</label>
+                <input type="range" class="slider" id="clipping" min="-100" max="100" step="5" value="0">
+                <div class="slider-value">Position: <span id="clippingValue">0</span>%</div>
+            </div>
         </div>
 
     </div>
@@ -183,6 +188,7 @@
         let meshDensity = 3;
         let meshSize = 2.0;
         let meshType = 'hexa';
+        let clippingPlane = new THREE.Plane(new THREE.Vector3(1, 0, 0), 0);
 
         // Mouse interaction
         let isLeftMouseDown = false;
@@ -208,17 +214,11 @@
             camera.position.set(4, 4, 4);
             camera.lookAt(0, 0, 0);
 
-            // Premium renderer setup
+            // Simple renderer setup for engineering
             renderer = new THREE.WebGLRenderer({ 
                 antialias: true,
-                alpha: true,
-                powerPreference: "high-performance"
+                alpha: true
             });
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.2;
-            renderer.outputColorSpace = THREE.SRGBColorSpace;
             
             const container = document.querySelector('.main-view');
             const width = container.clientWidth * 0.8;
@@ -227,23 +227,16 @@
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             container.appendChild(renderer.domElement);
 
-            // Enhanced lighting for premium look
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+            // Simple engineering lighting
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
             scene.add(ambientLight);
             
             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
             directionalLight.position.set(5, 5, 5);
-            directionalLight.castShadow = true;
-            directionalLight.shadow.mapSize.width = 2048;
-            directionalLight.shadow.mapSize.height = 2048;
-            directionalLight.shadow.camera.near = 0.5;
-            directionalLight.shadow.camera.far = 50;
             scene.add(directionalLight);
             
-            // Additional fill light
-            const fillLight = new THREE.DirectionalLight(0x6366f1, 0.3);
-            fillLight.position.set(-3, -3, 2);
-            scene.add(fillLight);
+            // Enable clipping planes in renderer
+            renderer.localClippingEnabled = true;
 
             // Create initial mesh
             createMesh();
@@ -256,54 +249,55 @@
         }
 
         function createTetrahedralMesh() {
-            // Create a tetrahedral mesh by arranging tetrahedra in a grid
-            const geometry = new THREE.BufferGeometry();
-            const vertices = [];
-            const indices = [];
-            
+            // Create tetrahedral elements using TetrahedronGeometry
+            const group = new THREE.Group();
             const step = meshSize / meshDensity;
-            let vertexIndex = 0;
             
-            // Create tetrahedral elements in a grid
             for (let x = 0; x < meshDensity; x++) {
                 for (let y = 0; y < meshDensity; y++) {
                     for (let z = 0; z < meshDensity; z++) {
-                        const baseX = (x - meshDensity/2 + 0.5) * step;
-                        const baseY = (y - meshDensity/2 + 0.5) * step;
-                        const baseZ = (z - meshDensity/2 + 0.5) * step;
+                        const tetraGeometry = new THREE.TetrahedronGeometry(step * 0.3);
                         
-                        // Create a tetrahedron at this position
-                        const tetraVertices = [
-                            [baseX, baseY + step*0.3, baseZ],           // top
-                            [baseX - step*0.3, baseY - step*0.2, baseZ + step*0.3],  // front left
-                            [baseX + step*0.3, baseY - step*0.2, baseZ + step*0.3],  // front right
-                            [baseX, baseY - step*0.2, baseZ - step*0.3]   // back
-                        ];
+                        const posX = (x - meshDensity/2 + 0.5) * step;
+                        const posY = (y - meshDensity/2 + 0.5) * step;
+                        const posZ = (z - meshDensity/2 + 0.5) * step;
                         
-                        // Add vertices
-                        tetraVertices.forEach(v => {
-                            vertices.push(v[0], v[1], v[2]);
+                        // Create solid tetrahedron
+                        const tetraMaterial = new THREE.MeshLambertMaterial({
+                            color: 0x4f46e5,
+                            transparent: true,
+                            opacity: 0.85,
+                            side: THREE.DoubleSide,
+                            clippingPlanes: [clippingPlane]
                         });
                         
-                        // Add faces (4 triangular faces for tetrahedron)
-                        const base = vertexIndex;
-                        indices.push(
-                            base, base + 1, base + 2,    // bottom face
-                            base, base + 2, base + 3,    // right face
-                            base, base + 3, base + 1,    // left face
-                            base + 1, base + 3, base + 2 // back face
+                        const tetra = new THREE.Mesh(tetraGeometry, tetraMaterial);
+                        tetra.position.set(posX, posY, posZ);
+                        tetra.rotation.set(
+                            Math.random() * Math.PI / 4,
+                            Math.random() * Math.PI / 4,
+                            Math.random() * Math.PI / 4
                         );
                         
-                        vertexIndex += 4;
+                        group.add(tetra);
+                        
+                        // Create wireframe
+                        const wireframeMaterial = new THREE.MeshBasicMaterial({
+                            color: 0x1e293b,
+                            wireframe: true,
+                            transparent: true,
+                            opacity: 0.8
+                        });
+                        
+                        const wireframeTetra = new THREE.Mesh(tetraGeometry.clone(), wireframeMaterial);
+                        wireframeTetra.position.copy(tetra.position);
+                        wireframeTetra.rotation.copy(tetra.rotation);
+                        group.add(wireframeTetra);
                     }
                 }
             }
             
-            geometry.setIndex(indices);
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-            geometry.computeVertexNormals();
-            
-            return geometry;
+            return group;
         }
 
         function createMesh() {
@@ -311,46 +305,41 @@
             if (cube) scene.remove(cube);
             if (wireframe) scene.remove(wireframe);
 
-            // Create geometry based on mesh type
-            let geometry;
             if (meshType === 'tetra') {
-                geometry = createTetrahedralMesh();
+                // Tetrahedral mesh returns a group with both solid and wireframe
+                cube = createTetrahedralMesh();
+                scene.add(cube);
             } else {
-                // Default to box geometry for hexa and poly
-                geometry = new THREE.BoxGeometry(meshSize, meshSize, meshSize, meshDensity, meshDensity, meshDensity);
+                // Create geometry for hexa and poly
+                const geometry = new THREE.BoxGeometry(meshSize, meshSize, meshSize, meshDensity, meshDensity, meshDensity);
+
+                // Simple engineering materials
+                const cubeMaterial = new THREE.MeshLambertMaterial({
+                    color: 0x4f46e5, // Engineering blue
+                    transparent: true,
+                    opacity: 0.85,
+                    side: THREE.DoubleSide,
+                    clippingPlanes: [clippingPlane]
+                });
+
+                const wireframeMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x1e293b, // Dark gray
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.8
+                });
+
+                // Create meshes
+                cube = new THREE.Mesh(geometry, cubeMaterial);
+                wireframe = new THREE.Mesh(geometry.clone(), wireframeMaterial);
+
+                // Show surfaces for hexa, hide for poly (clipping view)
+                cube.visible = (meshType === 'hexa');
+                wireframe.visible = true;
+
+                scene.add(cube);
+                scene.add(wireframe);
             }
-
-            // Premium cube material with better lighting
-            const cubeMaterial = new THREE.MeshPhysicalMaterial({
-                color: 0x6b7280,
-                metalness: 0.3,
-                roughness: 0.4,
-                clearcoat: 0.3,
-                clearcoatRoughness: 0.2,
-                transparent: true,
-                opacity: 0.85,
-                side: THREE.DoubleSide
-            });
-
-            // Premium black wireframe material
-            const wireframeMaterial = new THREE.MeshBasicMaterial({
-                color: 0x1f2937,
-                wireframe: true,
-                linewidth: 2,
-                transparent: true,
-                opacity: 0.9
-            });
-
-            // Create meshes with shadows
-            cube = new THREE.Mesh(geometry, cubeMaterial);
-            cube.castShadow = true;
-            cube.receiveShadow = true;
-            
-            wireframe = new THREE.Mesh(geometry.clone(), wireframeMaterial);
-            wireframe.castShadow = true;
-
-            scene.add(cube);
-            scene.add(wireframe);
 
             // Update info
             updateInfo();
@@ -405,10 +394,30 @@
                 const opacity = (100 - transparencyPercent) / 100;
                 document.getElementById('transparencyValue').textContent = (100 - transparencyPercent);
                 
-                // Update cube opacity
+                // Update opacity based on mesh type
                 if (cube) {
-                    cube.material.opacity = opacity;
+                    if (meshType === 'tetra') {
+                        // Update all tetrahedra in the group
+                        cube.children.forEach(child => {
+                            if (child.material && !child.material.wireframe) {
+                                child.material.opacity = opacity;
+                            }
+                        });
+                    } else {
+                        // Update regular cube
+                        cube.material.opacity = opacity;
+                    }
                 }
+            });
+
+            // Clipping plane slider
+            document.getElementById('clipping').addEventListener('input', (e) => {
+                const clippingPercent = parseInt(e.target.value);
+                document.getElementById('clippingValue').textContent = clippingPercent;
+                
+                // Update clipping plane position
+                const clippingPos = (clippingPercent / 100) * meshSize;
+                clippingPlane.constant = clippingPos;
             });
 
             // Mouse controls
@@ -443,7 +452,10 @@
                 
                 cube.rotation.x += deltaMove.y * 0.01;
                 cube.rotation.y += deltaMove.x * 0.01;
-                wireframe.rotation.copy(cube.rotation);
+                
+                if (wireframe && meshType !== 'tetra') {
+                    wireframe.rotation.copy(cube.rotation);
+                }
             }
 
             if (isRightMouseDown) {
@@ -453,7 +465,10 @@
                 
                 cube.position.x += deltaMove.x * 0.01;
                 cube.position.y -= deltaMove.y * 0.01;
-                wireframe.position.copy(cube.position);
+                
+                if (wireframe && meshType !== 'tetra') {
+                    wireframe.position.copy(cube.position);
+                }
             }
 
             previousMousePosition.x = event.clientX;
@@ -485,7 +500,10 @@
             if (!isLeftMouseDown && (Math.abs(rotationVelocity.x) > 0.001 || Math.abs(rotationVelocity.y) > 0.001)) {
                 cube.rotation.x += rotationVelocity.x;
                 cube.rotation.y += rotationVelocity.y;
-                wireframe.rotation.copy(cube.rotation);
+                
+                if (wireframe && meshType !== 'tetra') {
+                    wireframe.rotation.copy(cube.rotation);
+                }
                 
                 rotationVelocity.x *= damping;
                 rotationVelocity.y *= damping;
@@ -494,7 +512,10 @@
             if (!isRightMouseDown && (Math.abs(positionVelocity.x) > 0.001 || Math.abs(positionVelocity.y) > 0.001)) {
                 cube.position.x += positionVelocity.x;
                 cube.position.y += positionVelocity.y;
-                wireframe.position.copy(cube.position);
+                
+                if (wireframe && meshType !== 'tetra') {
+                    wireframe.position.copy(cube.position);
+                }
                 
                 positionVelocity.x *= damping;
                 positionVelocity.y *= damping;
