@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluid Dynamics Visualizer - Interactive Learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+            color: #2d3748;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 25px;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #4a5568;
+            margin-top: 2px;
+        }
+
+        .flow-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            color: #2d3748;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            width: 350px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            margin-top: 80px;
+            overflow-y: auto;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid;
+            border-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .control-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, #e2e8f0, #cbd5e1);
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .control-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .slider-value {
+            font-size: 13px;
+            color: #718096;
+            margin-top: 6px;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .mode-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .mode-btn {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .mode-btn:hover:not(.active) {
+            background: #f7fafc;
+            border-color: #cbd5e1;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .toggle-handle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active .toggle-handle {
+            transform: translateX(26px);
+        }
+
+        /* Simulation Canvas */
+        .simulation-area {
+            flex: 1;
+            margin-top: 80px;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #flow-canvas {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Info Panel */
+        .info-panel {
+            position: absolute;
+            top: 100px;
+            right: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-width: 250px;
+        }
+
+        .info-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .info-label {
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #2d3748;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Instructions Panel */
+        .instructions {
+            position: absolute;
+            bottom: 25px;
+            left: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 300px;
+        }
+
+        .instructions h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .instructions ul {
+            list-style: none;
+            font-size: 13px;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+
+        .instructions li {
+            margin-bottom: 6px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .instructions li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-size: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .control-panel {
+                width: 300px;
+            }
+            
+            .info-panel {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 20px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div>
+                <h1>Fluid Dynamics Visualizer</h1>
+                <p>Interactive learning platform for flow visualization and analysis</p>
+            </div>
+            <div class="flow-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Particles</span>
+                    <span class="stat-value" id="particle-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">FPS</span>
+                    <span class="stat-value" id="fps-counter">60</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Re</span>
+                    <span class="stat-value" id="reynolds-number">1000</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="control-panel">
+            <div class="control-section">
+                <div class="section-title">
+                    <div class="section-icon">🌊</div>
+                    Flow Properties
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">Flow Velocity</label>
+                    <input type="range" class="control-slider" id="velocity-slider" min="0" max="100" value="50" step="1">
+                    <div class="slider-value">Velocity: <span id="velocity-value">5.0</span> m/s</div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Flow Direction</label>
+                    <input type="range" class="control-slider" id="direction-slider" min="0" max="360" value="0" step="5">
+                    <div class="slider-value">Angle: <span id="direction-value">0</span>°</div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Fluid Viscosity</label>
+                    <input type="range" class="control-slider" id="viscosity-slider" min="1" max="100" value="10" step="1">
+                    <div class="slider-value">Viscosity: <span id="viscosity-value">0.001</span> Pa·s</div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <div class="section-title">
+                    <div class="section-icon">🔬</div>
+                    Visualization
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">Display Mode</label>
+                    <div class="mode-buttons">
+                        <button class="mode-btn active" data-mode="particles">Particles</button>
+                        <button class="mode-btn" data-mode="vectors">Vectors</button>
+                        <button class="mode-btn" data-mode="streamlines">Streamlines</button>
+                        <button class="mode-btn" data-mode="combined">Combined</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Particle Density</label>
+                    <input type="range" class="control-slider" id="density-slider" min="50" max="500" value="200" step="10">
+                    <div class="slider-value">Count: <span id="density-value">200</span></div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Animation Speed</label>
+                    <input type="range" class="control-slider" id="speed-slider" min="10" max="200" value="100" step="10">
+                    <div class="slider-value">Speed: <span id="speed-value">100</span>%</div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <div class="section-title">
+                    <div class="section-icon">⚙️</div>
+                    Controls
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">Animation</label>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div class="toggle-switch active" id="animation-toggle">
+                            <div class="toggle-handle"></div>
+                        </div>
+                        <span style="font-size: 13px; color: #4a5568;">Running</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <button class="mode-btn" id="reset-btn" style="width: 100%; margin-top: 10px;">
+                        Reset Simulation
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="simulation-area">
+            <canvas id="flow-canvas" width="800" height="600"></canvas>
+            
+            <div class="loading" id="loading-indicator">
+                <div class="spinner"></div>
+                Initializing fluid simulation...
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-title">
+                <div class="section-icon">📊</div>
+                Flow Analysis
+            </div>
+            <div class="info-item">
+                <span class="info-label">Max Velocity:</span>
+                <span class="info-value" id="max-velocity">5.00 m/s</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Avg Velocity:</span>
+                <span class="info-value" id="avg-velocity">4.85 m/s</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Reynolds No:</span>
+                <span class="info-value" id="reynolds-display">1000</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Flow Type:</span>
+                <span class="info-value" id="flow-type">Laminar</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Simulation:</span>
+                <span class="info-value" id="sim-status">Running</span>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>
+                <div class="section-icon">💡</div>
+                Learning Objectives
+            </h3>
+            <ul>
+                <li>Observe particle motion in uniform flow fields</li>
+                <li>Understand the relationship between velocity and direction</li>
+                <li>Explore effects of fluid viscosity on flow patterns</li>
+                <li>Compare different visualization methods</li>
+                <li>Learn basic fluid dynamics principles</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let canvas, ctx;
+        let particles = [];
+        let flowField = [];
+        let animationId;
+        let isAnimating = true;
+        
+        // Flow parameters
+        let flowVelocity = 5.0;
+        let flowDirection = 0;
+        let fluidViscosity = 0.001;
+        let particleCount = 200;
+        let animationSpeed = 1.0;
+        let displayMode = 'particles';
+        
+        // Canvas dimensions
+        const CANVAS_WIDTH = 800;
+        const CANVAS_HEIGHT = 600;
+        const GRID_SIZE = 20;
+        
+        // Performance tracking
+        let lastTime = 0;
+        let frameCount = 0;
+        let fps = 60;
+
+        // Particle class
+        class Particle {
+            constructor(x, y) {
+                this.x = x || Math.random() * CANVAS_WIDTH;
+                this.y = y || Math.random() * CANVAS_HEIGHT;
+                this.vx = 0;
+                this.vy = 0;
+                this.life = 1.0;
+                this.maxLife = 200 + Math.random() * 300;
+                this.age = 0;
+                this.size = 2 + Math.random() * 2;
+                this.color = this.getColor();
+            }
+            
+            getColor() {
+                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                const normalizedSpeed = Math.min(speed / 10, 1);
+                
+                // Blue to red gradient based on speed
+                const r = Math.floor(normalizedSpeed * 255);
+                const g = Math.floor((1 - normalizedSpeed) * 100);
+                const b = Math.floor((1 - normalizedSpeed) * 255);
+                
+                return `rgba(${r}, ${g}, ${b}, ${this.life})`;
+            }
+            
+            update() {
+                // Apply flow field
+                const flowVx = flowVelocity * Math.cos(flowDirection * Math.PI / 180);
+                const flowVy = flowVelocity * Math.sin(flowDirection * Math.PI / 180);
+                
+                this.vx = flowVx;
+                this.vy = flowVy;
+                
+                // Update position
+                this.x += this.vx * animationSpeed * 0.1;
+                this.y += this.vy * animationSpeed * 0.1;
+                
+                // Age particle
+                this.age++;
+                this.life = Math.max(0, 1 - this.age / this.maxLife);
+                
+                // Wrap around edges
+                if (this.x < 0) this.x = CANVAS_WIDTH;
+                if (this.x > CANVAS_WIDTH) this.x = 0;
+                if (this.y < 0) this.y = CANVAS_HEIGHT;
+                if (this.y > CANVAS_HEIGHT) this.y = 0;
+                
+                // Reset if too old
+                if (this.life <= 0) {
+                    this.reset();
+                }
+                
+                this.color = this.getColor();
+            }
+            
+            reset() {
+                this.x = Math.random() * CANVAS_WIDTH;
+                this.y = Math.random() * CANVAS_HEIGHT;
+                this.age = 0;
+                this.life = 1.0;
+                this.maxLife = 200 + Math.random() * 300;
+            }
+            
+            draw() {
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+            }
+        }
+
+        // Initialize the application
+        function init() {
+            console.log('Initializing Fluid Dynamics Visualizer...');
+            
+            setupCanvas();
+            createParticles();
+            setupControls();
+            
+            // Hide loading indicator
+            setTimeout(() => {
+                document.getElementById('loading-indicator').style.display = 'none';
+                startAnimation();
+            }, 1000);
+            
+            console.log('Initialization complete!');
+        }
+
+        function setupCanvas() {
+            canvas = document.getElementById('flow-canvas');
+            ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            canvas.width = CANVAS_WIDTH;
+            canvas.height = CANVAS_HEIGHT;
+            
+            console.log(`Canvas initialized: ${CANVAS_WIDTH}x${CANVAS_HEIGHT}`);
+        }
+
+        function createParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+            updateParticleCount();
+        }
+
+        function setupControls() {
+            console.log('Setting up controls...');
+            
+            // Flow velocity slider
+            document.getElementById('velocity-slider').addEventListener('input', (e) => {
+                flowVelocity = parseFloat(e.target.value) / 10;
+                document.getElementById('velocity-value').textContent = flowVelocity.toFixed(1);
+                updateFlowAnalysis();
+            });
+
+            // Flow direction slider
+            document.getElementById('direction-slider').addEventListener('input', (e) => {
+                flowDirection = parseInt(e.target.value);
+                document.getElementById('direction-value').textContent = flowDirection;
+            });
+
+            // Viscosity slider
+            document.getElementById('viscosity-slider').addEventListener('input', (e) => {
+                fluidViscosity = parseFloat(e.target.value) / 10000;
+                document.getElementById('viscosity-value').textContent = fluidViscosity.toFixed(4);
+                updateFlowAnalysis();
+            });
+
+            // Visualization mode buttons
+            document.querySelectorAll('.mode-btn[data-mode]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Remove active class from all mode buttons
+                    document.querySelectorAll('.mode-btn[data-mode]').forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    e.target.classList.add('active');
+                    
+                    displayMode = e.target.dataset.mode;
+                    console.log('Display mode changed to:', displayMode);
+                });
+            });
+
+            // Particle density slider
+            document.getElementById('density-slider').addEventListener('input', (e) => {
+                const newCount = parseInt(e.target.value);
+                document.getElementById('density-value').textContent = newCount;
+                
+                // Adjust particle count
+                if (newCount > particleCount) {
+                    // Add particles
+                    for (let i = particleCount; i < newCount; i++) {
+                        particles.push(new Particle());
+                    }
+                } else if (newCount < particleCount) {
+                    // Remove particles
+                    particles.splice(newCount);
+                }
+                
+                particleCount = newCount;
+                updateParticleCount();
+            });
+
+            // Animation speed slider
+            document.getElementById('speed-slider').addEventListener('input', (e) => {
+                animationSpeed = parseInt(e.target.value) / 100;
+                document.getElementById('speed-value').textContent = parseInt(e.target.value);
+            });
+
+            // Animation toggle
+            document.getElementById('animation-toggle').addEventListener('click', (e) => {
+                isAnimating = !isAnimating;
+                const toggle = e.target.closest('.toggle-switch');
+                const label = toggle.parentElement.querySelector('span');
+                
+                if (isAnimating) {
+                    toggle.classList.add('active');
+                    label.textContent = 'Running';
+                    startAnimation();
+                } else {
+                    toggle.classList.remove('active');
+                    label.textContent = 'Paused';
+                    if (animationId) {
+                        cancelAnimationFrame(animationId);
+                    }
+                }
+            });
+
+            // Reset button
+            document.getElementById('reset-btn').addEventListener('click', () => {
+                resetSimulation();
+            });
+
+            // Initialize slider values
+            updateSliderValues();
+        }
+
+        function updateSliderValues() {
+            // Set initial values to match sliders
+            document.getElementById('velocity-value').textContent = flowVelocity.toFixed(1);
+            document.getElementById('direction-value').textContent = flowDirection;
+            document.getElementById('viscosity-value').textContent = fluidViscosity.toFixed(4);
+            document.getElementById('density-value').textContent = particleCount;
+            document.getElementById('speed-value').textContent = Math.round(animationSpeed * 100);
+        }
+
+        function resetSimulation() {
+            console.log('Resetting simulation...');
+            
+            // Reset flow parameters
+            flowVelocity = 5.0;
+            flowDirection = 0;
+            fluidViscosity = 0.001;
+            animationSpeed = 1.0;
+            
+            // Reset sliders
+            document.getElementById('velocity-slider').value = 50;
+            document.getElementById('direction-slider').value = 0;
+            document.getElementById('viscosity-slider').value = 10;
+            document.getElementById('speed-slider').value = 100;
+            
+            // Reset particles
+            createParticles();
+            
+            // Reset display mode
+            displayMode = 'particles';
+            document.querySelectorAll('.mode-btn[data-mode]').forEach(b => b.classList.remove('active'));
+            document.querySelector('.mode-btn[data-mode="particles"]').classList.add('active');
+            
+            // Update displays
+            updateSliderValues();
+            updateFlowAnalysis();
+            
+            console.log('Simulation reset complete');
+        }
+
+        function startAnimation() {
+            if (isAnimating) {
+                animate();
+            }
+        }
+
+        function animate(currentTime = 0) {
+            if (!isAnimating) return;
+            
+            // Calculate FPS
+            if (currentTime - lastTime >= 1000) {
+                fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+                document.getElementById('fps-counter').textContent = fps;
+                frameCount = 0;
+                lastTime = currentTime;
+            }
+            frameCount++;
+            
+            // Clear canvas
+            ctx.fillStyle = 'rgba(248, 250, 252, 0.1)';
+            ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            
+            // Update and draw particles
+            if (displayMode === 'particles' || displayMode === 'combined') {
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+            }
+            
+            // Draw vectors if enabled
+            if (displayMode === 'vectors' || displayMode === 'combined') {
+                drawVectorField();
+            }
+            
+            // Draw streamlines if enabled
+            if (displayMode === 'streamlines' || displayMode === 'combined') {
+                drawStreamlines();
+            }
+            
+            updateFlowAnalysis();
+            
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function drawVectorField() {
+            const spacing = 40;
+            const arrowLength = 20;
+            
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.6)';
+            ctx.lineWidth = 2;
+            
+            for (let x = spacing; x < CANVAS_WIDTH; x += spacing) {
+                for (let y = spacing; y < CANVAS_HEIGHT; y += spacing) {
+                    const flowVx = flowVelocity * Math.cos(flowDirection * Math.PI / 180);
+                    const flowVy = flowVelocity * Math.sin(flowDirection * Math.PI / 180);
+                    
+                    const magnitude = Math.sqrt(flowVx * flowVx + flowVy * flowVy);
+                    const normalizedVx = (flowVx / magnitude) * arrowLength;
+                    const normalizedVy = (flowVy / magnitude) * arrowLength;
+                    
+                    // Draw arrow
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + normalizedVx, y + normalizedVy);
+                    ctx.stroke();
+                    
+                    // Draw arrowhead
+                    const angle = Math.atan2(normalizedVy, normalizedVx);
+                    const headLength = 8;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(x + normalizedVx, y + normalizedVy);
+                    ctx.lineTo(
+                        x + normalizedVx - headLength * Math.cos(angle - Math.PI / 6),
+                        y + normalizedVy - headLength * Math.sin(angle - Math.PI / 6)
+                    );
+                    ctx.moveTo(x + normalizedVx, y + normalizedVy);
+                    ctx.lineTo(
+                        x + normalizedVx - headLength * Math.cos(angle + Math.PI / 6),
+                        y + normalizedVy - headLength * Math.sin(angle + Math.PI / 6)
+                    );
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function drawStreamlines() {
+            const numStreamlines = 10;
+            const stepSize = 2;
+            const maxSteps = 200;
+            
+            ctx.strokeStyle = 'rgba(118, 75, 162, 0.7)';
+            ctx.lineWidth = 1.5;
+            
+            for (let i = 0; i < numStreamlines; i++) {
+                let x = (i * CANVAS_WIDTH) / numStreamlines;
+                let y = CANVAS_HEIGHT / 2 + (Math.random() - 0.5) * 100;
+                
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                
+                for (let step = 0; step < maxSteps; step++) {
+                    const flowVx = flowVelocity * Math.cos(flowDirection * Math.PI / 180);
+                    const flowVy = flowVelocity * Math.sin(flowDirection * Math.PI / 180);
+                    
+                    const magnitude = Math.sqrt(flowVx * flowVx + flowVy * flowVy);
+                    if (magnitude === 0) break;
+                    
+                    const normalizedVx = (flowVx / magnitude) * stepSize;
+                    const normalizedVy = (flowVy / magnitude) * stepSize;
+                    
+                    x += normalizedVx;
+                    y += normalizedVy;
+                    
+                    if (x < 0 || x > CANVAS_WIDTH || y < 0 || y > CANVAS_HEIGHT) break;
+                    
+                    ctx.lineTo(x, y);
+                }
+                
+                ctx.stroke();
+            }
+        }
+
+        function updateParticleCount() {
+            document.getElementById('particle-count').textContent = particles.length;
+        }
+
+        function updateFlowAnalysis() {
+            // Update flow analysis panel
+            document.getElementById('max-velocity').textContent = flowVelocity.toFixed(2) + ' m/s';
+            document.getElementById('avg-velocity').textContent = (flowVelocity * 0.97).toFixed(2) + ' m/s';
+            
+            // Calculate Reynolds number (simplified)
+            const density = 1000; // kg/m³ (water)
+            const characteristicLength = 0.1; // m
+            const reynoldsNumber = Math.round((density * flowVelocity * characteristicLength) / fluidViscosity);
+            
+            document.getElementById('reynolds-display').textContent = reynoldsNumber;
+            document.getElementById('reynolds-number').textContent = reynoldsNumber;
+            
+            // Determine flow type
+            const flowType = reynoldsNumber < 2000 ? 'Laminar' : reynoldsNumber < 4000 ? 'Transitional' : 'Turbulent';
+            document.getElementById('flow-type').textContent = flowType;
+            
+            document.getElementById('sim-status').textContent = isAnimating ? 'Running' : 'Paused';
+        }
+
+        // Placeholder for additional functions (will be implemented in next steps)
+        
+        // Initialize when page loads
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
