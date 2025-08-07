@@ -58,6 +58,13 @@
             y: 0
         };
 
+        // --- INERTIA VARIABLES ---
+        let rotationVelocity = { x: 0, y: 0 };
+        let positionVelocity = { x: 0, y: 0 };
+        const friction = 0.95; // How quickly the inertia dampens (closer to 1 = less friction)
+        const velocityScale = 0.02; // How much mouse movement affects velocity
+        const positionScale = 0.0002; // How much mouse movement affects position velocity
+
         function init() {
             // --- Scene ---
             scene = new THREE.Scene();
@@ -122,7 +129,11 @@
 
             // --- Handle Rotation (Left Mouse Button) ---
             if (isLeftMouseDown) {
-                // The rotation amount is proportional to the distance the mouse has moved.
+                // Update rotation velocity based on mouse movement
+                rotationVelocity.x = deltaMove.y * velocityScale;
+                rotationVelocity.y = deltaMove.x * velocityScale;
+                
+                // Apply immediate rotation for responsive feel
                 const deltaRotationQuaternion = new THREE.Quaternion()
                     .setFromEuler(new THREE.Euler(
                         toRadians(deltaMove.y * 1),
@@ -130,13 +141,16 @@
                         0,
                         'XYZ'
                     ));
-                // Apply the rotation to the cube's quaternion.
                 cube.quaternion.multiplyQuaternions(deltaRotationQuaternion, cube.quaternion);
             }
 
             // --- Handle Dragging/Panning (Right Mouse Button) ---
             if (isRightMouseDown) {
-                // The position change is scaled to feel natural.
+                // Update position velocity based on mouse movement
+                positionVelocity.x = deltaMove.x * positionScale;
+                positionVelocity.y = -deltaMove.y * positionScale;
+                
+                // Apply immediate position change for responsive feel
                 cube.position.x += deltaMove.x * 0.01;
                 cube.position.y -= deltaMove.y * 0.01;
             }
@@ -152,6 +166,7 @@
             // Reset the flags when the mouse button is released
             isLeftMouseDown = false;
             isRightMouseDown = false;
+            // Inertia will continue the motion based on the current velocity
         }
 
         function onWindowResize() {
