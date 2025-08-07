@@ -3,31 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Mesh Visualization Tool - Educational Platform</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <title>Mesh Visualization Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-blue: #2563eb;
-            --secondary-blue: #1e40af;
-            --light-blue: #dbeafe;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
-            --white: #ffffff;
-            --green-500: #10b981;
-            --red-500: #ef4444;
-            --yellow-500: #f59e0b;
-            --purple-500: #8b5cf6;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -36,153 +14,65 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            line-height: 1.6;
-        }
-
-        .app-container {
+            background: #f5f5f5;
             display: flex;
             height: 100vh;
-            background: var(--white);
         }
 
-        /* Header */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: var(--white);
-            border-bottom: 1px solid var(--gray-200);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 2rem;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary-blue);
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .help-btn {
-            padding: 0.5rem 1rem;
-            background: var(--gray-100);
-            border: 1px solid var(--gray-300);
-            border-radius: 6px;
-            color: var(--gray-700);
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .help-btn:hover {
-            background: var(--gray-200);
-        }
-
-        /* Sidebar */
         .sidebar {
-            width: 320px;
-            background: var(--white);
-            border-right: 1px solid var(--gray-200);
-            padding: 1.5rem;
+            width: 300px;
+            background: white;
+            border-right: 1px solid #ddd;
+            padding: 20px;
             overflow-y: auto;
-            margin-top: 60px;
-            height: calc(100vh - 60px);
         }
 
-        .sidebar.collapsed {
-            width: 60px;
-            padding: 1rem 0.5rem;
-        }
-
-        .sidebar-header {
+        .main-view {
+            flex: 1;
+            background: #f0f0f0;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
+            justify-content: center;
         }
 
-        .sidebar-title {
-            font-size: 1.125rem;
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        .control-title {
+            font-size: 14px;
             font-weight: 600;
-            color: var(--gray-900);
-        }
-
-        .collapse-btn {
-            padding: 0.5rem;
-            background: none;
-            border: 1px solid var(--gray-300);
-            border-radius: 6px;
-            color: var(--gray-600);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .collapse-btn:hover {
-            background: var(--gray-100);
-            color: var(--gray-900);
-        }
-
-        .control-section {
-            margin-bottom: 2rem;
-        }
-
-        .section-title {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--gray-700);
-            margin-bottom: 1rem;
+            color: #333;
+            margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .control-group {
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .control-group:last-child {
-            margin-bottom: 0;
-        }
-
         .control-item {
-            margin-bottom: 0.75rem;
-        }
-
-        .control-item:last-child {
-            margin-bottom: 0;
+            margin-bottom: 15px;
         }
 
         .control-label {
             display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--gray-700);
-            margin-bottom: 0.5rem;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
         }
 
-        /* Form Controls */
+        .select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: white;
+            font-size: 13px;
+        }
+
         .slider {
             width: 100%;
             height: 4px;
             border-radius: 2px;
-            background: var(--gray-200);
+            background: #ddd;
             outline: none;
             -webkit-appearance: none;
         }
@@ -192,613 +82,112 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background: var(--primary-blue);
+            background: #666;
             cursor: pointer;
-            border: 2px solid var(--white);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
 
-        .slider::-webkit-slider-thumb:hover {
-            background: var(--secondary-blue);
-        }
-
-        .select {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--gray-300);
-            border-radius: 6px;
-            background: var(--white);
-            color: var(--gray-900);
-            font-size: 0.875rem;
-            outline: none;
-        }
-
-        .select:focus {
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 0.5rem 1rem;
-            background: var(--primary-blue);
-            color: var(--white);
-            border: none;
-            border-radius: 6px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .btn:hover {
-            background: var(--secondary-blue);
-        }
-
-        .btn.secondary {
-            background: var(--gray-100);
-            color: var(--gray-700);
-            border: 1px solid var(--gray-300);
-        }
-
-        .btn.secondary:hover {
-            background: var(--gray-200);
-        }
-
-        .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .checkbox {
-            width: 16px;
-            height: 16px;
-            accent-color: var(--primary-blue);
-        }
-
-        .checkbox-label {
-            font-size: 0.875rem;
-            color: var(--gray-700);
-            margin: 0;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            margin-top: 60px;
-        }
-
-        .canvas-container {
-            flex: 1;
-            position: relative;
-            background: var(--gray-100);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .slider-value {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
         }
 
         canvas {
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            background: var(--white);
+            border: 1px solid #ccc;
+            background: white;
         }
 
-        /* Info Panel */
         .info-panel {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            padding: 1rem;
-            min-width: 250px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 15px;
+            font-size: 12px;
+            color: #666;
+            min-width: 200px;
         }
 
-        .info-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--gray-900);
-            margin-bottom: 0.75rem;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-        }
-
-        .info-item {
+        .info-row {
             display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
+            justify-content: space-between;
+            margin-bottom: 5px;
         }
 
         .info-label {
-            font-size: 0.75rem;
-            color: var(--gray-500);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
             font-weight: 500;
-        }
-
-        .info-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-            color: var(--gray-900);
-            font-weight: 600;
-        }
-
-        /* Bottom Panel */
-        .bottom-panel {
-            height: 200px;
-            background: var(--white);
-            border-top: 1px solid var(--gray-200);
-            padding: 1rem;
-            overflow-y: auto;
-        }
-
-        .panel-tabs {
-            display: flex;
-            border-bottom: 1px solid var(--gray-200);
-            margin-bottom: 1rem;
-        }
-
-        .tab {
-            padding: 0.5rem 1rem;
-            background: none;
-            border: none;
-            border-bottom: 2px solid transparent;
-            color: var(--gray-600);
-            cursor: pointer;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .tab.active {
-            color: var(--primary-blue);
-            border-bottom-color: var(--primary-blue);
-        }
-
-        .tab:hover {
-            color: var(--gray-900);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .properties-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .property-card {
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-            border-radius: 6px;
-            padding: 0.75rem;
-        }
-
-        .property-title {
-            font-size: 0.75rem;
-            color: var(--gray-500);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-
-        .property-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1rem;
-            color: var(--gray-900);
-            font-weight: 600;
-        }
-
-        /* Controls Guide */
-        .controls-guide {
-            position: absolute;
-            bottom: 1rem;
-            left: 1rem;
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            padding: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .guide-title {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--gray-900);
-            margin-bottom: 0.5rem;
-        }
-
-        .guide-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.25rem;
-            font-size: 0.75rem;
-            color: var(--gray-600);
-        }
-
-        .guide-icon {
-            color: var(--primary-blue);
-            width: 16px;
-        }
-
-        /* Loading */
-        .loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--white);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            transition: opacity 0.3s ease;
-        }
-
-        .loading.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--gray-200);
-            border-top: 3px solid var(--primary-blue);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
-        }
-
-        .loading-text {
-            font-size: 0.875rem;
-            color: var(--gray-600);
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-                z-index: 50;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .info-panel {
-                position: relative;
-                top: auto;
-                right: auto;
-                margin: 1rem;
-            }
-
-            .controls-guide {
-                position: relative;
-                bottom: auto;
-                left: auto;
-                margin: 1rem;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <div class="loading-text">Loading 3D Mesh Visualization Tool...</div>
-    </div>
-
-    <!-- Header -->
-    <div class="header">
-        <div class="logo">
-            <i class="fas fa-cube"></i>
-            3D Mesh Visualization Tool
-        </div>
-        <div class="header-controls">
-            <a href="#" class="help-btn">
-                <i class="fas fa-question-circle"></i>
-                Help & Documentation
-            </a>
-        </div>
-    </div>
-
-    <div class="app-container">
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-title">Controls</div>
-                <button class="collapse-btn" id="collapseBtn">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-            </div>
-
-            <!-- Cube Properties -->
-            <div class="control-section">
-                <div class="section-title">Cube Geometry</div>
-                <div class="control-group">
-                    <div class="control-item">
-                        <label class="control-label">Mesh Size (segments per side)</label>
-                        <input type="range" class="slider" id="meshSizeSlider" min="1" max="20" step="1" value="1">
-                        <div style="font-size: 0.75rem; color: var(--gray-500); margin-top: 0.25rem;">
-                            Segments: <span id="meshSizeValue">1</span> × <span id="meshSizeValue2">1</span> × <span id="meshSizeValue3">1</span>
-                        </div>
-                    </div>
-                    <div class="control-item">
-                        <label class="control-label">Cube Size</label>
-                        <input type="range" class="slider" id="cubeSizeSlider" min="0.5" max="4" step="0.1" value="2">
-                        <div style="font-size: 0.75rem; color: var(--gray-500); margin-top: 0.25rem;">
-                            Size: <span id="cubeSizeValue">2.0</span> units
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Display Options -->
-            <div class="control-section">
-                <div class="section-title">Display Options</div>
-                <div class="control-group">
-                    <div class="control-item">
-                        <label class="control-label">Transparency</label>
-                        <input type="range" class="slider" id="transparencySlider" min="0" max="100" step="5" value="20">
-                        <div style="font-size: 0.75rem; color: var(--gray-500); margin-top: 0.25rem;">
-                            Opacity: <span id="transparencyValue">80</span>%
-                        </div>
-                    </div>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="wireframeCheck" class="checkbox" checked>
-                            <label class="checkbox-label">Show Wireframe</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="facesCheck" class="checkbox">
-                            <label class="checkbox-label">Show Faces</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="verticesCheck" class="checkbox">
-                            <label class="checkbox-label">Show Vertices</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="normalsCheck" class="checkbox">
-                            <label class="checkbox-label">Show Normals</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Interaction -->
-            <div class="control-section">
-                <div class="section-title">Interaction</div>
-                <div class="control-group">
-                    <div class="control-item">
-                        <label class="control-label">Rotation Speed</label>
-                        <input type="range" class="slider" id="rotationSpeedSlider" min="0.1" max="3" step="0.1" value="1">
-                    </div>
-                    <div class="control-item">
-                        <label class="control-label">Mouse Sensitivity</label>
-                        <input type="range" class="slider" id="sensitivitySlider" min="0.1" max="2" step="0.1" value="1">
-                    </div>
-                    <div class="control-item">
-                        <label class="control-label">Damping</label>
-                        <input type="range" class="slider" id="dampingSlider" min="0.8" max="0.99" step="0.01" value="0.95">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Actions -->
-            <div class="control-section">
-                <div class="section-title">Actions</div>
-                <div class="control-group">
-                    <div class="control-item">
-                        <button class="btn" id="resetBtn">
-                            <i class="fas fa-refresh"></i>
-                            Reset View
-                        </button>
-                    </div>
-                    <div class="control-item">
-                        <button class="btn secondary" id="autoRotateBtn">
-                            <i class="fas fa-play"></i>
-                            Auto Rotate
-                        </button>
-                    </div>
-                </div>
+    <div class="sidebar">
+        <div class="control-group">
+            <div class="control-title">Mesh Type</div>
+            <div class="control-item">
+                <label class="control-label">Element Type</label>
+                <select class="select" id="meshType">
+                    <option value="hexa">Hexahedral (Hexa)</option>
+                    <option value="poly">Polyhedral (Poly)</option>
+                </select>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Canvas Container -->
-            <div class="canvas-container">
-                <!-- Info Panel -->
-                <div class="info-panel">
-                    <div class="info-title">Mesh Information</div>
-                                         <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-label">Vertices</div>
-                            <div class="info-value" id="verticesCount">8</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Faces</div>
-                            <div class="info-value" id="facesCount">12</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Elements</div>
-                            <div class="info-value" id="elementsCount">1</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">FPS</div>
-                            <div class="info-value" id="fpsDisplay">60</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Controls Guide -->
-                <div class="controls-guide">
-                    <div class="guide-title">Mouse Controls</div>
-                    <div class="guide-item">
-                        <i class="fas fa-mouse guide-icon"></i>
-                        <span>Left Click + Drag: Rotate mesh</span>
-                    </div>
-                                         <div class="guide-item">
-                        <i class="fas fa-hand-paper guide-icon"></i>
-                        <span>Right Click + Drag: Move object</span>
-                    </div>
-                    <div class="guide-item">
-                        <i class="fas fa-scroll guide-icon"></i>
-                        <span>Mouse Wheel: Zoom in/out</span>
-                    </div>
-                </div>
+        <div class="control-group">
+            <div class="control-title">Mesh Parameters</div>
+            <div class="control-item">
+                <label class="control-label">Mesh Density</label>
+                <input type="range" class="slider" id="meshDensity" min="1" max="10" value="3">
+                <div class="slider-value">Divisions: <span id="densityValue">3</span></div>
             </div>
-
-            <!-- Bottom Panel -->
-            <div class="bottom-panel">
-                <div class="panel-tabs">
-                    <button class="tab active" data-tab="properties">Mesh Properties</button>
-                    <button class="tab" data-tab="analysis">Geometric Analysis</button>
-                    <button class="tab" data-tab="export">Export Options</button>
-                </div>
-
-                <div class="tab-content active" id="properties">
-                    <div class="properties-grid">
-                        <div class="property-card">
-                            <div class="property-title">Surface Area</div>
-                            <div class="property-value" id="surfaceArea">24.00</div>
-                        </div>
-                        <div class="property-card">
-                            <div class="property-title">Volume</div>
-                            <div class="property-value" id="volume">8.00</div>
-                        </div>
-                        <div class="property-card">
-                            <div class="property-title">Bounding Box</div>
-                            <div class="property-value" id="boundingBox">2×2×2</div>
-                        </div>
-                        <div class="property-card">
-                            <div class="property-title">Centroid</div>
-                            <div class="property-value" id="centroid">(0,0,0)</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="analysis">
-                    <div class="properties-grid">
-                        <div class="property-card">
-                            <div class="property-title">Euler Characteristic</div>
-                            <div class="property-value" id="eulerChar">2</div>
-                        </div>
-                        <div class="property-card">
-                            <div class="property-title">Genus</div>
-                            <div class="property-value" id="genus">0</div>
-                        </div>
-                        <div class="property-card">
-                            <div class="property-title">Manifold</div>
-                            <div class="property-value" id="manifold">Yes</div>
-                        </div>
-                        <div class="property-card">
-                            <div class="property-title">Watertight</div>
-                            <div class="property-value" id="watertight">Yes</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="export">
-                    <div class="properties-grid">
-                        <div class="property-card">
-                            <div class="property-title">OBJ Format</div>
-                            <button class="btn" onclick="exportMesh('obj')">Export OBJ</button>
-                        </div>
-                        <div class="property-card">
-                            <div class="property-title">STL Format</div>
-                            <button class="btn" onclick="exportMesh('stl')">Export STL</button>
-                        </div>
-                        <div class="property-card">
-                            <div class="property-title">PLY Format</div>
-                            <button class="btn" onclick="exportMesh('ply')">Export PLY</button>
-                        </div>
-                        <div class="property-card">
-                            <div class="property-title">JSON Data</div>
-                            <button class="btn" onclick="exportMesh('json')">Export JSON</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="control-item">
+                <label class="control-label">Size</label>
+                <input type="range" class="slider" id="meshSize" min="1" max="4" step="0.1" value="2">
+                <div class="slider-value">Size: <span id="sizeValue">2.0</span></div>
             </div>
         </div>
     </div>
 
-    <!-- Three.js -->
+    <div class="main-view">
+        <div class="info-panel">
+            <div class="info-row">
+                <span class="info-label">Elements:</span>
+                <span id="elementCount">27</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Nodes:</span>
+                <span id="nodeCount">64</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Faces:</span>
+                <span id="faceCount">54</span>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
     <script>
-        // --- GLOBAL VARIABLES ---
-        let scene, camera, renderer, mesh, wireframeMesh, verticesMesh, normalHelpers;
-        let isLeftMouseDown = false, isRightMouseDown = false;
+        let scene, camera, renderer, cube, wireframe;
+        let meshDensity = 3;
+        let meshSize = 2.0;
+        let meshType = 'hexa';
+
+        // Mouse interaction
+        let isLeftMouseDown = false;
+        let isRightMouseDown = false;
         let previousMousePosition = { x: 0, y: 0 };
         let rotationVelocity = { x: 0, y: 0 };
         let positionVelocity = { x: 0, y: 0 };
-        let autoRotate = false;
-        
-        // Cube parameters
-        let meshSize = 1;
-        let cubeSize = 2.0;
-        let transparency = 0.8; // 80% opacity (20% transparency)
-        
-        // Interaction parameters
-        let rotationSpeed = 1;
-        let sensitivity = 1;
-        let damping = 0.95;
-        
-        // Performance tracking
-        let frameCount = 0;
-        let lastTime = 0;
-        let fps = 60;
+        const damping = 0.95;
 
-        // --- INITIALIZATION ---
         function init() {
-            // Scene setup
+            // Scene
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xffffff);
+            scene.background = new THREE.Color(0xf0f0f0);
 
-            // Orthogonal camera setup
-            const frustumSize = 6;
+            // Orthogonal Camera
+            const frustumSize = 5;
             const aspect = window.innerWidth / window.innerHeight;
             camera = new THREE.OrthographicCamera(
                 frustumSize * aspect / -2, frustumSize * aspect / 2,
@@ -808,297 +197,141 @@
             camera.position.set(4, 4, 4);
             camera.lookAt(0, 0, 0);
 
-            // Renderer setup
-            renderer = new THREE.WebGLRenderer({ 
-                antialias: true,
-                alpha: true 
-            });
-            renderer.setSize(window.innerWidth * 0.75, window.innerHeight * 0.6);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-            // Add canvas to container
-            const canvasContainer = document.querySelector('.canvas-container');
-            canvasContainer.appendChild(renderer.domElement);
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            const container = document.querySelector('.main-view');
+            const width = container.clientWidth * 0.8;
+            const height = container.clientHeight * 0.8;
+            renderer.setSize(width, height);
+            container.appendChild(renderer.domElement);
 
             // Lighting
-            setupLighting();
-
-            // Create initial cube mesh
-            createCubeMesh();
-
-            // Event listeners
-            setupEventListeners();
-
-            // UI setup
-            setupUI();
-
-            // Hide loading screen
-            setTimeout(() => {
-                document.getElementById('loading').classList.add('hidden');
-            }, 500);
-        }
-
-        function setupLighting() {
-            // Ambient light
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
             scene.add(ambientLight);
-
-            // Main directional light
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
             directionalLight.position.set(5, 5, 5);
-            directionalLight.castShadow = true;
-            directionalLight.shadow.mapSize.width = 1024;
-            directionalLight.shadow.mapSize.height = 1024;
             scene.add(directionalLight);
 
-            // Fill light
-            const fillLight = new THREE.DirectionalLight(0xffffff, 0.2);
-            fillLight.position.set(-5, -5, -5);
-            scene.add(fillLight);
+            // Create initial mesh
+            createMesh();
+
+            // Setup controls
+            setupControls();
+
+            // Animation loop
+            animate();
         }
 
-        function createCubeMesh() {
-            // Remove existing meshes
-            if (mesh) scene.remove(mesh);
-            if (wireframeMesh) scene.remove(wireframeMesh);
-            if (verticesMesh) scene.remove(verticesMesh);
-            if (normalHelpers) {
-                normalHelpers.forEach(helper => scene.remove(helper));
-                normalHelpers = [];
-            }
+        function createMesh() {
+            // Remove existing mesh
+            if (cube) scene.remove(cube);
+            if (wireframe) scene.remove(wireframe);
 
-            // Create cube geometry with current parameters
-            const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize, meshSize, meshSize, meshSize);
+            // Create geometry
+            const geometry = new THREE.BoxGeometry(meshSize, meshSize, meshSize, meshDensity, meshDensity, meshDensity);
 
-            // Main mesh (faces) - start hidden
-            const material = new THREE.MeshLambertMaterial({ 
-                color: 0x4a90e2,
+            // Gray cube material
+            const cubeMaterial = new THREE.MeshLambertMaterial({
+                color: 0x808080,
                 transparent: true,
-                opacity: transparency
-            });
-            mesh = new THREE.Mesh(geometry, material);
-            mesh.castShadow = true;
-            mesh.receiveShadow = true;
-            mesh.visible = false; // Start with faces hidden
-            scene.add(mesh);
-
-            // Wireframe mesh
-            const wireframeMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0x2563eb,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.8
-            });
-            wireframeMesh = new THREE.Mesh(geometry.clone(), wireframeMaterial);
-            scene.add(wireframeMesh);
-
-            // Vertices
-            createVerticesDisplay(geometry);
-
-            // Update mesh information
-            updateMeshInfo(geometry);
-        }
-
-        function createVerticesDisplay(geometry) {
-            const vertices = geometry.attributes.position.array;
-            const verticesGeometry = new THREE.BufferGeometry();
-            verticesGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-
-            const verticesMaterial = new THREE.PointsMaterial({
-                color: 0xef4444,
-                size: 0.1,
-                sizeAttenuation: true
+                opacity: 0.7
             });
 
-            verticesMesh = new THREE.Points(verticesGeometry, verticesMaterial);
-            scene.add(verticesMesh);
+            // Black wireframe material
+            const wireframeMaterial = new THREE.MeshBasicMaterial({
+                color: 0x000000,
+                wireframe: true
+            });
+
+            // Create meshes
+            cube = new THREE.Mesh(geometry, cubeMaterial);
+            wireframe = new THREE.Mesh(geometry.clone(), wireframeMaterial);
+
+            scene.add(cube);
+            scene.add(wireframe);
+
+            // Update info
+            updateInfo();
         }
 
-        function updateMeshInfo(geometry) {
-            const vertices = geometry.attributes.position.count;
-            const faces = geometry.index ? geometry.index.count / 3 : vertices / 3;
-            const elements = meshSize * meshSize * meshSize; // Number of cube elements
+        function updateInfo() {
+            const elements = meshDensity * meshDensity * meshDensity;
+            const nodes = (meshDensity + 1) * (meshDensity + 1) * (meshDensity + 1);
+            const faces = meshType === 'hexa' ? elements * 6 : elements * Math.floor(Math.random() * 6) + 4; // Simplified for demo
 
-            document.getElementById('verticesCount').textContent = vertices;
-            document.getElementById('facesCount').textContent = Math.floor(faces);
-            document.getElementById('elementsCount').textContent = elements;
-
-            // Calculate values for cube
-            const surfaceArea = 6 * cubeSize * cubeSize;
-            const volume = cubeSize * cubeSize * cubeSize;
-            
-            document.getElementById('surfaceArea').textContent = surfaceArea.toFixed(2);
-            document.getElementById('volume').textContent = volume.toFixed(2);
-            document.getElementById('boundingBox').textContent = `${cubeSize.toFixed(1)}×${cubeSize.toFixed(1)}×${cubeSize.toFixed(1)}`;
-            document.getElementById('centroid').textContent = '(0,0,0)';
-            document.getElementById('eulerChar').textContent = '2';
-            document.getElementById('genus').textContent = '0';
-            document.getElementById('manifold').textContent = 'Yes';
-            document.getElementById('watertight').textContent = 'Yes';
+            document.getElementById('elementCount').textContent = elements;
+            document.getElementById('nodeCount').textContent = nodes;
+            document.getElementById('faceCount').textContent = faces;
         }
 
-        function setupEventListeners() {
+        function setupControls() {
+            // Mesh type selector
+            document.getElementById('meshType').addEventListener('change', (e) => {
+                meshType = e.target.value;
+                updateInfo();
+            });
+
+            // Mesh density slider
+            document.getElementById('meshDensity').addEventListener('input', (e) => {
+                meshDensity = parseInt(e.target.value);
+                document.getElementById('densityValue').textContent = meshDensity;
+                createMesh();
+            });
+
+            // Mesh size slider
+            document.getElementById('meshSize').addEventListener('input', (e) => {
+                meshSize = parseFloat(e.target.value);
+                document.getElementById('sizeValue').textContent = meshSize.toFixed(1);
+                createMesh();
+            });
+
+            // Mouse controls
             const canvas = renderer.domElement;
-            
-            // Mouse events
             canvas.addEventListener('mousedown', onMouseDown);
             canvas.addEventListener('mousemove', onMouseMove);
             canvas.addEventListener('mouseup', onMouseUp);
             canvas.addEventListener('contextmenu', e => e.preventDefault());
             canvas.addEventListener('wheel', onWheel);
-            
-            // Window resize
-            window.addEventListener('resize', onWindowResize);
         }
 
-        function setupUI() {
-            // Cube mesh size slider
-            document.getElementById('meshSizeSlider').addEventListener('input', (e) => {
-                meshSize = parseInt(e.target.value);
-                document.getElementById('meshSizeValue').textContent = meshSize;
-                document.getElementById('meshSizeValue2').textContent = meshSize;
-                document.getElementById('meshSizeValue3').textContent = meshSize;
-                createCubeMesh();
-            });
-
-            // Cube size slider
-            document.getElementById('cubeSizeSlider').addEventListener('input', (e) => {
-                cubeSize = parseFloat(e.target.value);
-                document.getElementById('cubeSizeValue').textContent = cubeSize.toFixed(1);
-                createCubeMesh();
-            });
-
-            // Transparency slider
-            document.getElementById('transparencySlider').addEventListener('input', (e) => {
-                const transparencyPercent = parseInt(e.target.value);
-                transparency = (100 - transparencyPercent) / 100; // Convert to opacity
-                document.getElementById('transparencyValue').textContent = (100 - transparencyPercent);
-                
-                // Update mesh material opacity
-                if (mesh) {
-                    mesh.material.opacity = transparency;
-                }
-            });
-
-            // Display checkboxes
-            document.getElementById('wireframeCheck').addEventListener('change', (e) => {
-                wireframeMesh.visible = e.target.checked;
-            });
-
-            document.getElementById('facesCheck').addEventListener('change', (e) => {
-                mesh.visible = e.target.checked;
-            });
-
-            document.getElementById('verticesCheck').addEventListener('change', (e) => {
-                verticesMesh.visible = e.target.checked;
-            });
-
-            document.getElementById('normalsCheck').addEventListener('change', (e) => {
-                // Toggle normal helpers
-                if (e.target.checked) {
-                    createNormalHelpers();
-                } else {
-                    if (normalHelpers) {
-                        normalHelpers.forEach(helper => scene.remove(helper));
-                        normalHelpers = [];
-                    }
-                }
-            });
-
-            // Parameter sliders
-            document.getElementById('rotationSpeedSlider').addEventListener('input', (e) => {
-                rotationSpeed = parseFloat(e.target.value);
-            });
-
-            document.getElementById('sensitivitySlider').addEventListener('input', (e) => {
-                sensitivity = parseFloat(e.target.value);
-            });
-
-            document.getElementById('dampingSlider').addEventListener('input', (e) => {
-                damping = parseFloat(e.target.value);
-            });
-
-            // Buttons
-            document.getElementById('resetBtn').addEventListener('click', resetView);
-            document.getElementById('autoRotateBtn').addEventListener('click', toggleAutoRotate);
-            document.getElementById('collapseBtn').addEventListener('click', toggleSidebar);
-
-            // Tabs
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', (e) => {
-                    switchTab(e.target.dataset.tab);
-                });
-            });
-        }
-
-        function createNormalHelpers() {
-            if (normalHelpers) {
-                normalHelpers.forEach(helper => scene.remove(helper));
-            }
-            normalHelpers = [];
-
-            const normalHelper = new THREE.VertexNormalsHelper(mesh, 0.5, 0x00ff00);
-            normalHelpers.push(normalHelper);
-            scene.add(normalHelper);
-        }
-
-        // --- EVENT HANDLERS ---
         function onMouseDown(event) {
             if (event.button === 0) {
                 isLeftMouseDown = true;
             } else if (event.button === 2) {
                 isRightMouseDown = true;
             }
-            
             previousMousePosition.x = event.clientX;
             previousMousePosition.y = event.clientY;
         }
 
         function onMouseMove(event) {
             const deltaMove = {
-                x: (event.clientX - previousMousePosition.x) * sensitivity,
-                y: (event.clientY - previousMousePosition.y) * sensitivity
+                x: event.clientX - previousMousePosition.x,
+                y: event.clientY - previousMousePosition.y
             };
 
             if (isLeftMouseDown) {
-                // Rotate mesh
+                // Rotate
                 rotationVelocity.x = deltaMove.y * 0.01;
                 rotationVelocity.y = deltaMove.x * 0.01;
                 
-                mesh.rotation.x += deltaMove.y * 0.01 * rotationSpeed;
-                mesh.rotation.y += deltaMove.x * 0.01 * rotationSpeed;
-                
-                if (wireframeMesh) {
-                    wireframeMesh.rotation.copy(mesh.rotation);
-                }
-                if (verticesMesh) {
-                    verticesMesh.rotation.copy(mesh.rotation);
-                }
+                cube.rotation.x += deltaMove.y * 0.01;
+                cube.rotation.y += deltaMove.x * 0.01;
+                wireframe.rotation.copy(cube.rotation);
             }
 
             if (isRightMouseDown) {
-                // Move object
-                positionVelocity.x = deltaMove.x * 0.0001;
-                positionVelocity.y = -deltaMove.y * 0.0001;
+                // Move
+                positionVelocity.x = deltaMove.x * 0.001;
+                positionVelocity.y = -deltaMove.y * 0.001;
                 
-                mesh.position.x += deltaMove.x * 0.01;
-                mesh.position.y -= deltaMove.y * 0.01;
-                
-                // Move wireframe and vertices with the mesh
-                if (wireframeMesh) {
-                    wireframeMesh.position.copy(mesh.position);
-                }
-                if (verticesMesh) {
-                    verticesMesh.position.copy(mesh.position);
-                }
+                cube.position.x += deltaMove.x * 0.01;
+                cube.position.y -= deltaMove.y * 0.01;
+                wireframe.position.copy(cube.position);
             }
 
-            previousMousePosition = {
-                x: event.clientX,
-                y: event.clientY
-            };
+            previousMousePosition.x = event.clientX;
+            previousMousePosition.y = event.clientY;
         }
 
         function onMouseUp(event) {
@@ -1109,9 +342,7 @@
         function onWheel(event) {
             event.preventDefault();
             const zoomSpeed = 0.1;
-            
-            // For orthogonal camera, we need to adjust the frustum size
-            const frustumSize = Math.max(2, Math.min(12, camera.right * 2 + event.deltaY * zoomSpeed * 0.01));
+            const frustumSize = Math.max(2, Math.min(10, camera.right * 2 + event.deltaY * zoomSpeed * 0.01));
             const aspect = window.innerWidth / window.innerHeight;
             
             camera.left = frustumSize * aspect / -2;
@@ -1121,141 +352,33 @@
             camera.updateProjectionMatrix();
         }
 
-        function onWindowResize() {
-            const width = window.innerWidth * 0.75;
-            const height = window.innerHeight * 0.6;
-            
-            // Update orthogonal camera
-            const aspect = width / height;
-            const frustumSize = camera.right * 2;
-            
-            camera.left = frustumSize * aspect / -2;
-            camera.right = frustumSize * aspect / 2;
-            camera.top = frustumSize / 2;
-            camera.bottom = frustumSize / -2;
-            camera.updateProjectionMatrix();
-            
-            renderer.setSize(width, height);
-        }
-
-        // --- UI FUNCTIONS ---
-        function resetView() {
-            // Reset mesh rotation and position
-            mesh.rotation.set(0, 0, 0);
-            mesh.position.set(0, 0, 0);
-            
-            if (wireframeMesh) {
-                wireframeMesh.rotation.set(0, 0, 0);
-                wireframeMesh.position.set(0, 0, 0);
-            }
-            if (verticesMesh) {
-                verticesMesh.rotation.set(0, 0, 0);
-                verticesMesh.position.set(0, 0, 0);
-            }
-            
-            // Reset camera
-            camera.position.set(4, 4, 4);
-            camera.lookAt(0, 0, 0);
-            
-            rotationVelocity = { x: 0, y: 0 };
-            positionVelocity = { x: 0, y: 0 };
-        }
-
-        function toggleAutoRotate() {
-            autoRotate = !autoRotate;
-            const btn = document.getElementById('autoRotateBtn');
-            btn.innerHTML = autoRotate 
-                ? '<i class="fas fa-stop"></i> Stop Rotation'
-                : '<i class="fas fa-play"></i> Auto Rotate';
-        }
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('collapsed');
-        }
-
-        function switchTab(tabName) {
-            // Update tab buttons
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-
-            // Update tab content
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.getElementById(tabName).classList.add('active');
-        }
-
-        function exportMesh(format) {
-            // Simple export functionality for educational purposes
-            alert(`Export to ${format.toUpperCase()} format would be implemented here.\n\nThis would include:\n- Vertex coordinates\n- Face indices\n- Normal vectors\n- UV coordinates (if applicable)`);
-        }
-
-        function updateFPS() {
-            frameCount++;
-            const now = performance.now();
-            
-            if (now - lastTime >= 1000) {
-                fps = Math.round((frameCount * 1000) / (now - lastTime));
-                frameCount = 0;
-                lastTime = now;
-                
-                document.getElementById('fpsDisplay').textContent = fps;
-            }
-        }
-
-        // --- ANIMATION LOOP ---
         function animate() {
             requestAnimationFrame(animate);
 
-            // Auto rotation
-            if (autoRotate) {
-                mesh.rotation.y += 0.01;
-                if (wireframeMesh) wireframeMesh.rotation.copy(mesh.rotation);
-                if (verticesMesh) verticesMesh.rotation.copy(mesh.rotation);
-            }
-
             // Apply inertia
             if (!isLeftMouseDown && (Math.abs(rotationVelocity.x) > 0.001 || Math.abs(rotationVelocity.y) > 0.001)) {
-                mesh.rotation.x += rotationVelocity.x;
-                mesh.rotation.y += rotationVelocity.y;
-                
-                if (wireframeMesh) wireframeMesh.rotation.copy(mesh.rotation);
-                if (verticesMesh) verticesMesh.rotation.copy(mesh.rotation);
+                cube.rotation.x += rotationVelocity.x;
+                cube.rotation.y += rotationVelocity.y;
+                wireframe.rotation.copy(cube.rotation);
                 
                 rotationVelocity.x *= damping;
                 rotationVelocity.y *= damping;
             }
 
-            if (!isRightMouseDown && (Math.abs(positionVelocity.x) > 0.0001 || Math.abs(positionVelocity.y) > 0.0001)) {
-                mesh.position.x += positionVelocity.x * 10;
-                mesh.position.y += positionVelocity.y * 10;
-                
-                // Move wireframe and vertices with the mesh
-                if (wireframeMesh) {
-                    wireframeMesh.position.copy(mesh.position);
-                }
-                if (verticesMesh) {
-                    verticesMesh.position.copy(mesh.position);
-                }
+            if (!isRightMouseDown && (Math.abs(positionVelocity.x) > 0.001 || Math.abs(positionVelocity.y) > 0.001)) {
+                cube.position.x += positionVelocity.x;
+                cube.position.y += positionVelocity.y;
+                wireframe.position.copy(cube.position);
                 
                 positionVelocity.x *= damping;
                 positionVelocity.y *= damping;
             }
 
-            // Update FPS
-            updateFPS();
-
-            // Render
             renderer.render(scene, camera);
         }
 
-        // --- START APPLICATION ---
-        document.addEventListener('DOMContentLoaded', function() {
-            init();
-            animate();
-        });
+        // Start the application
+        init();
     </script>
 </body>
 </html>
