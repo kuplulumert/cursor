@@ -591,7 +591,7 @@
                             <label class="checkbox-label">Show Wireframe</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="facesCheck" class="checkbox" checked>
+                            <input type="checkbox" id="facesCheck" class="checkbox">
                             <label class="checkbox-label">Show Faces</label>
                         </div>
                         <div class="checkbox-item">
@@ -679,9 +679,9 @@
                         <i class="fas fa-mouse guide-icon"></i>
                         <span>Left Click + Drag: Rotate mesh</span>
                     </div>
-                    <div class="guide-item">
+                                         <div class="guide-item">
                         <i class="fas fa-hand-paper guide-icon"></i>
-                        <span>Right Click + Drag: Pan camera</span>
+                        <span>Right Click + Drag: Move object</span>
                     </div>
                     <div class="guide-item">
                         <i class="fas fa-scroll guide-icon"></i>
@@ -797,10 +797,15 @@
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xffffff);
 
-            // Camera setup
+            // Orthogonal camera setup
+            const frustumSize = 6;
             const aspect = window.innerWidth / window.innerHeight;
-            camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
-            camera.position.set(3, 3, 5);
+            camera = new THREE.OrthographicCamera(
+                frustumSize * aspect / -2, frustumSize * aspect / 2,
+                frustumSize / 2, frustumSize / -2,
+                0.1, 1000
+            );
+            camera.position.set(4, 4, 4);
             camera.lookAt(0, 0, 0);
 
             // Renderer setup
@@ -867,7 +872,7 @@
             // Create cube geometry with current parameters
             const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize, meshSize, meshSize, meshSize);
 
-            // Main mesh (faces)
+            // Main mesh (faces) - start hidden
             const material = new THREE.MeshLambertMaterial({ 
                 color: 0x4a90e2,
                 transparent: true,
@@ -876,6 +881,7 @@
             mesh = new THREE.Mesh(geometry, material);
             mesh.castShadow = true;
             mesh.receiveShadow = true;
+            mesh.visible = false; // Start with faces hidden
             scene.add(mesh);
 
             // Wireframe mesh
@@ -1073,12 +1079,20 @@
             }
 
             if (isRightMouseDown) {
-                // Pan camera
+                // Move object
                 positionVelocity.x = deltaMove.x * 0.0001;
                 positionVelocity.y = -deltaMove.y * 0.0001;
                 
-                camera.position.x += deltaMove.x * 0.01;
-                camera.position.y -= deltaMove.y * 0.01;
+                mesh.position.x += deltaMove.x * 0.01;
+                mesh.position.y -= deltaMove.y * 0.01;
+                
+                // Move wireframe and vertices with the mesh
+                if (wireframeMesh) {
+                    wireframeMesh.position.copy(mesh.position);
+                }
+                if (verticesMesh) {
+                    verticesMesh.position.copy(mesh.position);
+                }
             }
 
             previousMousePosition = {
@@ -1095,26 +1109,52 @@
         function onWheel(event) {
             event.preventDefault();
             const zoomSpeed = 0.1;
-            camera.position.z += event.deltaY * zoomSpeed * 0.01;
-            camera.position.z = Math.max(1, Math.min(20, camera.position.z));
+            
+            // For orthogonal camera, we need to adjust the frustum size
+            const frustumSize = Math.max(2, Math.min(12, camera.right * 2 + event.deltaY * zoomSpeed * 0.01));
+            const aspect = window.innerWidth / window.innerHeight;
+            
+            camera.left = frustumSize * aspect / -2;
+            camera.right = frustumSize * aspect / 2;
+            camera.top = frustumSize / 2;
+            camera.bottom = frustumSize / -2;
+            camera.updateProjectionMatrix();
         }
 
         function onWindowResize() {
             const width = window.innerWidth * 0.75;
             const height = window.innerHeight * 0.6;
             
-            camera.aspect = width / height;
+            // Update orthogonal camera
+            const aspect = width / height;
+            const frustumSize = camera.right * 2;
+            
+            camera.left = frustumSize * aspect / -2;
+            camera.right = frustumSize * aspect / 2;
+            camera.top = frustumSize / 2;
+            camera.bottom = frustumSize / -2;
             camera.updateProjectionMatrix();
+            
             renderer.setSize(width, height);
         }
 
         // --- UI FUNCTIONS ---
         function resetView() {
+            // Reset mesh rotation and position
             mesh.rotation.set(0, 0, 0);
-            if (wireframeMesh) wireframeMesh.rotation.set(0, 0, 0);
-            if (verticesMesh) verticesMesh.rotation.set(0, 0, 0);
+            mesh.position.set(0, 0, 0);
             
-            camera.position.set(3, 3, 5);
+            if (wireframeMesh) {
+                wireframeMesh.rotation.set(0, 0, 0);
+                wireframeMesh.position.set(0, 0, 0);
+            }
+            if (verticesMesh) {
+                verticesMesh.rotation.set(0, 0, 0);
+                verticesMesh.position.set(0, 0, 0);
+            }
+            
+            // Reset camera
+            camera.position.set(4, 4, 4);
             camera.lookAt(0, 0, 0);
             
             rotationVelocity = { x: 0, y: 0 };
@@ -1189,8 +1229,16 @@
             }
 
             if (!isRightMouseDown && (Math.abs(positionVelocity.x) > 0.0001 || Math.abs(positionVelocity.y) > 0.0001)) {
-                camera.position.x += positionVelocity.x * 10;
-                camera.position.y += positionVelocity.y * 10;
+                mesh.position.x += positionVelocity.x * 10;
+                mesh.position.y += positionVelocity.y * 10;
+                
+                // Move wireframe and vertices with the mesh
+                if (wireframeMesh) {
+                    wireframeMesh.position.copy(mesh.position);
+                }
+                if (verticesMesh) {
+                    verticesMesh.position.copy(mesh.position);
+                }
                 
                 positionVelocity.x *= damping;
                 positionVelocity.y *= damping;
