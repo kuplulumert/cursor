@@ -129,6 +129,7 @@
                 <label class="control-label">Element Type</label>
                 <select class="select" id="meshType">
                     <option value="hexa">Hexahedral (Hexa)</option>
+                    <option value="tetra">Tetrahedral (Tetra)</option>
                     <option value="poly">Polyhedral (Poly)</option>
                 </select>
             </div>
@@ -148,14 +149,7 @@
             </div>
         </div>
 
-        <div class="control-group">
-            <div class="control-title">Display</div>
-            <div class="control-item">
-                <label class="control-label">Transparency</label>
-                <input type="range" class="slider" id="transparency" min="0" max="100" step="5" value="30">
-                <div class="slider-value">Opacity: <span id="transparencyValue">70</span>%</div>
-            </div>
-        </div>
+
     </div>
 
     <div class="main-view">
@@ -206,20 +200,42 @@
             camera.position.set(4, 4, 4);
             camera.lookAt(0, 0, 0);
 
-            // Renderer
-            renderer = new THREE.WebGLRenderer({ antialias: true });
+            // Premium renderer setup
+            renderer = new THREE.WebGLRenderer({ 
+                antialias: true,
+                alpha: true,
+                powerPreference: "high-performance"
+            });
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+            
             const container = document.querySelector('.main-view');
             const width = container.clientWidth * 0.8;
             const height = container.clientHeight * 0.8;
             renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             container.appendChild(renderer.domElement);
 
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            // Enhanced lighting for premium look
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
             scene.add(ambientLight);
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
             directionalLight.position.set(5, 5, 5);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            directionalLight.shadow.camera.near = 0.5;
+            directionalLight.shadow.camera.far = 50;
             scene.add(directionalLight);
+            
+            // Additional fill light
+            const fillLight = new THREE.DirectionalLight(0x6366f1, 0.3);
+            fillLight.position.set(-3, -3, 2);
+            scene.add(fillLight);
 
             // Create initial mesh
             createMesh();
@@ -239,22 +255,34 @@
             // Create geometry
             const geometry = new THREE.BoxGeometry(meshSize, meshSize, meshSize, meshDensity, meshDensity, meshDensity);
 
-            // Gray cube material
-            const cubeMaterial = new THREE.MeshLambertMaterial({
-                color: 0x808080,
+            // Premium cube material with better lighting
+            const cubeMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x6b7280,
+                metalness: 0.3,
+                roughness: 0.4,
+                clearcoat: 0.3,
+                clearcoatRoughness: 0.2,
                 transparent: true,
-                opacity: 0.7
+                opacity: 0.85,
+                side: THREE.DoubleSide
             });
 
-            // Black wireframe material
+            // Premium black wireframe material
             const wireframeMaterial = new THREE.MeshBasicMaterial({
-                color: 0x000000,
-                wireframe: true
+                color: 0x1f2937,
+                wireframe: true,
+                linewidth: 2,
+                transparent: true,
+                opacity: 0.9
             });
 
-            // Create meshes
+            // Create meshes with shadows
             cube = new THREE.Mesh(geometry, cubeMaterial);
+            cube.castShadow = true;
+            cube.receiveShadow = true;
+            
             wireframe = new THREE.Mesh(geometry.clone(), wireframeMaterial);
+            wireframe.castShadow = true;
 
             scene.add(cube);
             scene.add(wireframe);
@@ -266,7 +294,15 @@
         function updateInfo() {
             const elements = meshDensity * meshDensity * meshDensity;
             const nodes = (meshDensity + 1) * (meshDensity + 1) * (meshDensity + 1);
-            const faces = meshType === 'hexa' ? elements * 6 : elements * Math.floor(Math.random() * 6) + 4; // Simplified for demo
+            
+            let faces;
+            if (meshType === 'hexa') {
+                faces = elements * 6; // Each hex has 6 faces
+            } else if (meshType === 'tetra') {
+                faces = elements * 4; // Each tetrahedron has 4 faces
+            } else { // poly
+                faces = elements * Math.floor(Math.random() * 6) + 4; // Variable faces for poly
+            }
 
             document.getElementById('elementCount').textContent = elements;
             document.getElementById('nodeCount').textContent = nodes;
@@ -294,17 +330,7 @@
                 createMesh();
             });
 
-            // Transparency slider
-            document.getElementById('transparency').addEventListener('input', (e) => {
-                const transparencyPercent = parseInt(e.target.value);
-                const opacity = (100 - transparencyPercent) / 100;
-                document.getElementById('transparencyValue').textContent = (100 - transparencyPercent);
-                
-                // Update cube opacity
-                if (cube) {
-                    cube.material.opacity = opacity;
-                }
-            });
+
 
             // Mouse controls
             const canvas = renderer.domElement;
