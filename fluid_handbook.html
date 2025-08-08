@@ -1636,7 +1636,7 @@
             ctx.textAlign = 'left';
             ctx.fillText('Moving Plate', 60, topPlateY + 15);
             ctx.fillText('Stationary Plate', 60, bottomPlateY + 15);
-            ctx.fillText(\`\${viscosity.charAt(0).toUpperCase() + viscosity.slice(1)} Viscosity\`, width/2 + 50, height/2 - 40);
+            ctx.fillText(viscosity.charAt(0).toUpperCase() + viscosity.slice(1) + ' Viscosity', width/2 + 50, height/2 - 40);
         }
 
         function drawFlowTypesDiagram(canvas, flowType) {
@@ -2061,7 +2061,7 @@
                 ctx.textAlign = 'center';
                 ctx.fillText('h', 110, 165);
                 ctx.font = '14px Inter';
-                ctx.fillText('Torricelli\\'s Law: V = √(2gh)', width/2, 50);
+                ctx.fillText('Torricelli\'s Law: V = √(2gh)', width/2, 50);
                 
             } else if (scenario === 'pitot') {
                 // Pitot tube
@@ -2096,8 +2096,8 @@
                 ctx.fillStyle = '#1f2937';
                 ctx.font = '12px Inter';
                 ctx.textAlign = 'center';
-                ctx.fillText('Stagnation\\nPressure', 350, centerY - 90);
-                ctx.fillText('Static\\nPressure', 330, centerY - 60);
+                ctx.fillText('Stagnation Pressure', 350, centerY - 90);
+                ctx.fillText('Static Pressure', 330, centerY - 60);
                 ctx.font = '14px Inter';
                 ctx.fillText('Pitot Tube: V = √(2(P₀ - P)/ρ)', width/2, 50);
             }
@@ -2185,13 +2185,13 @@
             ctx.fillStyle = '#1f2937';
             ctx.font = '16px Inter';
             ctx.textAlign = 'center';
-            ctx.fillText(\`Moody Diagram - \${region.charAt(0).toUpperCase() + region.slice(1)} Region\`, width/2, 30);
+            ctx.fillText('Moody Diagram - ' + region.charAt(0).toUpperCase() + region.slice(1) + ' Region', width/2, 30);
         }
 
         // Knowledge check functions
         function checkAnswer(sectionKey, correctAnswer) {
-            const selectedOption = document.querySelector(\`#feedback-\${sectionKey}\`).parentElement.querySelector('.answer-option.selected');
-            const feedback = document.getElementById(\`feedback-\${sectionKey}\`);
+            const selectedOption = document.querySelector('#feedback-' + sectionKey).parentElement.querySelector('.answer-option.selected');
+            const feedback = document.getElementById('feedback-' + sectionKey);
             
             if (!selectedOption) {
                 alert('Please select an answer first.');
@@ -2211,10 +2211,10 @@
             });
             
             // Show feedback
-            feedback.className = \`feedback \${isCorrect ? 'correct' : 'incorrect'}\`;
+            feedback.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
             feedback.textContent = isCorrect ? 
                 'Correct! Well done.' : 
-                \`Incorrect. The correct answer is \${correctAnswer.toUpperCase()}.\`;
+                'Incorrect. The correct answer is ' + correctAnswer.toUpperCase() + '.';
             feedback.style.display = 'block';
             
             // Disable button
