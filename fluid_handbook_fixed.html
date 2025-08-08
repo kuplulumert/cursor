@@ -139,6 +139,7 @@
 
         .chapter-title:hover {
             background: rgba(37, 99, 235, 0.1);
+            transform: translateX(2px);
         }
 
         .chapter-icon {
@@ -169,6 +170,7 @@
         .section-item:hover {
             background: rgba(37, 99, 235, 0.1);
             color: var(--primary-color);
+            transform: translateX(3px);
         }
 
         .section-item.active {
@@ -391,7 +393,7 @@
                         </div>
                         <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div class="chapter-sections">
+                    <div class="chapter-sections" id="conservation-sections">
                         <div class="section-item" data-section="continuity">
                             Continuity Equation
                             <span class="section-status"><i class="fas fa-circle"></i></span>
@@ -533,21 +535,41 @@
             console.log('Setting up navigation...');
             
             // Chapter title clicks
-            document.querySelectorAll('.chapter-title').forEach(title => {
+            const chapterTitles = document.querySelectorAll('.chapter-title');
+            console.log('Found', chapterTitles.length, 'chapter titles');
+            
+            chapterTitles.forEach((title, index) => {
+                const chapter = title.dataset.chapter;
+                console.log(`Setting up chapter ${index}: ${chapter}`);
+                
                 title.addEventListener('click', (e) => {
-                    const chapter = e.currentTarget.dataset.chapter;
+                    e.preventDefault();
+                    e.stopPropagation();
                     console.log('Chapter clicked:', chapter);
                     toggleChapter(chapter);
                 });
+                
+                // Add visual feedback
+                title.style.cursor = 'pointer';
             });
 
             // Section clicks
-            document.querySelectorAll('.section-item').forEach(item => {
+            const sectionItems = document.querySelectorAll('.section-item');
+            console.log('Found', sectionItems.length, 'section items');
+            
+            sectionItems.forEach((item, index) => {
+                const section = item.dataset.section;
+                console.log(`Setting up section ${index}: ${section}`);
+                
                 item.addEventListener('click', (e) => {
-                    const section = e.currentTarget.dataset.section;
+                    e.preventDefault();
+                    e.stopPropagation();
                     console.log('Section clicked:', section);
                     navigateToSection(section);
                 });
+                
+                // Add visual feedback
+                item.style.cursor = 'pointer';
             });
 
             // Navigation buttons
@@ -558,6 +580,8 @@
                     navigateNext();
                 });
             }
+            
+            console.log('Navigation setup complete!');
         }
 
         function setupTools() {
@@ -595,15 +619,33 @@
             console.log('Toggling chapter:', chapterKey);
             
             const chapterElement = document.querySelector(`[data-chapter="${chapterKey}"]`);
+            if (!chapterElement) {
+                console.error('Chapter element not found for:', chapterKey);
+                return;
+            }
+            
             const sectionsElement = chapterElement.nextElementSibling;
+            if (!sectionsElement) {
+                console.error('Sections element not found for chapter:', chapterKey);
+                return;
+            }
+            
             const chevron = chapterElement.querySelector('.fas.fa-chevron-down, .fas.fa-chevron-up');
+            if (!chevron) {
+                console.error('Chevron element not found for chapter:', chapterKey);
+                return;
+            }
+            
+            console.log('Current expanded state:', sectionsElement.classList.contains('expanded'));
             
             if (sectionsElement.classList.contains('expanded')) {
                 sectionsElement.classList.remove('expanded');
                 chevron.className = 'fas fa-chevron-down';
+                console.log('Collapsed chapter:', chapterKey);
             } else {
                 sectionsElement.classList.add('expanded');
                 chevron.className = 'fas fa-chevron-up';
+                console.log('Expanded chapter:', chapterKey);
             }
         }
 
