@@ -3,113 +3,438 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive 3D Cube</title>
+    <title>Mesh Visualization Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Basic styling to make the canvas fill the page */
-        body {
+        * {
             margin: 0;
-            overflow: hidden;
-            font-family: 'Inter', sans-serif;
-            background-color: #1a1a1a;
-            color: #e0e0e0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
+            padding: 0;
+            box-sizing: border-box;
         }
-        #info {
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .main-view {
+            flex: 1;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        .control-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .control-item {
+            margin-bottom: 15px;
+        }
+
+        .control-label {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: white;
+            font-size: 13px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #666;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        canvas {
+            border: 1px solid #ccc;
+            background: white;
+        }
+
+        .info-panel {
             position: absolute;
             top: 20px;
-            text-align: center;
-            width: 100%;
-            padding: 10px;
-            background-color: rgba(0,0,0,0.3);
-            border-radius: 8px;
-            max-width: 400px;
+            right: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 15px;
+            font-size: 12px;
+            color: #666;
+            min-width: 200px;
         }
-        canvas {
-            display: block;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .info-label {
+            font-weight: 500;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="sidebar">
+        <div class="control-group">
+            <div class="control-title">Mesh Type</div>
+            <div class="control-item">
+                <label class="control-label">Element Type</label>
+                <select class="select" id="meshType">
+                    <option value="hexa">Hexahedral (Hexa)</option>
+                    <option value="tetra">Tetrahedral (Tetra)</option>
+                    <option value="poly">Polyhedral (Poly)</option>
+                </select>
+            </div>
+        </div>
 
-    <div id="info">
-        <p><strong>Left Mouse Button + Drag:</strong> Rotate Cube</p>
-        <p><strong>Right Mouse Button + Drag:</strong> Move Cube</p>
+        <div class="control-group">
+            <div class="control-title">Mesh Parameters</div>
+            <div class="control-item">
+                <label class="control-label">Mesh Density</label>
+                <input type="range" class="slider" id="meshDensity" min="1" max="10" value="3">
+                <div class="slider-value">Divisions: <span id="densityValue">3</span></div>
+            </div>
+            <div class="control-item">
+                <label class="control-label">Size</label>
+                <input type="range" class="slider" id="meshSize" min="1" max="4" step="0.1" value="2">
+                <div class="slider-value">Size: <span id="sizeValue">2.0</span></div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="control-title">Display</div>
+            <div class="control-item">
+                <label class="control-label">Transparency</label>
+                <input type="range" class="slider" id="transparency" min="0" max="90" step="5" value="15">
+                <div class="slider-value">Opacity: <span id="transparencyValue">85</span>%</div>
+            </div>
+            <div class="control-item">
+                <label class="control-label">Clipping Plane</label>
+                <input type="range" class="slider" id="clipping" min="-100" max="100" step="5" value="0">
+                <div class="slider-value">Position: <span id="clippingValue">0</span>%</div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Import the three.js library -->
+    <div class="main-view">
+        <div class="info-panel">
+            <div class="info-row">
+                <span class="info-label">Elements:</span>
+                <span id="elementCount">27</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Nodes:</span>
+                <span id="nodeCount">64</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Faces:</span>
+                <span id="faceCount">54</span>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
     <script>
-        // --- SCENE SETUP ---
-        let scene, camera, renderer, cube;
+        let scene, camera, renderer, cube, wireframe;
+        let meshDensity = 3;
+        let meshSize = 2.0;
+        let meshType = 'hexa';
+        let clippingPlane = new THREE.Plane(new THREE.Vector3(1, 0, 0), 0);
 
-        // --- MOUSE INTERACTION VARIABLES ---
+        // Mouse interaction
         let isLeftMouseDown = false;
         let isRightMouseDown = false;
-        let previousMousePosition = {
-            x: 0,
-            y: 0
-        };
+        let previousMousePosition = { x: 0, y: 0 };
+        let rotationVelocity = { x: 0, y: 0 };
+        let positionVelocity = { x: 0, y: 0 };
+        const damping = 0.95;
 
         function init() {
-            // --- Scene ---
+            // Scene
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x2c3e50);
+            scene.background = new THREE.Color(0xf0f0f0);
 
-            // --- Camera ---
-            // Set up a perspective camera.
-            // Arguments: Field of View, Aspect Ratio, Near Clipping Plane, Far Clipping Plane
-            const fov = 75;
+            // Orthogonal Camera
+            const frustumSize = 5;
             const aspect = window.innerWidth / window.innerHeight;
-            const near = 0.1;
-            const far = 1000;
-            camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-            camera.position.z = 5; // Move the camera back so we can see the cube
+            camera = new THREE.OrthographicCamera(
+                frustumSize * aspect / -2, frustumSize * aspect / 2,
+                frustumSize / 2, frustumSize / -2,
+                0.1, 1000
+            );
+            camera.position.set(4, 4, 4);
+            camera.lookAt(0, 0, 0);
 
-            // --- Renderer ---
-            // The renderer is what draws the scene onto the canvas.
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth * 0.8, window.innerHeight * 0.8);
-            document.body.appendChild(renderer.domElement);
+            // Simple renderer setup for engineering
+            renderer = new THREE.WebGLRenderer({ 
+                antialias: true,
+                alpha: true
+            });
+            
+            const container = document.querySelector('.main-view');
+            const width = container.clientWidth * 0.8;
+            const height = container.clientHeight * 0.8;
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
 
-            // --- Geometry and Material ---
-            // A BoxGeometry is a cube shape.
-            const geometry = new THREE.BoxGeometry(2, 2, 2);
-            // A MeshNormalMaterial colors the faces of the cube based on their orientation.
-            const material = new THREE.MeshNormalMaterial();
+            // Simple engineering lighting
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
+            
+            // Enable clipping planes in renderer
+            renderer.localClippingEnabled = true;
 
-            // --- Mesh (Cube) ---
-            // A mesh is an object that takes a geometry and applies a material to it.
-            cube = new THREE.Mesh(geometry, material);
-            scene.add(cube);
+            // Create initial mesh
+            createMesh();
 
-            // --- Event Listeners ---
-            renderer.domElement.addEventListener('mousedown', onMouseDown, false);
-            renderer.domElement.addEventListener('mousemove', onMouseMove, false);
-            renderer.domElement.addEventListener('mouseup', onMouseUp, false);
-            // Prevent the default right-click context menu
-            renderer.domElement.addEventListener('contextmenu', (event) => event.preventDefault(), false);
-            // Handle window resizing
-            window.addEventListener('resize', onWindowResize, false);
+            // Setup controls
+            setupControls();
+
+            // Animation loop
+            animate();
         }
 
-        // --- EVENT HANDLER FUNCTIONS ---
+        function createTetrahedralMesh() {
+            // Create tetrahedral elements using TetrahedronGeometry
+            const group = new THREE.Group();
+            const step = meshSize / meshDensity;
+            
+            for (let x = 0; x < meshDensity; x++) {
+                for (let y = 0; y < meshDensity; y++) {
+                    for (let z = 0; z < meshDensity; z++) {
+                        const tetraGeometry = new THREE.TetrahedronGeometry(step * 0.3);
+                        
+                        const posX = (x - meshDensity/2 + 0.5) * step;
+                        const posY = (y - meshDensity/2 + 0.5) * step;
+                        const posZ = (z - meshDensity/2 + 0.5) * step;
+                        
+                        // Create solid tetrahedron
+                        const tetraMaterial = new THREE.MeshLambertMaterial({
+                            color: 0x4f46e5,
+                            transparent: true,
+                            opacity: 0.85,
+                            side: THREE.DoubleSide,
+                            clippingPlanes: [clippingPlane]
+                        });
+                        
+                        const tetra = new THREE.Mesh(tetraGeometry, tetraMaterial);
+                        tetra.position.set(posX, posY, posZ);
+                        tetra.rotation.set(
+                            Math.random() * Math.PI / 4,
+                            Math.random() * Math.PI / 4,
+                            Math.random() * Math.PI / 4
+                        );
+                        
+                        group.add(tetra);
+                        
+                        // Create wireframe
+                        const wireframeMaterial = new THREE.MeshBasicMaterial({
+                            color: 0x1e293b,
+                            wireframe: true,
+                            transparent: true,
+                            opacity: 0.8
+                        });
+                        
+                        const wireframeTetra = new THREE.Mesh(tetraGeometry.clone(), wireframeMaterial);
+                        wireframeTetra.position.copy(tetra.position);
+                        wireframeTetra.rotation.copy(tetra.rotation);
+                        group.add(wireframeTetra);
+                    }
+                }
+            }
+            
+            return group;
+        }
+
+        function createMesh() {
+            // Remove existing mesh
+            if (cube) scene.remove(cube);
+            if (wireframe) scene.remove(wireframe);
+
+            if (meshType === 'tetra') {
+                // Tetrahedral mesh returns a group with both solid and wireframe
+                cube = createTetrahedralMesh();
+                scene.add(cube);
+            } else {
+                // Create geometry for hexa and poly
+                const geometry = new THREE.BoxGeometry(meshSize, meshSize, meshSize, meshDensity, meshDensity, meshDensity);
+
+                // Simple engineering materials
+                const cubeMaterial = new THREE.MeshLambertMaterial({
+                    color: 0x4f46e5, // Engineering blue
+                    transparent: true,
+                    opacity: 0.85,
+                    side: THREE.DoubleSide,
+                    clippingPlanes: [clippingPlane]
+                });
+
+                const wireframeMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x1e293b, // Dark gray
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.8
+                });
+
+                // Create meshes
+                cube = new THREE.Mesh(geometry, cubeMaterial);
+                wireframe = new THREE.Mesh(geometry.clone(), wireframeMaterial);
+
+                // Show surfaces for hexa, hide for poly (clipping view)
+                cube.visible = (meshType === 'hexa');
+                wireframe.visible = true;
+
+                scene.add(cube);
+                scene.add(wireframe);
+            }
+
+            // Update info
+            updateInfo();
+        }
+
+        function updateInfo() {
+            const elements = meshDensity * meshDensity * meshDensity;
+            
+            let nodes, faces;
+            if (meshType === 'tetra') {
+                // For tetrahedral mesh, each element has 4 nodes and 4 faces
+                nodes = elements * 4; // Each tetrahedron has 4 vertices
+                faces = elements * 4; // Each tetrahedron has 4 triangular faces
+            } else if (meshType === 'hexa') {
+                // For hexahedral (cube) mesh
+                nodes = (meshDensity + 1) * (meshDensity + 1) * (meshDensity + 1);
+                faces = elements * 6; // Each hex has 6 faces
+            } else { // poly
+                nodes = (meshDensity + 1) * (meshDensity + 1) * (meshDensity + 1);
+                faces = elements * Math.floor(Math.random() * 6) + 4; // Variable faces for poly
+            }
+
+            document.getElementById('elementCount').textContent = elements;
+            document.getElementById('nodeCount').textContent = nodes;
+            document.getElementById('faceCount').textContent = faces;
+        }
+
+        function setupControls() {
+            // Mesh type selector
+            document.getElementById('meshType').addEventListener('change', (e) => {
+                meshType = e.target.value;
+                createMesh();
+            });
+
+            // Mesh density slider
+            document.getElementById('meshDensity').addEventListener('input', (e) => {
+                meshDensity = parseInt(e.target.value);
+                document.getElementById('densityValue').textContent = meshDensity;
+                createMesh();
+            });
+
+            // Mesh size slider
+            document.getElementById('meshSize').addEventListener('input', (e) => {
+                meshSize = parseFloat(e.target.value);
+                document.getElementById('sizeValue').textContent = meshSize.toFixed(1);
+                createMesh();
+            });
+
+            // Transparency slider
+            document.getElementById('transparency').addEventListener('input', (e) => {
+                const transparencyPercent = parseInt(e.target.value);
+                const opacity = (100 - transparencyPercent) / 100;
+                document.getElementById('transparencyValue').textContent = (100 - transparencyPercent);
+                
+                // Update opacity based on mesh type
+                if (cube) {
+                    if (meshType === 'tetra') {
+                        // Update all tetrahedra in the group
+                        cube.children.forEach(child => {
+                            if (child.material && !child.material.wireframe) {
+                                child.material.opacity = opacity;
+                            }
+                        });
+                    } else {
+                        // Update regular cube
+                        cube.material.opacity = opacity;
+                    }
+                }
+            });
+
+            // Clipping plane slider
+            document.getElementById('clipping').addEventListener('input', (e) => {
+                const clippingPercent = parseInt(e.target.value);
+                document.getElementById('clippingValue').textContent = clippingPercent;
+                
+                // Update clipping plane position
+                const clippingPos = (clippingPercent / 100) * meshSize;
+                clippingPlane.constant = clippingPos;
+            });
+
+            // Mouse controls
+            const canvas = renderer.domElement;
+            canvas.addEventListener('mousedown', onMouseDown);
+            canvas.addEventListener('mousemove', onMouseMove);
+            canvas.addEventListener('mouseup', onMouseUp);
+            canvas.addEventListener('contextmenu', e => e.preventDefault());
+            canvas.addEventListener('wheel', onWheel);
+        }
 
         function onMouseDown(event) {
-            // Check which mouse button was pressed
-            if (event.button === 0) { // Left mouse button
+            if (event.button === 0) {
                 isLeftMouseDown = true;
-            } else if (event.button === 2) { // Right mouse button
+            } else if (event.button === 2) {
                 isRightMouseDown = true;
             }
-            // Store the initial mouse position
             previousMousePosition.x = event.clientX;
             previousMousePosition.y = event.clientY;
         }
@@ -120,63 +445,87 @@
                 y: event.clientY - previousMousePosition.y
             };
 
-            // --- Handle Rotation (Left Mouse Button) ---
             if (isLeftMouseDown) {
-                // The rotation amount is proportional to the distance the mouse has moved.
-                const deltaRotationQuaternion = new THREE.Quaternion()
-                    .setFromEuler(new THREE.Euler(
-                        toRadians(deltaMove.y * 1),
-                        toRadians(deltaMove.x * 1),
-                        0,
-                        'XYZ'
-                    ));
-                // Apply the rotation to the cube's quaternion.
-                cube.quaternion.multiplyQuaternions(deltaRotationQuaternion, cube.quaternion);
+                // Rotate
+                rotationVelocity.x = deltaMove.y * 0.01;
+                rotationVelocity.y = deltaMove.x * 0.01;
+                
+                cube.rotation.x += deltaMove.y * 0.01;
+                cube.rotation.y += deltaMove.x * 0.01;
+                
+                if (wireframe && meshType !== 'tetra') {
+                    wireframe.rotation.copy(cube.rotation);
+                }
             }
 
-            // --- Handle Dragging/Panning (Right Mouse Button) ---
             if (isRightMouseDown) {
-                // The position change is scaled to feel natural.
+                // Move
+                positionVelocity.x = deltaMove.x * 0.001;
+                positionVelocity.y = -deltaMove.y * 0.001;
+                
                 cube.position.x += deltaMove.x * 0.01;
                 cube.position.y -= deltaMove.y * 0.01;
+                
+                if (wireframe && meshType !== 'tetra') {
+                    wireframe.position.copy(cube.position);
+                }
             }
 
-            // Update the previous mouse position for the next frame.
-            previousMousePosition = {
-                x: event.clientX,
-                y: event.clientY
-            };
+            previousMousePosition.x = event.clientX;
+            previousMousePosition.y = event.clientY;
         }
 
         function onMouseUp(event) {
-            // Reset the flags when the mouse button is released
             isLeftMouseDown = false;
             isRightMouseDown = false;
         }
 
-        function onWindowResize() {
-            // Update camera aspect ratio and renderer size on window resize.
-            camera.aspect = window.innerWidth / window.innerHeight;
+        function onWheel(event) {
+            event.preventDefault();
+            const zoomSpeed = 0.1;
+            const frustumSize = Math.max(2, Math.min(10, camera.right * 2 + event.deltaY * zoomSpeed * 0.01));
+            const aspect = window.innerWidth / window.innerHeight;
+            
+            camera.left = frustumSize * aspect / -2;
+            camera.right = frustumSize * aspect / 2;
+            camera.top = frustumSize / 2;
+            camera.bottom = frustumSize / -2;
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth * 0.8, window.innerHeight * 0.8);
         }
 
-        // --- UTILITY FUNCTION ---
-        function toRadians(angle) {
-            return angle * (Math.PI / 180);
-        }
-
-        // --- ANIMATION LOOP ---
         function animate() {
-            // requestAnimationFrame creates a smooth animation loop.
             requestAnimationFrame(animate);
-            // Render the scene from the perspective of the camera.
+
+            // Apply inertia
+            if (!isLeftMouseDown && (Math.abs(rotationVelocity.x) > 0.001 || Math.abs(rotationVelocity.y) > 0.001)) {
+                cube.rotation.x += rotationVelocity.x;
+                cube.rotation.y += rotationVelocity.y;
+                
+                if (wireframe && meshType !== 'tetra') {
+                    wireframe.rotation.copy(cube.rotation);
+                }
+                
+                rotationVelocity.x *= damping;
+                rotationVelocity.y *= damping;
+            }
+
+            if (!isRightMouseDown && (Math.abs(positionVelocity.x) > 0.001 || Math.abs(positionVelocity.y) > 0.001)) {
+                cube.position.x += positionVelocity.x;
+                cube.position.y += positionVelocity.y;
+                
+                if (wireframe && meshType !== 'tetra') {
+                    wireframe.position.copy(cube.position);
+                }
+                
+                positionVelocity.x *= damping;
+                positionVelocity.y *= damping;
+            }
+
             renderer.render(scene, camera);
         }
 
-        // --- START EVERYTHING ---
+        // Start the application
         init();
-        animate();
     </script>
 </body>
 </html>

@@ -1,0 +1,2446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluid Dynamics Handbook - Complete Educational Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Crimson+Pro:wght@400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #1e293b;
+            --secondary-color: #475569;
+            --accent-color: #0369a1;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --error-color: #dc2626;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --bg-primary: #fefefe;
+            --bg-secondary: #f8fafc;
+            --border-color: #e2e8f0;
+            --shadow-light: 0 1px 3px rgba(15, 23, 42, 0.1);
+            --shadow-medium: 0 4px 6px rgba(15, 23, 42, 0.12);
+            --shadow-heavy: 0 10px 25px rgba(15, 23, 42, 0.15);
+            --academic-navy: #1e293b;
+            --academic-blue: #0369a1;
+            --academic-gold: #d97706;
+            --paper-white: #fefefe;
+            --highlight-yellow: #fef3c7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', 'Georgia', serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .handbook-container {
+            display: flex;
+            height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--paper-white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar {
+            width: 320px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 2px solid var(--academic-gold);
+            background: var(--academic-navy);
+            color: white;
+            position: relative;
+        }
+
+        .sidebar-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--academic-gold), transparent);
+        }
+
+        .handbook-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .handbook-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .progress-section {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .progress-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 5.6%;
+            transition: width 0.5s ease;
+        }
+
+        .chapter-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .chapter {
+            margin-bottom: 8px;
+        }
+
+        .chapter-title {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .chapter-title:hover {
+            background: rgba(37, 99, 235, 0.1);
+            transform: translateX(2px);
+        }
+
+        .chapter-icon {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .chapter-sections {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .chapter-sections.expanded {
+            max-height: 500px;
+        }
+
+        .section-item {
+            padding: 10px 20px 10px 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .section-item:hover {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            transform: translateX(3px);
+        }
+
+        .section-item.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .section-status {
+            font-size: 8px;
+            color: #cbd5e1;
+        }
+
+        .section-item.active .section-status {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .content-tools {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tool-btn {
+            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .tool-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .content-main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: var(--bg-primary);
+        }
+
+        .content-page {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .page-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-family: 'Crimson Pro', serif;
+        }
+
+        .page-subtitle {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .content-text {
+            font-size: 16px;
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+
+        .definition-box,
+        .formula-box,
+        .example-box,
+        .highlight-box {
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 10px;
+            border-left: 4px solid;
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, var(--highlight-yellow), rgba(253, 224, 71, 0.1));
+            border-left-color: var(--academic-gold);
+            box-shadow: var(--shadow-light);
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, rgba(3, 105, 161, 0.1), rgba(3, 105, 161, 0.05));
+            border-left-color: var(--academic-blue);
+            box-shadow: var(--shadow-light);
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, rgba(3, 105, 161, 0.08), rgba(3, 105, 161, 0.03));
+            border-left-color: var(--academic-blue);
+            box-shadow: var(--shadow-light);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.1), rgba(30, 41, 59, 0.05));
+            border-left-color: var(--academic-navy);
+            box-shadow: var(--shadow-light);
+        }
+
+        .definition-title,
+        .formula-title,
+        .example-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .section-heading {
+            font-size: 1.8em;
+            color: var(--primary-color);
+            margin: 30px 0 20px 0;
+            font-family: 'Crimson Pro', serif;
+        }
+
+        .subsection-heading {
+            font-size: 1.3em;
+            color: var(--secondary-color);
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+        }
+
+        /* Academic Section Structure for Micro-Learning */
+        .learning-section {
+            background: var(--paper-white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+            animation: fadeInModule 0.5s ease-in-out;
+        }
+
+        .learning-section:hover {
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeInModule {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--academic-navy), var(--academic-blue));
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .section-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .section-content {
+            padding: 20px;
+        }
+
+        .section-progress {
+            background: var(--bg-secondary);
+            padding: 10px 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-indicator {
+            display: flex;
+            gap: 5px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.completed {
+            background: var(--success-color);
+        }
+
+        .progress-dot.current {
+            background: var(--academic-blue);
+            transform: scale(1.2);
+        }
+
+        .section-completion {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .completion-badge {
+            background: var(--success-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .next-section-btn {
+            background: var(--academic-blue);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .next-section-btn:hover {
+            background: var(--academic-navy);
+            transform: translateY(-1px);
+        }
+
+        /* Interactive Diagrams */
+        .diagram-container {
+            margin: 30px 0;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .diagram-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .diagram-canvas {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto 15px auto;
+        }
+
+        .diagram-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .diagram-btn {
+            padding: 8px 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .diagram-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .diagram-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Knowledge Checks */
+        .knowledge-check {
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px solid var(--warning-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .check-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .question {
+            font-weight: 500;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        .answer-options {
+            margin: 15px 0;
+        }
+
+        .answer-option {
+            padding: 10px 15px;
+            margin: 5px 0;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .answer-option:hover {
+            background: rgba(37, 99, 235, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .answer-option.selected {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .check-btn {
+            background: var(--warning-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-color);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .feedback.correct {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+
+        .footer-nav {
+            margin-top: 50px;
+            padding: 20px 0;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .nav-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Search Modal */
+        .search-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .search-container {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: var(--shadow-heavy);
+            width: 90%;
+            max-width: 600px;
+            max-height: 70vh;
+            overflow: hidden;
+        }
+
+        .search-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .search-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 8px;
+        }
+
+        .search-results {
+            max-height: 50vh;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .search-result {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s ease;
+        }
+
+        .search-result:hover {
+            background: var(--bg-secondary);
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .result-chapter {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .result-snippet {
+            font-size: 14px;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .result-highlight {
+            background: yellow;
+            padding: 1px 2px;
+            border-radius: 2px;
+        }
+
+        .search-suggestions {
+            padding: 20px;
+        }
+
+        .suggestions-title {
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .suggestion-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suggestion-tag {
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-tag:hover {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Notes System */
+        .notes-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .notes-container {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: var(--shadow-heavy);
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notes-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .notes-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="handbook-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="handbook-title">
+                    <i class="fas fa-book-open"></i>
+                    Fluid Dynamics Handbook
+                </div>
+                <div class="handbook-subtitle">Complete Educational Platform</div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-title">Learning Progress</div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-text" style="font-size: 12px; color: var(--text-secondary); margin-top: 8px; text-align: center;">
+                    1 of 18 sections completed
+                </div>
+            </div>
+
+            <nav class="chapter-nav">
+                <div class="chapter">
+                    <div class="chapter-title" data-chapter="fundamentals">
+                        <div>
+                            <i class="fas fa-flask chapter-icon"></i>
+                            Fundamentals
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="chapter-sections expanded">
+                        <div class="section-item active" data-section="introduction">
+                            Introduction to Fluids
+                            <span class="section-status"><i class="fas fa-check-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="properties">
+                            Fluid Properties
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="classification">
+                            Flow Classification
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chapter">
+                    <div class="chapter-title" data-chapter="kinematics">
+                        <div>
+                            <i class="fas fa-wind chapter-icon"></i>
+                            Fluid Kinematics
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="chapter-sections">
+                        <div class="section-item" data-section="velocity-field">
+                            Velocity Fields
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="streamlines">
+                            Streamlines & Pathlines
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="acceleration">
+                            Acceleration Fields
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chapter">
+                    <div class="chapter-title" data-chapter="conservation">
+                        <div>
+                            <i class="fas fa-balance-scale chapter-icon"></i>
+                            Conservation Laws
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="chapter-sections">
+                        <div class="section-item" data-section="continuity">
+                            Continuity Equation
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="momentum">
+                            Momentum Equation
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="energy">
+                            Energy Equation
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chapter">
+                    <div class="chapter-title" data-chapter="applications">
+                        <div>
+                            <i class="fas fa-cogs chapter-icon"></i>
+                            Applications
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="chapter-sections">
+                        <div class="section-item" data-section="bernoulli">
+                            Bernoulli's Equation
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="pipe-flow">
+                            Pipe Flow
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="external-flow">
+                            External Flow
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chapter">
+                    <div class="chapter-title" data-chapter="dimensional">
+                        <div>
+                            <i class="fas fa-calculator chapter-icon"></i>
+                            Dimensional Analysis
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="chapter-sections">
+                        <div class="section-item" data-section="buckingham-pi">
+                            Buckingham Pi Theorem
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="similarity">
+                            Dynamic Similarity
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="model-testing">
+                            Model Testing
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chapter">
+                    <div class="chapter-title" data-chapter="advanced">
+                        <div>
+                            <i class="fas fa-microchip chapter-icon"></i>
+                            Advanced Topics
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="chapter-sections">
+                        <div class="section-item" data-section="cfd-intro">
+                            CFD Introduction
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="turbulence">
+                            Turbulence Modeling
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="compressible">
+                            Compressible Flow
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="content-area">
+            <div class="content-header">
+                <div class="breadcrumb" id="breadcrumb">
+                    Fundamentals › Introduction to Fluids
+                </div>
+                <div class="content-tools">
+                    <div class="tool-btn" id="bookmark-btn">
+                        <i class="fas fa-bookmark"></i>
+                        Bookmark
+                    </div>
+                    <div class="tool-btn" id="print-btn">
+                        <i class="fas fa-print"></i>
+                        Print
+                    </div>
+                    <div class="tool-btn" id="search-btn">
+                        <i class="fas fa-search"></i>
+                        Search
+                    </div>
+                    <div class="tool-btn" id="notes-btn">
+                        <i class="fas fa-sticky-note"></i>
+                        Notes
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-main">
+                <div class="content-page fade-in" id="content-container">
+                    <!-- Content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div id="search-modal" class="search-modal">
+        <div class="search-container">
+            <div class="search-header">
+                <input type="text" id="search-input" class="search-input" placeholder="Search the handbook..." autocomplete="off">
+                <button id="search-close" class="search-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="search-results" class="search-results">
+                <div class="search-suggestions">
+                    <div class="suggestions-title">Popular Topics</div>
+                    <div class="suggestion-tags">
+                        <span class="suggestion-tag" data-term="bernoulli">Bernoulli's Equation</span>
+                        <span class="suggestion-tag" data-term="reynolds">Reynolds Number</span>
+                        <span class="suggestion-tag" data-term="continuity">Continuity Equation</span>
+                        <span class="suggestion-tag" data-term="viscosity">Viscosity</span>
+                        <span class="suggestion-tag" data-term="laminar">Laminar Flow</span>
+                        <span class="suggestion-tag" data-term="turbulent">Turbulent Flow</span>
+                        <span class="suggestion-tag" data-term="pressure">Pressure</span>
+                        <span class="suggestion-tag" data-term="velocity">Velocity</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes Modal -->
+    <div id="notes-modal" class="notes-modal">
+        <div class="notes-container">
+            <div class="notes-header">
+                <div class="notes-title">
+                    <i class="fas fa-sticky-note"></i>
+                    My Notes
+                </div>
+                <button id="notes-close" class="search-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- Notes functionality will be added -->
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentChapter = 'fundamentals';
+        let currentSection = 'introduction';
+        let completedSections = ['introduction'];
+        let bookmarks = [];
+        let notes = [];
+        let currentNoteId = null;
+
+        // Content data structure - Complete 18 sections
+        const handbookContent = {
+            fundamentals: {
+                title: "Fundamentals",
+                sections: {
+                    introduction: {
+                        title: "Introduction to Fluids",
+                        content: "introduction"
+                    },
+                    properties: {
+                        title: "Fluid Properties",
+                        content: "properties"
+                    },
+                    classification: {
+                        title: "Flow Classification", 
+                        content: "classification"
+                    }
+                }
+            },
+            kinematics: {
+                title: "Fluid Kinematics",
+                sections: {
+                    "velocity-field": {
+                        title: "Velocity Fields",
+                        content: "velocity-field"
+                    },
+                    streamlines: {
+                        title: "Streamlines & Pathlines",
+                        content: "streamlines"
+                    },
+                    acceleration: {
+                        title: "Acceleration Fields",
+                        content: "acceleration"
+                    }
+                }
+            },
+            conservation: {
+                title: "Conservation Laws",
+                sections: {
+                    continuity: {
+                        title: "Continuity Equation",
+                        content: "continuity"
+                    },
+                    momentum: {
+                        title: "Momentum Equation",
+                        content: "momentum"
+                    },
+                    energy: {
+                        title: "Energy Equation",
+                        content: "energy"
+                    }
+                }
+            },
+            applications: {
+                title: "Applications",
+                sections: {
+                    bernoulli: {
+                        title: "Bernoulli's Equation",
+                        content: "bernoulli"
+                    },
+                    "pipe-flow": {
+                        title: "Pipe Flow",
+                        content: "pipe-flow"
+                    },
+                    "external-flow": {
+                        title: "External Flow",
+                        content: "external-flow"
+                    }
+                }
+            },
+            dimensional: {
+                title: "Dimensional Analysis",
+                sections: {
+                    "buckingham-pi": {
+                        title: "Buckingham Pi Theorem",
+                        content: "buckingham-pi"
+                    },
+                    similarity: {
+                        title: "Dynamic Similarity",
+                        content: "similarity"
+                    },
+                    "model-testing": {
+                        title: "Model Testing",
+                        content: "model-testing"
+                    }
+                }
+            },
+            advanced: {
+                title: "Advanced Topics",
+                sections: {
+                    "cfd-intro": {
+                        title: "CFD Introduction",
+                        content: "cfd-intro"
+                    },
+                    turbulence: {
+                        title: "Turbulence Modeling",
+                        content: "turbulence"
+                    },
+                    compressible: {
+                        title: "Compressible Flow",
+                        content: "compressible"
+                    }
+                }
+            }
+        };
+
+        // Initialize the application
+        function init() {
+            console.log('Initializing Complete Fluid Dynamics Handbook...');
+            
+            setupNavigation();
+            setupTools();
+            updateProgress();
+            loadSectionContent('introduction'); // Load initial content
+            
+            console.log('Complete Handbook initialized successfully!');
+        }
+
+        function setupNavigation() {
+            console.log('Setting up navigation...');
+            
+            // Chapter title clicks
+            const chapterTitles = document.querySelectorAll('.chapter-title');
+            console.log('Found', chapterTitles.length, 'chapter titles');
+            
+            chapterTitles.forEach((title, index) => {
+                const chapter = title.dataset.chapter;
+                console.log(`Setting up chapter ${index}: ${chapter}`);
+                
+                title.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Chapter clicked:', chapter);
+                    toggleChapter(chapter);
+                });
+            });
+
+            // Section clicks
+            const sectionItems = document.querySelectorAll('.section-item');
+            console.log('Found', sectionItems.length, 'section items');
+            
+            sectionItems.forEach((item, index) => {
+                const section = item.dataset.section;
+                console.log(`Setting up section ${index}: ${section}`);
+                
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Section clicked:', section);
+                    navigateToSection(section);
+                });
+            });
+            
+            console.log('Navigation setup complete!');
+        }
+
+        function setupTools() {
+            console.log('Setting up tools...');
+            
+            // Bookmark functionality
+            const bookmarkBtn = document.getElementById('bookmark-btn');
+            if (bookmarkBtn) {
+                bookmarkBtn.addEventListener('click', () => {
+                    console.log('Bookmark clicked');
+                    toggleBookmark();
+                });
+            }
+
+            // Print functionality
+            const printBtn = document.getElementById('print-btn');
+            if (printBtn) {
+                printBtn.addEventListener('click', () => {
+                    console.log('Print clicked');
+                    window.print();
+                });
+            }
+
+            // Search functionality
+            const searchBtn = document.getElementById('search-btn');
+            if (searchBtn) {
+                searchBtn.addEventListener('click', () => {
+                    console.log('Search clicked');
+                    showSearchModal();
+                });
+            }
+
+            // Notes functionality
+            const notesBtn = document.getElementById('notes-btn');
+            if (notesBtn) {
+                notesBtn.addEventListener('click', () => {
+                    console.log('Notes clicked');
+                    showNotesModal();
+                });
+            }
+
+            setupSearchTools();
+        }
+
+        function toggleChapter(chapterKey) {
+            console.log('Toggling chapter:', chapterKey);
+            
+            const chapterElement = document.querySelector(`[data-chapter="${chapterKey}"]`);
+            if (!chapterElement) {
+                console.error('Chapter element not found for:', chapterKey);
+                return;
+            }
+            
+            const sectionsElement = chapterElement.nextElementSibling;
+            if (!sectionsElement) {
+                console.error('Sections element not found for chapter:', chapterKey);
+                return;
+            }
+            
+            const chevron = chapterElement.querySelector('.fas.fa-chevron-down, .fas.fa-chevron-up');
+            if (!chevron) {
+                console.error('Chevron element not found for chapter:', chapterKey);
+                return;
+            }
+            
+            console.log('Current expanded state:', sectionsElement.classList.contains('expanded'));
+            
+            if (sectionsElement.classList.contains('expanded')) {
+                sectionsElement.classList.remove('expanded');
+                chevron.className = 'fas fa-chevron-down';
+                console.log('Collapsed chapter:', chapterKey);
+            } else {
+                sectionsElement.classList.add('expanded');
+                chevron.className = 'fas fa-chevron-up';
+                console.log('Expanded chapter:', chapterKey);
+            }
+        }
+
+        function navigateToSection(sectionKey) {
+            console.log('Navigating to section:', sectionKey);
+            
+            // Find which chapter this section belongs to
+            let targetChapter = null;
+            for (const [chapterKey, chapterData] of Object.entries(handbookContent)) {
+                if (chapterData.sections[sectionKey]) {
+                    targetChapter = chapterKey;
+                    break;
+                }
+            }
+
+            if (!targetChapter) {
+                console.error('Section not found:', sectionKey);
+                return;
+            }
+
+            // Update current state
+            currentChapter = targetChapter;
+            currentSection = sectionKey;
+
+            // Update navigation state
+            document.querySelectorAll('.section-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${sectionKey}"]`).classList.add('active');
+
+            // Expand the target chapter if not expanded
+            const targetChapterElement = document.querySelector(`[data-chapter="${targetChapter}"]`);
+            const targetSectionsElement = targetChapterElement.nextElementSibling;
+            if (!targetSectionsElement.classList.contains('expanded')) {
+                toggleChapter(targetChapter);
+            }
+
+            // Update breadcrumb
+            updateBreadcrumb();
+
+            // Load content
+            loadSectionContent(sectionKey);
+
+            // Mark as completed
+            if (!completedSections.includes(sectionKey)) {
+                completedSections.push(sectionKey);
+                updateSectionStatus(sectionKey);
+                updateProgress();
+            }
+        }
+
+        function updateBreadcrumb() {
+            const chapterTitle = handbookContent[currentChapter]?.title || 'Unknown Chapter';
+            const sectionTitle = handbookContent[currentChapter]?.sections[currentSection]?.title || 'Unknown Section';
+            
+            document.getElementById('breadcrumb').textContent = `${chapterTitle} › ${sectionTitle}`;
+        }
+
+        function loadSectionContent(sectionKey) {
+            console.log('Loading content for:', sectionKey);
+            
+            const container = document.getElementById('content-container');
+            
+            // Complete content mapping
+            const contentMap = {
+                introduction: getIntroductionContent(),
+                properties: getPropertiesContent(),
+                classification: getClassificationContent(),
+                "velocity-field": getVelocityFieldContent(),
+                streamlines: getStreamlinesContent(),
+                acceleration: getAccelerationContent(),
+                continuity: getContinuityContent(),
+                momentum: getMomentumContent(),
+                energy: getEnergyContent(),
+                bernoulli: getBernoulliContent(),
+                "pipe-flow": getPipeFlowContent(),
+                "external-flow": getExternalFlowContent(),
+                "buckingham-pi": getBuckinghamPiContent(),
+                similarity: getSimilarityContent(),
+                "model-testing": getModelTestingContent(),
+                "cfd-intro": getCFDIntroContent(),
+                turbulence: getTurbulenceContent(),
+                compressible: getCompressibleContent()
+            };
+            
+            const content = contentMap[sectionKey] || getDefaultContent(sectionKey);
+            container.innerHTML = content;
+            container.className = 'content-page fade-in';
+            
+            // Setup interactive elements after content loads
+            setTimeout(() => {
+                setupInteractiveElements();
+            }, 100);
+            
+            // Re-render MathJax
+            if (window.MathJax) {
+                MathJax.typesetPromise([container]).then(() => {
+                    console.log('MathJax rendering complete for:', sectionKey);
+                });
+            }
+        }
+
+        function setupInteractiveElements() {
+            setupDiagramInteractions();
+            setupKnowledgeChecks();
+        }
+
+        function setupDiagramInteractions() {
+            // Placeholder for diagram interactions
+            console.log('Setting up diagram interactions...');
+        }
+
+        function setupKnowledgeChecks() {
+            // Setup answer option interactions
+            document.querySelectorAll('.answer-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    // Remove selected class from siblings
+                    option.parentElement.querySelectorAll('.answer-option').forEach(o => {
+                        o.classList.remove('selected');
+                    });
+                    // Add selected class to clicked option
+                    option.classList.add('selected');
+                });
+            });
+        }
+
+        function checkAnswer(sectionKey, correctAnswer) {
+            const selectedOption = document.querySelector('#feedback-' + sectionKey).parentElement.querySelector('.answer-option.selected');
+            const feedback = document.getElementById('feedback-' + sectionKey);
+            
+            if (!selectedOption) {
+                feedback.textContent = 'Please select an answer first.';
+                feedback.className = 'feedback incorrect';
+                return;
+            }
+            
+            const userAnswer = selectedOption.dataset.answer;
+            const isCorrect = userAnswer === correctAnswer;
+            
+            feedback.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+            feedback.textContent = isCorrect ? 
+                'Correct! Well done.' : 
+                'Incorrect. The correct answer is ' + correctAnswer.toUpperCase() + '.';
+            
+            // Disable all options
+            selectedOption.parentElement.querySelectorAll('.answer-option').forEach(option => {
+                option.style.pointerEvents = 'none';
+                if (option.dataset.answer === correctAnswer) {
+                    option.style.background = 'var(--success-color)';
+                    option.style.color = 'white';
+                }
+            });
+        }
+
+        function updateSectionStatus(sectionKey) {
+            const sectionElement = document.querySelector(`[data-section="${sectionKey}"]`);
+            if (sectionElement) {
+                const statusIcon = sectionElement.querySelector('.section-status i');
+                if (statusIcon) {
+                    statusIcon.className = 'fas fa-check-circle';
+                    statusIcon.style.color = 'var(--success-color)';
+                }
+            }
+        }
+
+        function updateProgress() {
+            const totalSections = 18;
+            const completedCount = completedSections.length;
+            const progressPercent = (completedCount / totalSections) * 100;
+            
+            document.querySelector('.progress-fill').style.width = `${progressPercent}%`;
+            document.querySelector('.progress-text').textContent = `${completedCount} of ${totalSections} sections completed`;
+        }
+
+        function toggleBookmark() {
+            const currentPage = `${currentChapter}-${currentSection}`;
+            const bookmarkBtn = document.getElementById('bookmark-btn');
+            
+            if (bookmarks.includes(currentPage)) {
+                bookmarks = bookmarks.filter(b => b !== currentPage);
+                bookmarkBtn.innerHTML = '<i class="fas fa-bookmark"></i> Bookmark';
+            } else {
+                bookmarks.push(currentPage);
+                bookmarkBtn.innerHTML = '<i class="fas fa-bookmark"></i> Bookmarked';
+            }
+        }
+
+        // Search functionality
+        function showSearchModal() {
+            const modal = document.getElementById('search-modal');
+            modal.style.display = 'flex';
+            document.getElementById('search-input').focus();
+        }
+
+        function hideSearchModal() {
+            const modal = document.getElementById('search-modal');
+            modal.style.display = 'none';
+            document.getElementById('search-input').value = '';
+        }
+
+        function showNotesModal() {
+            const modal = document.getElementById('notes-modal');
+            modal.style.display = 'flex';
+        }
+
+        function hideNotesModal() {
+            const modal = document.getElementById('notes-modal');
+            modal.style.display = 'none';
+        }
+
+        function setupSearchTools() {
+            // Search input handler
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    if (e.target.value.trim()) {
+                        performSearch(e.target.value);
+                    } else {
+                        showSearchSuggestions();
+                    }
+                });
+            }
+
+            // Search close button
+            const searchClose = document.getElementById('search-close');
+            if (searchClose) {
+                searchClose.addEventListener('click', hideSearchModal);
+            }
+
+            // Close modal when clicking outside
+            const searchModal = document.getElementById('search-modal');
+            if (searchModal) {
+                searchModal.addEventListener('click', (e) => {
+                    if (e.target.id === 'search-modal') {
+                        hideSearchModal();
+                    }
+                });
+            }
+
+            showSearchSuggestions();
+        }
+
+        function performSearch(query) {
+            // Simple search implementation
+            console.log('Searching for:', query);
+            const resultsContainer = document.getElementById('search-results');
+            resultsContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: var(--text-secondary);">Search results for "${query}" will appear here...</div>`;
+        }
+
+        function showSearchSuggestions() {
+            const container = document.getElementById('search-results');
+            container.innerHTML = `
+                <div class="search-suggestions">
+                    <div class="suggestions-title">Popular Topics</div>
+                    <div class="suggestion-tags">
+                        <span class="suggestion-tag" data-term="bernoulli">Bernoulli's Equation</span>
+                        <span class="suggestion-tag" data-term="reynolds">Reynolds Number</span>
+                        <span class="suggestion-tag" data-term="continuity">Continuity Equation</span>
+                        <span class="suggestion-tag" data-term="viscosity">Viscosity</span>
+                        <span class="suggestion-tag" data-term="laminar">Laminar Flow</span>
+                        <span class="suggestion-tag" data-term="turbulent">Turbulent Flow</span>
+                        <span class="suggestion-tag" data-term="pressure">Pressure</span>
+                        <span class="suggestion-tag" data-term="velocity">Velocity</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Navigation helper function
+        function getNavigationFooter(sectionKey) {
+            const allSections = [
+                'introduction', 'properties', 'classification',
+                'velocity-field', 'streamlines', 'acceleration', 
+                'continuity', 'momentum', 'energy',
+                'bernoulli', 'pipe-flow', 'external-flow',
+                'buckingham-pi', 'similarity', 'model-testing',
+                'cfd-intro', 'turbulence', 'compressible'
+            ];
+            
+            const currentIndex = allSections.indexOf(sectionKey);
+            const prevSection = currentIndex > 0 ? allSections[currentIndex - 1] : null;
+            const nextSection = currentIndex < allSections.length - 1 ? allSections[currentIndex + 1] : null;
+            
+            return `
+                <div class="footer-nav">
+                    ${prevSection ? 
+                        `<button class="nav-btn" onclick="navigateToSection('${prevSection}')">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>` : 
+                        '<button class="nav-btn" disabled>Previous</button>'
+                    }
+                    ${nextSection ? 
+                        `<button class="nav-btn" onclick="navigateToSection('${nextSection}')">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>` : 
+                        '<button class="nav-btn" disabled>Next</button>'
+                    }
+                </div>
+            `;
+        }
+
+        // I'll continue with content functions in the next part due to length limits
+        // For now, let me create a comprehensive introduction to demonstrate
+        function getIntroductionContent() {
+            return `
+                <h1 class="page-title">Introduction to Fluids</h1>
+                <p class="page-subtitle">Master fluid mechanics through structured micro-learning modules</p>
+
+                <!-- Module content will be dynamically inserted here -->
+                <div id="module-container"></div>
+
+
+
+                <div id="completion-section" style="display: none; text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, var(--academic-navy), var(--academic-blue)); color: white; border-radius: 12px;">
+                    <h3 style="margin-bottom: 15px; font-size: 24px;">🎓 Congratulations!</h3>
+                    <p style="font-size: 18px; margin-bottom: 10px;">You've completed the Introduction to Fluids</p>
+                    <p style="font-size: 16px; opacity: 0.9;">Mastered the fundamentals through structured learning modules</p>
+                    <div style="margin-top: 20px;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin: 0 5px;">✓ Fluid Definition</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin: 0 5px;">✓ Continuum Theory</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin: 0 5px;">✓ Viscosity</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin: 0 5px;">✓ Dimensions</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin: 0 5px;">✓ Applications</span>
+                    </div>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Knowledge Check</div>
+                    <div class="question">A fluid element subjected to a constant shear stress will:</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) Deform by a finite amount and then remain static</div>
+                        <div class="answer-option" data-answer="b">B) Continuously deform (flow) as long as the stress is applied</div>
+                        <div class="answer-option" data-answer="c">C) Return to its original shape when the stress is removed</div>
+                        <div class="answer-option" data-answer="d">D) Not deform at all if the stress is below the yield stress</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('introduction', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-introduction"></div>
+                </div>
+
+                <h2 class="section-heading">Mathematical Framework</h2>
+
+                <div class="content-text">
+                    Fluid mechanics employs sophisticated mathematical tools to describe fluid behavior. The foundation rests on conservation principles expressed through partial differential equations.
+                </div>
+
+                <div class="subsection-heading">Field Variables and Descriptions</div>
+                <div class="content-text">
+                    Fluid motion can be described using two complementary approaches:
+                </div>
+
+                <div class="definition-box">
+                    <div class="definition-title">Lagrangian Description</div>
+                    <p><strong>Particle-following approach:</strong> Track individual fluid particles through space and time.</p>
+                    <p><strong>Mathematical representation:</strong></p>
+                    <p style="margin: 10px 0;">Position: <strong>r⃗ = r⃗(a⃗, t)</strong> where a⃗ is the initial position</p>
+                    <p>Velocity: <strong>V⃗ = ∂r⃗/∂t|<sub>a⃗</sub></strong></p>
+                    <p><strong>Applications:</strong> Particle tracking, pollution dispersion, weather forecasting</p>
+                </div>
+
+                <div class="definition-box">
+                    <div class="definition-title">Eulerian Description</div>
+                    <p><strong>Field approach:</strong> Observe fluid properties at fixed points in space as functions of time.</p>
+                    <p><strong>Mathematical representation:</strong></p>
+                    <p style="margin: 10px 0;">Velocity field: <strong>V⃗ = V⃗(x⃗, t)</strong></p>
+                    <p>Property fields: <strong>ρ = ρ(x⃗, t), p = p(x⃗, t), T = T(x⃗, t)</strong></p>
+                    <p><strong>Applications:</strong> Most engineering applications, CFD simulations</p>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Material Derivative</div>
+                    <p>The rate of change following a fluid particle (connecting Lagrangian and Eulerian views):</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\frac{D\\phi}{Dt} = \\frac{\\partial \\phi}{\\partial t} + \\vec{V} \\cdot \\nabla \\phi$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        where:<br>
+                        • <strong>Dφ/Dt</strong> = material (substantial) derivative<br>
+                        • <strong>∂φ/∂t</strong> = local derivative (unsteady effects)<br>
+                        • <strong>V⃗ · ∇φ</strong> = convective derivative (spatial transport)
+                    </p>
+                </div>
+
+                <div class="subsection-heading">Thermodynamic Considerations</div>
+                <div class="content-text">
+                    Fluid behavior is governed by thermodynamic relationships that link mechanical and thermal properties.
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Equation of State</div>
+                    <p>Relates pressure, density, and temperature:</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$p = p(\\rho, T)$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        <strong>Perfect Gas:</strong> p = ρRT (R = specific gas constant)<br>
+                        <strong>Incompressible Liquid:</strong> ρ = constant<br>
+                        <strong>Van der Waals Gas:</strong> (p + a/v²)(v - b) = RT
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Compressibility Effects</div>
+                    <p><strong>Bulk Modulus of Elasticity:</strong></p>
+                    <p style="margin: 10px 0; text-align: center;">$$K = -V\\frac{\\partial p}{\\partial V} = \\rho\\frac{\\partial p}{\\partial \\rho}$$</p>
+                    <p><strong>Speed of Sound:</strong></p>
+                    <p style="margin: 10px 0; text-align: center;">$$c = \\sqrt{\\frac{\\partial p}{\\partial \\rho}} = \\sqrt{\\frac{K}{\\rho}}$$</p>
+                    <p><strong>Typical Values:</strong></p>
+                    <p>• Water: K ≈ 2.2 × 10⁹ Pa, c ≈ 1500 m/s</p>
+                    <p>• Air (20°C): c ≈ 343 m/s</p>
+                </div>
+
+                <div class="subsection-heading">Surface Tension and Interfacial Phenomena</div>
+                <div class="content-text">
+                    At interfaces between different phases, intermolecular forces create surface tension effects that become important for small-scale flows or when significant curvature exists.
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Young-Laplace Equation</div>
+                    <p>Pressure jump across a curved interface:</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\Delta p = \\sigma\\left(\\frac{1}{R_1} + \\frac{1}{R_2}\\right)$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        where:<br>
+                        • σ = surface tension [N/m]<br>
+                        • R₁, R₂ = principal radii of curvature<br>
+                        • For a sphere: Δp = 2σ/R<br>
+                        • For a cylinder: Δp = σ/R
+                    </p>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Dimensionless Numbers in Surface Tension:</strong><br>
+                    • <strong>Weber Number:</strong> We = ρV²L/σ (inertial vs surface tension forces)<br>
+                    • <strong>Bond Number:</strong> Bo = ρgL²/σ (gravitational vs surface tension forces)<br>
+                    • <strong>Capillary Number:</strong> Ca = μV/σ (viscous vs surface tension forces)
+                </div>
+
+                <h2 class="section-heading">Scale Analysis and Approximations</h2>
+
+                <div class="content-text">
+                    Engineering fluid mechanics often involves identifying the dominant physical effects through scale analysis, leading to simplified governing equations.
+                </div>
+
+                <div class="subsection-heading">Reynolds Number and Flow Regimes</div>
+                <div class="formula-box">
+                    <div class="formula-title">Reynolds Number</div>
+                    <p>Ratio of inertial to viscous forces:</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$Re = \\frac{\\rho V L}{\\mu} = \\frac{V L}{\\nu}$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        <strong>Physical interpretation:</strong><br>
+                        • High Re: Inertial forces dominate → turbulent flow likely<br>
+                        • Low Re: Viscous forces dominate → laminar flow<br>
+                        • Critical Re values depend on geometry and flow configuration
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Critical Reynolds Numbers</div>
+                    <p><strong>Pipe Flow:</strong> Re<sub>crit</sub> ≈ 2300 (based on diameter)</p>
+                    <p><strong>Flow over flat plate:</strong> Re<sub>crit</sub> ≈ 5 × 10⁵ (based on distance from leading edge)</p>
+                    <p><strong>Flow over cylinder:</strong> Re<sub>crit</sub> ≈ 200,000 (based on diameter)</p>
+                    <p><strong>Flow in boundary layer:</strong> Re<sub>crit</sub> ≈ 1000 (based on momentum thickness)</p>
+                </div>
+
+                <div class="subsection-heading">Mach Number and Compressibility</div>
+                <div class="formula-box">
+                    <div class="formula-title">Mach Number</div>
+                    <p>Ratio of flow velocity to speed of sound:</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$M = \\frac{V}{c}$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        <strong>Flow regimes:</strong><br>
+                        • M < 0.3: Incompressible flow (density variation < 5%)<br>
+                        • 0.3 < M < 1: Subsonic compressible flow<br>
+                        • M = 1: Sonic flow<br>
+                        • M > 1: Supersonic flow (shock waves possible)
+                    </p>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Knowledge Check</div>
+                    <div class="question">A fluid element subjected to a constant shear stress will:</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) Deform by a finite amount and then remain static</div>
+                        <div class="answer-option" data-answer="b">B) Continuously deform (flow) as long as the stress is applied</div>
+                        <div class="answer-option" data-answer="c">C) Return to its original shape when the stress is removed</div>
+                        <div class="answer-option" data-answer="d">D) Not deform at all if the stress is below the yield stress</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('introduction', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-introduction"></div>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Advanced Knowledge Check</div>
+                    <div class="question">The continuum assumption in fluid mechanics is valid when:</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) The Knudsen number is much greater than 1</div>
+                        <div class="answer-option" data-answer="b">B) The Knudsen number is much less than 0.01</div>
+                        <div class="answer-option" data-answer="c">C) The fluid temperature is above the critical point</div>
+                        <div class="answer-option" data-answer="d">D) The fluid velocity exceeds the speed of sound</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('introduction-advanced', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-introduction-advanced"></div>
+                </div>
+
+                <h2 class="section-heading">Historical Development and Modern Perspectives</h2>
+
+                <div class="content-text">
+                    The development of fluid mechanics spans centuries, evolving from empirical observations to sophisticated theoretical frameworks and computational methods.
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Historical Milestones</div>
+                    <p><strong>Ancient Period:</strong></p>
+                    <p>• Archimedes (287-212 BC): Buoyancy principle, hydrostatics</p>
+                    <p>• Hero of Alexandria (10-70 AD): Early understanding of pneumatics</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Renaissance & Early Modern:</strong></p>
+                    <p>• Leonardo da Vinci (1452-1519): Turbulence observations, flow visualization</p>
+                    <p>• Evangelista Torricelli (1608-1647): Torricelli's law for tank discharge</p>
+                    <p>• Blaise Pascal (1623-1662): Pascal's principle for pressure transmission</p>
+                    
+                    <p style="margin-top: 15px;"><strong>18th-19th Century Foundations:</strong></p>
+                    <p>• Daniel Bernoulli (1700-1782): Bernoulli's equation (1738)</p>
+                    <p>• Leonhard Euler (1707-1783): Euler equations for inviscid flow (1757)</p>
+                    <p>• Claude-Louis Navier (1785-1836): Navier-Stokes equations (1822)</p>
+                    <p>• George Gabriel Stokes (1819-1903): Complete Navier-Stokes formulation (1845)</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Modern Era:</strong></p>
+                    <p>• Osborne Reynolds (1842-1912): Reynolds number, turbulence transition (1883)</p>
+                    <p>• Ludwig Prandtl (1875-1953): Boundary layer theory (1904)</p>
+                    <p>• Theodore von Kármán (1881-1963): Turbulence and vortex dynamics</p>
+                </div>
+
+                <div class="subsection-heading">Modern Computational Fluid Dynamics</div>
+                <div class="content-text">
+                    The advent of digital computers revolutionized fluid mechanics, enabling the solution of complex problems previously intractable by analytical methods.
+                </div>
+
+                <div class="definition-box">
+                    <div class="definition-title">CFD Methodology</div>
+                    <p><strong>Governing Equations:</strong> Navier-Stokes equations + continuity + energy</p>
+                    <p><strong>Numerical Methods:</strong></p>
+                    <p>• Finite Difference Method (FDM): Structured grids, simple geometries</p>
+                    <p>• Finite Element Method (FEM): Complex geometries, structural coupling</p>
+                    <p>• Finite Volume Method (FVM): Conservation properties, most popular in CFD</p>
+                    <p><strong>Turbulence Modeling:</strong></p>
+                    <p>• Direct Numerical Simulation (DNS): Resolves all scales</p>
+                    <p>• Large Eddy Simulation (LES): Resolves large scales, models small scales</p>
+                    <p>• Reynolds-Averaged Navier-Stokes (RANS): Time-averaged approach</p>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Modern CFD Applications:</strong><br>
+                    • <strong>Aerospace:</strong> Aircraft design, engine optimization, atmospheric re-entry<br>
+                    • <strong>Automotive:</strong> Aerodynamics, combustion, HVAC systems<br>
+                    • <strong>Energy:</strong> Wind turbines, gas turbines, heat exchangers<br>
+                    • <strong>Environment:</strong> Weather prediction, pollution dispersion, climate modeling<br>
+                    • <strong>Biomedical:</strong> Blood flow modeling, drug delivery, respiratory mechanics
+                </div>
+
+                <div class="subsection-heading">Experimental Methods and Validation</div>
+                <div class="content-text">
+                    Despite computational advances, experimental fluid mechanics remains crucial for validation, discovery of new phenomena, and development of engineering correlations.
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Modern Experimental Techniques</div>
+                    <p><strong>Flow Visualization:</strong></p>
+                    <p>• Particle Image Velocimetry (PIV): Quantitative velocity field measurement</p>
+                    <p>• Laser Doppler Velocimetry (LDV): Point velocity measurements</p>
+                    <p>• Hot-wire anemometry: Turbulence measurements</p>
+                    <p>• Schlieren photography: Density gradient visualization</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Pressure and Force Measurement:</strong></p>
+                    <p>• Pressure transducers: Unsteady pressure measurement</p>
+                    <p>• Load cells: Force and moment measurement</p>
+                    <p>• Pressure-sensitive paint: Surface pressure distribution</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Advanced Diagnostics:</strong></p>
+                    <p>• Molecular tagging velocimetry: Non-intrusive velocity measurement</p>
+                    <p>• Pressure-sensitive and temperature-sensitive paints</p>
+                    <p>• High-speed imaging: Transient phenomena capture</p>
+                </div>
+
+                <h2 class="section-heading">Scope and Organization of Study</h2>
+
+                <div class="content-text">
+                    This handbook provides a comprehensive treatment of fluid mechanics, progressing from fundamental concepts to advanced applications. The material is organized to build understanding systematically while providing practical engineering insights.
+                </div>
+
+                <div class="definition-box">
+                    <div class="definition-title">Learning Objectives</div>
+                    <p>Upon completing this handbook, you will be able to:</p>
+                    <p>• <strong>Analyze</strong> fluid statics problems involving pressure distribution and buoyancy</p>
+                    <p>• <strong>Apply</strong> conservation principles to solve fluid flow problems</p>
+                    <p>• <strong>Design</strong> piping systems and select appropriate pumps</p>
+                    <p>• <strong>Evaluate</strong> boundary layer development and separation</p>
+                    <p>• <strong>Perform</strong> dimensional analysis for experimental planning</p>
+                    <p>• <strong>Understand</strong> compressible flow phenomena and shock waves</p>
+                    <p>• <strong>Appreciate</strong> turbulence physics and modeling approaches</p>
+                </div>
+
+                <div class="subsection-heading">Mathematical Prerequisites</div>
+                <div class="content-text">
+                    Effective study of fluid mechanics requires solid mathematical foundations:
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Essential Mathematical Tools:</strong><br>
+                    • <strong>Vector Calculus:</strong> Gradient, divergence, curl operations in various coordinate systems<br>
+                    • <strong>Partial Differential Equations:</strong> Classification, solution methods, boundary conditions<br>
+                    • <strong>Ordinary Differential Equations:</strong> Linear and nonlinear systems, stability analysis<br>
+                    • <strong>Complex Analysis:</strong> Conformal mapping, potential flow theory<br>
+                    • <strong>Tensor Analysis:</strong> Stress and strain tensors, coordinate transformations<br>
+                    • <strong>Dimensional Analysis:</strong> Buckingham Pi theorem, similarity theory
+                </div>
+
+                <div class="subsection-heading">Problem-Solving Methodology</div>
+                <div class="content-text">
+                    Successful fluid mechanics problem solving follows a systematic approach:
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Systematic Problem-Solving Steps</div>
+                    <p><strong>1. Problem Understanding:</strong></p>
+                    <p>• Identify the physical system and boundaries</p>
+                    <p>• Determine what is given and what needs to be found</p>
+                    <p>• Sketch the problem with coordinate system</p>
+                    
+                    <p style="margin-top: 10px;"><strong>2. Physical Analysis:</strong></p>
+                    <p>• Identify the relevant physical phenomena</p>
+                    <p>• Make reasonable assumptions and approximations</p>
+                    <p>• Choose appropriate governing equations</p>
+                    
+                    <p style="margin-top: 10px;"><strong>3. Mathematical Formulation:</strong></p>
+                    <p>• Apply conservation principles</p>
+                    <p>• Specify boundary and initial conditions</p>
+                    <p>• Perform dimensional analysis if appropriate</p>
+                    
+                    <p style="margin-top: 10px;"><strong>4. Solution and Verification:</strong></p>
+                    <p>• Solve the mathematical problem</p>
+                    <p>• Check dimensional consistency</p>
+                    <p>• Verify limiting cases and physical reasonableness</p>
+                </div>
+
+
+
+                ${getNavigationFooter('introduction')}
+            `;
+        }
+
+        // Placeholder content functions - these will be expanded with full content
+        function getPropertiesContent() {
+            return `
+                <h1 class="page-title">Fluid Properties</h1>
+                <p class="page-subtitle">Physical and thermodynamic characteristics of fluids</p>
+                <div class="content-text">Comprehensive content on fluid properties including density, viscosity, compressibility, and surface tension...</div>
+                ${getNavigationFooter('properties')}
+            `;
+        }
+
+        function getClassificationContent() {
+            return `
+                <h1 class="page-title">Flow Classification</h1>
+                <p class="page-subtitle">Different types of fluid flow patterns</p>
+                <div class="content-text">Detailed classification of fluid flows: laminar vs turbulent, steady vs unsteady, compressible vs incompressible...</div>
+                ${getNavigationFooter('classification')}
+            `;
+        }
+
+        function getVelocityFieldContent() {
+            return `
+                <h1 class="page-title">Velocity Fields</h1>
+                <p class="page-subtitle">Describing fluid motion through velocity vectors</p>
+                <div class="content-text">Complete coverage of velocity field representation, Eulerian and Lagrangian descriptions...</div>
+                ${getNavigationFooter('velocity-field')}
+            `;
+        }
+
+        function getStreamlinesContent() {
+            return `
+                <h1 class="page-title">Streamlines & Pathlines</h1>
+                <p class="page-subtitle">Visualization of fluid flow patterns</p>
+                <div class="content-text">Comprehensive explanation of flow visualization techniques including streamlines, pathlines, streaklines...</div>
+                ${getNavigationFooter('streamlines')}
+            `;
+        }
+
+        function getAccelerationContent() {
+            return `
+                <h1 class="page-title">Acceleration Fields</h1>
+                <p class="page-subtitle">Rate of change of velocity in fluid flow</p>
+                <div class="content-text">Detailed analysis of fluid acceleration including material derivative, local and convective acceleration...</div>
+                ${getNavigationFooter('acceleration')}
+            `;
+        }
+
+        function getContinuityContent() {
+            return `
+                <h1 class="page-title">Continuity Equation</h1>
+                <p class="page-subtitle">Conservation of mass in fluid flow</p>
+                <div class="content-text">Complete derivation and applications of the continuity equation for various flow conditions...</div>
+                ${getNavigationFooter('continuity')}
+            `;
+        }
+
+        function getMomentumContent() {
+            return `
+                <h1 class="page-title">Momentum Equation</h1>
+                <p class="page-subtitle">Newton's second law for fluid flow</p>
+                <div class="content-text">Comprehensive treatment of momentum conservation including Navier-Stokes equations...</div>
+                ${getNavigationFooter('momentum')}
+            `;
+        }
+
+        function getEnergyContent() {
+            return `
+                <h1 class="page-title">Energy Equation</h1>
+                <p class="page-subtitle">Conservation of energy in fluid systems</p>
+                <div class="content-text">Energy conservation principles and their applications in fluid mechanics...</div>
+                ${getNavigationFooter('energy')}
+            `;
+        }
+
+        function getBernoulliContent() {
+            return `
+                <h1 class="page-title">Bernoulli's Equation</h1>
+                <p class="page-subtitle">Energy conservation for inviscid flow</p>
+                <div class="content-text">Derivation, assumptions, and applications of Bernoulli's equation...</div>
+                ${getNavigationFooter('bernoulli')}
+            `;
+        }
+
+        function getPipeFlowContent() {
+            return `
+                <h1 class="page-title">Pipe Flow</h1>
+                <p class="page-subtitle">Internal flow analysis and design</p>
+                <div class="content-text">Comprehensive pipe flow analysis including friction factors, pressure losses...</div>
+                ${getNavigationFooter('pipe-flow')}
+            `;
+        }
+
+        function getExternalFlowContent() {
+            return `
+                <h1 class="page-title">External Flow</h1>
+                <p class="page-subtitle">Flow around objects and boundary layers</p>
+                <div class="content-text">Boundary layer theory, drag and lift analysis for external flows...</div>
+                ${getNavigationFooter('external-flow')}
+            `;
+        }
+
+        function getBuckinghamPiContent() {
+            return `
+                <h1 class="page-title">Buckingham Pi Theorem</h1>
+                <p class="page-subtitle">Systematic approach to dimensional analysis</p>
+                <div class="content-text">Complete methodology for dimensional analysis using Buckingham Pi theorem...</div>
+                ${getNavigationFooter('buckingham-pi')}
+            `;
+        }
+
+        function getSimilarityContent() {
+            return `
+                <h1 class="page-title">Dynamic Similarity</h1>
+                <p class="page-subtitle">Scaling laws and similarity criteria</p>
+                <div class="content-text">Similarity theory and its applications in model testing and scaling...</div>
+                ${getNavigationFooter('similarity')}
+            `;
+        }
+
+        function getModelTestingContent() {
+            return `
+                <h1 class="page-title">Model Testing</h1>
+                <p class="page-subtitle">Practical applications of similarity theory</p>
+                <div class="content-text">Model testing techniques and data interpretation for engineering applications...</div>
+                ${getNavigationFooter('model-testing')}
+            `;
+        }
+
+        function getCFDIntroContent() {
+            return `
+                <h1 class="page-title">CFD Introduction</h1>
+                <p class="page-subtitle">Computational Fluid Dynamics fundamentals</p>
+                <div class="content-text">Introduction to CFD methods, numerical techniques, and software applications...</div>
+                ${getNavigationFooter('cfd-intro')}
+            `;
+        }
+
+        function getTurbulenceContent() {
+            return `
+                <h1 class="page-title">Turbulence Modeling</h1>
+                <p class="page-subtitle">Approaches to modeling turbulent flows</p>
+                <div class="content-text">Turbulence modeling techniques including RANS, LES, and DNS approaches...</div>
+                ${getNavigationFooter('turbulence')}
+            `;
+        }
+
+        function getCompressibleContent() {
+            return `
+                <h1 class="page-title">Compressible Flow</h1>
+                <p class="page-subtitle">High-speed gas dynamics</p>
+                <div class="content-text">Compressible flow theory including shock waves, expansion waves, and nozzle flows...</div>
+                ${getNavigationFooter('compressible')}
+            `;
+        }
+
+        function getDefaultContent(sectionKey) {
+            const sectionData = handbookContent[currentChapter]?.sections[sectionKey];
+            return `
+                <h1 class="page-title">${sectionData?.title || 'Section'}</h1>
+                <p class="page-subtitle">Content is being prepared...</p>
+                
+                <div class="content-text">
+                    This section contains comprehensive content on ${sectionData?.title?.toLowerCase() || 'this topic'}. 
+                    Full educational material with interactive diagrams, examples, and knowledge checks will be available here.
+                </div>
+                
+                ${getNavigationFooter(sectionKey)}
+            `;
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            console.log('Window loaded, initializing complete handbook...');
+            init();
+        });
+
+        // Handle MathJax rendering
+        window.addEventListener('load', function() {
+            if (window.MathJax) {
+                MathJax.typesetPromise().then(() => {
+                    console.log('Initial MathJax rendering complete');
+                });
+            }
+
+            // Initialize micro-learning features
+            initializeMicroLearning();
+        });
+
+        // Dynamic Module System - Only one module exists in DOM at any time
+        let currentModuleIndex = 1;
+        const totalModules = 5;
+
+        // Module data definitions
+        const moduleData = {
+            1: {
+                title: "📚 Module 1: What is a Fluid?",
+                badge: "Core Concept",
+                content: `
+                    <div class="definition-box">
+                        <div class="definition-title">Definition: Fluid</div>
+                        <p>A <strong>fluid</strong> is a substance that continuously deforms (flows) under an applied shear stress, regardless of how small that stress may be. This fundamental characteristic distinguishes fluids from solids, which can support shear stress without continuous deformation.</p>
+                        <p style="margin-top: 10px; font-style: italic;">Mathematical criterion: A fluid cannot resist a shear stress in static equilibrium.</p>
+                    </div>
+
+                    <div class="content-text">
+                        Fluid mechanics is the branch of continuum mechanics that studies the motion of fluids (liquids and gases) and the forces acting on them. It combines principles from physics, mathematics, and engineering to analyze fluid behavior in both static and dynamic conditions.
+                    </div>
+
+                    <div class="knowledge-check">
+                        <div class="check-title">Quick Check</div>
+                        <div class="question">What distinguishes a fluid from a solid?</div>
+                        <div class="answer-options">
+                            <div class="answer-option" data-answer="a">A) Density difference</div>
+                            <div class="answer-option" data-answer="b">B) Continuous deformation under any shear stress</div>
+                            <div class="answer-option" data-answer="c">C) Temperature sensitivity</div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('module1', 'b')">Check Answer</button>
+                        <div class="feedback" id="feedback-module1"></div>
+                    </div>
+                `
+            },
+            2: {
+                title: "🔬 Module 2: Continuum Assumption",
+                badge: "Mathematical Foundation",
+                content: `
+                    <div class="content-text">
+                        The continuum assumption treats fluids as continuous media, ignoring their molecular structure. This macroscopic approach is valid when the characteristic length scale of the flow (L) is much larger than the mean free path of molecules (λ).
+                    </div>
+
+                    <div class="formula-box">
+                        <div class="formula-title">Knudsen Number</div>
+                        <p>The validity of the continuum assumption is assessed using the Knudsen number:</p>
+                        <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                            $$Kn = \\frac{\\lambda}{L}$$
+                        </p>
+                        <p style="margin-top: 15px; font-size: 14px;">
+                            • Kn < 0.01: Continuum flow (Navier-Stokes equations valid)<br>
+                            • 0.01 < Kn < 0.1: Slip flow (modified boundary conditions)<br>
+                            • 0.1 < Kn < 10: Transition flow (kinetic theory required)<br>
+                            • Kn > 10: Free molecular flow (molecular dynamics)
+                        </p>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>Physical Interpretation:</strong> At any point in the fluid, we can define a representative elementary volume (REV) that is:<br>
+                        • Large enough to contain sufficient molecules for statistical averages<br>
+                        • Small enough compared to the macroscopic flow length scales<br>
+                        • Allows definition of intensive properties as point functions
+                    </div>
+                `
+            },
+            3: {
+                title: "🌊 Module 3: Viscosity & Flow Behavior",
+                badge: "Physical Properties",
+                content: `
+                    <div class="content-text">
+                        Unlike solids, fluids cannot support shear stress in equilibrium. When subjected to shear stress, fluids undergo continuous deformation (flow). The relationship between stress and rate of deformation defines the fluid's rheological behavior.
+                    </div>
+
+                    <div class="formula-box">
+                        <div class="formula-title">Newton's Law of Viscosity</div>
+                        <p>For a Newtonian fluid, the shear stress is linearly proportional to the velocity gradient:</p>
+                        <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                            $$\\tau = \\mu \\frac{du}{dy}$$
+                        </p>
+                        <p style="margin-top: 15px; font-size: 14px;">
+                            where:<br>
+                            • τ = shear stress [Pa = N/m²]<br>
+                            • μ = dynamic viscosity [Pa·s = N·s/m²]<br>
+                            • du/dy = velocity gradient [s⁻¹]
+                        </p>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Viscosity Values at 20°C</div>
+                        <p><strong>Gases:</strong> Air: μ = 1.81 × 10⁻⁵ Pa·s</p>
+                        <p><strong>Liquids:</strong> Water: μ = 1.002 × 10⁻³ Pa·s, Engine oil: μ ≈ 0.1 Pa·s</p>
+                    </div>
+
+                    <div class="knowledge-check">
+                        <div class="check-title">Quick Check</div>
+                        <div class="question">What happens when you double the velocity gradient in a Newtonian fluid?</div>
+                        <div class="answer-options">
+                            <div class="answer-option" data-answer="a">A) Shear stress doubles</div>
+                            <div class="answer-option" data-answer="b">B) Shear stress halves</div>
+                            <div class="answer-option" data-answer="c">C) No change in shear stress</div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('module3', 'a')">Check Answer</button>
+                        <div class="feedback" id="feedback-module3"></div>
+                    </div>
+                `
+            },
+            4: {
+                title: "⚖️ Module 4: Dimensional Analysis",
+                badge: "Engineering Tool",
+                content: `
+                    <div class="content-text">
+                        Fluid mechanics employs fundamental dimensions of mass [M], length [L], and time [T]. All fluid properties can be expressed in terms of these basic dimensions.
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Key Property Dimensions</div>
+                        <p><strong>Density:</strong> ρ [M L⁻³]</p>
+                        <p><strong>Velocity:</strong> V [L T⁻¹]</p>
+                        <p><strong>Pressure:</strong> p [M L⁻¹ T⁻²]</p>
+                        <p><strong>Dynamic viscosity:</strong> μ [M L⁻¹ T⁻¹]</p>
+                        <p><strong>Kinematic viscosity:</strong> ν = μ/ρ [L² T⁻¹]</p>
+                    </div>
+
+                    <div class="formula-box">
+                        <div class="formula-title">Reynolds Number</div>
+                        <p>Ratio of inertial to viscous forces:</p>
+                        <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                            $$Re = \\frac{\\rho V L}{\\mu} = \\frac{V L}{\\nu}$$
+                        </p>
+                        <p style="margin-top: 15px; font-size: 14px;">
+                            <strong>Critical values:</strong><br>
+                            • Pipe Flow: Re<sub>crit</sub> ≈ 2300<br>
+                            • Flow over flat plate: Re<sub>crit</sub> ≈ 5 × 10⁵
+                        </p>
+                    </div>
+                `
+            },
+            5: {
+                title: "🎯 Module 5: Applications & Summary",
+                badge: "Real World",
+                content: `
+                    <div class="content-text">
+                        Fluid mechanics principles are applied across numerous engineering disciplines and natural phenomena, from designing aircraft to understanding blood flow.
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Key Engineering Applications</div>
+                        <p><strong>Aerospace:</strong> Airfoil design, rocket nozzles, atmospheric re-entry</p>
+                        <p><strong>Automotive:</strong> Aerodynamics, engine cooling, fuel injection</p>
+                        <p><strong>Civil:</strong> Water distribution, dam design, wind loading</p>
+                        <p><strong>Biomedical:</strong> Blood flow modeling, respiratory mechanics</p>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>No-Slip Boundary Condition:</strong><br>
+                        At solid surfaces, fluid velocity equals surface velocity:<br>
+                        $$\\vec{V}_{fluid} = \\vec{V}_{wall}$$<br>
+                        For stationary walls: <strong>V<sub>fluid</sub> = 0</strong>
+                    </div>
+
+                    <div class="knowledge-check">
+                        <div class="check-title">Final Assessment</div>
+                        <div class="question">Which application does NOT typically use fluid mechanics principles?</div>
+                        <div class="answer-options">
+                            <div class="answer-option" data-answer="a">A) Aircraft wing design</div>
+                            <div class="answer-option" data-answer="b">B) Computer processor design</div>
+                            <div class="answer-option" data-answer="c">C) Heart valve analysis</div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('module5', 'b')">Check Answer</button>
+                        <div class="feedback" id="feedback-module5"></div>
+                    </div>
+                `
+            }
+        };
+
+        function renderModule(moduleNumber) {
+            const container = document.getElementById('module-container');
+            const module = moduleData[moduleNumber];
+            
+            if (!module) return;
+
+            // Generate progress dots
+            let progressDots = '';
+            for (let i = 1; i <= totalModules; i++) {
+                let dotClass = 'progress-dot';
+                if (i < moduleNumber) {
+                    dotClass += ' completed';
+                } else if (i === moduleNumber) {
+                    dotClass += ' current';
+                }
+                progressDots += `<div class="${dotClass}"></div>`;
+            }
+
+            // Generate next button or completion button
+            let actionButton = '';
+            if (moduleNumber < totalModules) {
+                actionButton = `<button class="next-section-btn" onclick="nextModule()">Next Module →</button>`;
+            } else {
+                actionButton = `<button class="next-section-btn" onclick="completeIntroduction()">Complete Introduction 🎓</button>`;
+            }
+
+            // Create complete module HTML
+            const moduleHTML = `
+                <div class="learning-section active" id="module${moduleNumber}">
+                    <div class="section-header">
+                        <div class="section-title">${module.title}</div>
+                        <div class="section-badge">${module.badge}</div>
+                    </div>
+                    <div class="section-content">
+                        ${module.content}
+                    </div>
+                    <div class="section-progress">
+                        <div class="progress-indicator">
+                            ${progressDots}
+                        </div>
+                        <div class="section-completion">
+                            ${actionButton}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Replace entire container content
+            container.innerHTML = moduleHTML;
+
+            // Re-render MathJax if available
+            if (window.MathJax) {
+                MathJax.typesetPromise([container]).catch((err) => console.log('MathJax error:', err));
+            }
+
+            // Scroll to top of module
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function nextModule() {
+            if (currentModuleIndex < totalModules) {
+                currentModuleIndex++;
+                renderModule(currentModuleIndex);
+                
+                // Show completion badge
+                setTimeout(() => {
+                    showCompletionBadge();
+                }, 500);
+            }
+        }
+
+
+
+        function completeIntroduction() {
+            // Clear the module container
+            const container = document.getElementById('module-container');
+            container.innerHTML = '';
+            
+            // Show completion section
+            const completionSection = document.getElementById('completion-section');
+            if (completionSection) {
+                completionSection.style.display = 'block';
+                completionSection.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start'
+                });
+            }
+            
+            // Show final completion badge
+            setTimeout(() => {
+                showCompletionBadge('🎓 Introduction to Fluids Mastered!');
+            }, 500);
+        }
+
+        function showCompletionBadge(message = '🎉 Module Completed!') {
+            // Create temporary completion notification
+            const badge = document.createElement('div');
+            badge.innerHTML = message;
+            badge.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--success-color);
+                color: white;
+                padding: 10px 15px;
+                border-radius: 8px;
+                font-weight: 600;
+                z-index: 1000;
+                animation: slideIn 0.5s ease-out;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            `;
+            
+            document.body.appendChild(badge);
+            
+            setTimeout(() => {
+                badge.remove();
+            }, 3000);
+        }
+
+        function initializeMicroLearning() {
+            // Add CSS animation for completion badge
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Render the first module
+            renderModule(1);
+        }
+    </script>
+</body>
+</html>
