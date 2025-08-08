@@ -22,20 +22,25 @@
 
     <style>
         :root {
-            --primary-color: #2563eb;
-            --secondary-color: #7c3aed;
-            --accent-color: #06b6d4;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --error-color: #ef4444;
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --bg-primary: #ffffff;
+            --primary-color: #1e293b;
+            --secondary-color: #475569;
+            --accent-color: #0369a1;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --error-color: #dc2626;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --bg-primary: #fefefe;
             --bg-secondary: #f8fafc;
-            --border-color: #e5e7eb;
-            --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --shadow-heavy: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --border-color: #e2e8f0;
+            --shadow-light: 0 1px 3px rgba(15, 23, 42, 0.1);
+            --shadow-medium: 0 4px 6px rgba(15, 23, 42, 0.12);
+            --shadow-heavy: 0 10px 25px rgba(15, 23, 42, 0.15);
+            --academic-navy: #1e293b;
+            --academic-blue: #0369a1;
+            --academic-gold: #d97706;
+            --paper-white: #fefefe;
+            --highlight-yellow: #fef3c7;
         }
 
         * {
@@ -45,10 +50,11 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Crimson Pro', 'Georgia', serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
             color: var(--text-primary);
+            line-height: 1.6;
         }
 
         .handbook-container {
@@ -56,11 +62,11 @@
             height: 100vh;
             max-width: 1400px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            background: var(--paper-white);
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: var(--shadow-heavy);
+            box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
+            border: 1px solid var(--border-color);
         }
 
         .sidebar {
@@ -73,20 +79,34 @@
 
         .sidebar-header {
             padding: 25px 20px;
-            border-bottom: 1px solid var(--border-color);
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-bottom: 2px solid var(--academic-gold);
+            background: var(--academic-navy);
             color: white;
+            position: relative;
+        }
+
+        .sidebar-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--academic-gold), transparent);
         }
 
         .handbook-title {
             font-size: 18px;
-            font-weight: 700;
+            font-weight: 600;
             margin-bottom: 5px;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.5px;
         }
 
         .handbook-subtitle {
             font-size: 12px;
             opacity: 0.9;
+            font-style: italic;
         }
 
         .progress-section {
@@ -274,23 +294,27 @@
         }
 
         .definition-box {
-            background: rgba(16, 185, 129, 0.05);
-            border-left-color: var(--success-color);
+            background: linear-gradient(135deg, var(--highlight-yellow), rgba(253, 224, 71, 0.1));
+            border-left-color: var(--academic-gold);
+            box-shadow: var(--shadow-light);
         }
 
         .formula-box {
-            background: rgba(37, 99, 235, 0.05);
-            border-left-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(3, 105, 161, 0.1), rgba(3, 105, 161, 0.05));
+            border-left-color: var(--academic-blue);
+            box-shadow: var(--shadow-light);
         }
 
         .example-box {
-            background: rgba(245, 158, 11, 0.05);
-            border-left-color: var(--warning-color);
+            background: linear-gradient(135deg, rgba(3, 105, 161, 0.08), rgba(3, 105, 161, 0.03));
+            border-left-color: var(--academic-blue);
+            box-shadow: var(--shadow-light);
         }
 
         .highlight-box {
-            background: rgba(124, 58, 237, 0.05);
-            border-left-color: var(--secondary-color);
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.1), rgba(30, 41, 59, 0.05));
+            border-left-color: var(--academic-navy);
+            box-shadow: var(--shadow-light);
         }
 
         .definition-title,
@@ -313,6 +337,115 @@
             color: var(--secondary-color);
             margin: 25px 0 15px 0;
             font-weight: 600;
+        }
+
+        /* Academic Section Structure for Micro-Learning */
+        .learning-section {
+            background: var(--paper-white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+        }
+
+        .learning-section:hover {
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-2px);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--academic-navy), var(--academic-blue));
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .section-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .section-content {
+            padding: 20px;
+        }
+
+        .section-progress {
+            background: var(--bg-secondary);
+            padding: 10px 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-indicator {
+            display: flex;
+            gap: 5px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.completed {
+            background: var(--success-color);
+        }
+
+        .progress-dot.current {
+            background: var(--academic-blue);
+            transform: scale(1.2);
+        }
+
+        .section-completion {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .completion-badge {
+            background: var(--success-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .next-section-btn {
+            background: var(--academic-blue);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .next-section-btn:hover {
+            background: var(--academic-navy);
+            transform: translateY(-1px);
         }
 
         /* Interactive Diagrams */
@@ -1453,175 +1586,254 @@
         function getIntroductionContent() {
             return `
                 <h1 class="page-title">Introduction to Fluids</h1>
-                <p class="page-subtitle">Understanding the fundamentals of fluid mechanics</p>
+                <p class="page-subtitle">Master fluid mechanics through structured micro-learning modules</p>
 
-                <div class="definition-box">
-                    <div class="definition-title">Definition: Fluid</div>
-                    <p>A <strong>fluid</strong> is a substance that continuously deforms (flows) under an applied shear stress, regardless of how small that stress may be. This fundamental characteristic distinguishes fluids from solids, which can support shear stress without continuous deformation.</p>
-                    <p style="margin-top: 10px; font-style: italic;">Mathematical criterion: A fluid cannot resist a shear stress in static equilibrium.</p>
-                </div>
+                <div class="learning-section">
+                    <div class="section-header">
+                        <div class="section-title">📚 Module 1: What is a Fluid?</div>
+                        <div class="section-badge">Core Concept</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="definition-box">
+                            <div class="definition-title">Definition: Fluid</div>
+                            <p>A <strong>fluid</strong> is a substance that continuously deforms (flows) under an applied shear stress, regardless of how small that stress may be. This fundamental characteristic distinguishes fluids from solids, which can support shear stress without continuous deformation.</p>
+                            <p style="margin-top: 10px; font-style: italic;">Mathematical criterion: A fluid cannot resist a shear stress in static equilibrium.</p>
+                        </div>
 
-                <div class="content-text">
-                    Fluid mechanics is the branch of continuum mechanics that studies the motion of fluids (liquids and gases) and the forces acting on them. It combines principles from physics, mathematics, and engineering to analyze fluid behavior in both static and dynamic conditions. The field encompasses theoretical analysis, experimental investigation, and computational simulation methods.
-                </div>
+                        <div class="content-text">
+                            Fluid mechanics is the branch of continuum mechanics that studies the motion of fluids (liquids and gases) and the forces acting on them. It combines principles from physics, mathematics, and engineering to analyze fluid behavior in both static and dynamic conditions.
+                        </div>
 
-                <h2 class="section-heading">Fundamental Concepts and Assumptions</h2>
-
-                <div class="subsection-heading">1. Continuum Assumption</div>
-                <div class="content-text">
-                    The continuum assumption treats fluids as continuous media, ignoring their molecular structure. This macroscopic approach is valid when the characteristic length scale of the flow (L) is much larger than the mean free path of molecules (λ).
-                </div>
-
-                <div class="formula-box">
-                    <div class="formula-title">Knudsen Number</div>
-                    <p>The validity of the continuum assumption is assessed using the Knudsen number:</p>
-                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
-                        $$Kn = \\frac{\\lambda}{L}$$
-                    </p>
-                    <p style="margin-top: 15px; font-size: 14px;">
-                        • Kn < 0.01: Continuum flow (Navier-Stokes equations valid)<br>
-                        • 0.01 < Kn < 0.1: Slip flow (modified boundary conditions)<br>
-                        • 0.1 < Kn < 10: Transition flow (kinetic theory required)<br>
-                        • Kn > 10: Free molecular flow (molecular dynamics)
-                    </p>
-                </div>
-
-                <div class="subsection-heading">2. Fluid as a Continuum</div>
-                <div class="content-text">
-                    Under the continuum assumption, fluid properties such as density (ρ), velocity (V), pressure (p), and temperature (T) are defined at every point in space and time. These properties are assumed to vary continuously throughout the fluid domain, allowing the use of calculus-based analysis.
-                </div>
-
-                <div class="highlight-box">
-                    <strong>Physical Interpretation:</strong> At any point in the fluid, we can define a representative elementary volume (REV) that is:<br>
-                    • Large enough to contain sufficient molecules for statistical averages<br>
-                    • Small enough compared to the macroscopic flow length scales<br>
-                    • Allows definition of intensive properties as point functions
-                </div>
-
-                <div class="subsection-heading">3. No-Slip Condition</div>
-                <div class="content-text">
-                    The no-slip condition is a fundamental boundary condition in viscous flow analysis. At a solid-fluid interface, the fluid velocity equals the velocity of the solid surface. This condition arises from molecular interactions and intermolecular forces at the interface.
-                </div>
-
-                <div class="formula-box">
-                    <div class="formula-title">No-Slip Boundary Condition</div>
-                    <p>At a solid wall moving with velocity <strong>V<sub>wall</sub></strong>:</p>
-                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
-                        $$\\vec{V}_{fluid} = \\vec{V}_{wall}$$
-                    </p>
-                    <p style="margin-top: 15px; font-size: 14px;">
-                        For stationary walls: <strong>V<sub>fluid</sub> = 0</strong><br>
-                        This condition applies to all velocity components tangential and normal to the surface.
-                    </p>
-                </div>
-
-                <div class="subsection-heading">4. Fluid Stress and Deformation</div>
-                <div class="content-text">
-                    Unlike solids, fluids cannot support shear stress in equilibrium. When subjected to shear stress, fluids undergo continuous deformation (flow). The relationship between stress and rate of deformation defines the fluid's rheological behavior.
-                </div>
-
-                <div class="formula-box">
-                    <div class="formula-title">Newton's Law of Viscosity</div>
-                    <p>For a Newtonian fluid, the shear stress is linearly proportional to the velocity gradient:</p>
-                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
-                        $$\\tau = \\mu \\frac{du}{dy}$$
-                    </p>
-                    <p style="margin-top: 15px; font-size: 14px;">
-                        where:<br>
-                        • τ = shear stress [Pa = N/m²]<br>
-                        • μ = dynamic viscosity [Pa·s = N·s/m²]<br>
-                        • du/dy = velocity gradient [s⁻¹]
-                    </p>
-                </div>
-
-                <div class="example-box">
-                    <div class="example-title">Viscosity Values at 20°C</div>
-                    <p><strong>Gases:</strong></p>
-                    <p>• Air: μ = 1.81 × 10⁻⁵ Pa·s</p>
-                    <p>• Hydrogen: μ = 8.76 × 10⁻⁶ Pa·s</p>
-                    <p><strong>Liquids:</strong></p>
-                    <p>• Water: μ = 1.002 × 10⁻³ Pa·s</p>
-                    <p>• Engine oil (SAE 30): μ ≈ 0.1 Pa·s</p>
-                    <p>• Glycerin: μ = 1.49 Pa·s</p>
-                </div>
-
-                <div class="diagram-container">
-                    <div class="diagram-title">Interactive Molecular Structure Diagram</div>
-                    <canvas class="diagram-canvas" id="molecular-diagram" width="600" height="300"></canvas>
-                    <div class="diagram-controls">
-                        <button class="diagram-btn active" data-state="solid">Solid</button>
-                        <button class="diagram-btn" data-state="liquid">Liquid</button>
-                        <button class="diagram-btn" data-state="gas">Gas</button>
+                        <div class="knowledge-check">
+                            <div class="check-title">Quick Check</div>
+                            <div class="question">What distinguishes a fluid from a solid?</div>
+                            <div class="answer-options">
+                                <div class="answer-option" data-answer="a">A) Density difference</div>
+                                <div class="answer-option" data-answer="b">B) Continuous deformation under any shear stress</div>
+                                <div class="answer-option" data-answer="c">C) Temperature sensitivity</div>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('module1', 'b')">Check Answer</button>
+                            <div class="feedback" id="feedback-module1"></div>
+                        </div>
+                    </div>
+                    <div class="section-progress">
+                        <div class="progress-indicator">
+                            <div class="progress-dot current"></div>
+                            <div class="progress-dot"></div>
+                            <div class="progress-dot"></div>
+                            <div class="progress-dot"></div>
+                            <div class="progress-dot"></div>
+                        </div>
+                        <button class="next-section-btn" onclick="scrollToSection('module2')">Next Module →</button>
                     </div>
                 </div>
 
-                <h2 class="section-heading">Classification of Fluids</h2>
+                <div class="learning-section" id="module2">
+                    <div class="section-header">
+                        <div class="section-title">🔬 Module 2: Continuum Assumption</div>
+                        <div class="section-badge">Mathematical Foundation</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="content-text">
+                            The continuum assumption treats fluids as continuous media, ignoring their molecular structure. This macroscopic approach is valid when the characteristic length scale of the flow (L) is much larger than the mean free path of molecules (λ).
+                        </div>
 
-                <div class="subsection-heading">Newtonian vs Non-Newtonian Fluids</div>
-                <div class="content-text">
-                    Fluids are classified based on their response to applied shear stress:
+                        <div class="formula-box">
+                            <div class="formula-title">Knudsen Number</div>
+                            <p>The validity of the continuum assumption is assessed using the Knudsen number:</p>
+                            <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                                $$Kn = \\frac{\\lambda}{L}$$
+                            </p>
+                            <p style="margin-top: 15px; font-size: 14px;">
+                                • Kn < 0.01: Continuum flow (Navier-Stokes equations valid)<br>
+                                • 0.01 < Kn < 0.1: Slip flow (modified boundary conditions)<br>
+                                • 0.1 < Kn < 10: Transition flow (kinetic theory required)<br>
+                                • Kn > 10: Free molecular flow (molecular dynamics)
+                            </p>
+                        </div>
+
+                        <div class="highlight-box">
+                            <strong>Physical Interpretation:</strong> At any point in the fluid, we can define a representative elementary volume (REV) that is:<br>
+                            • Large enough to contain sufficient molecules for statistical averages<br>
+                            • Small enough compared to the macroscopic flow length scales<br>
+                            • Allows definition of intensive properties as point functions
+                        </div>
+                    </div>
+                    <div class="section-progress">
+                        <div class="progress-indicator">
+                            <div class="progress-dot completed"></div>
+                            <div class="progress-dot current"></div>
+                            <div class="progress-dot"></div>
+                            <div class="progress-dot"></div>
+                            <div class="progress-dot"></div>
+                        </div>
+                        <button class="next-section-btn" onclick="scrollToSection('module3')">Next Module →</button>
+                    </div>
                 </div>
 
-                <div class="definition-box">
-                    <div class="definition-title">Newtonian Fluids</div>
-                    <p><strong>Characteristics:</strong></p>
-                    <p>• Linear relationship between shear stress and velocity gradient</p>
-                    <p>• Viscosity independent of shear rate</p>
-                    <p>• Examples: Water, air, most gases, simple liquids</p>
-                    <p style="margin-top: 10px;"><strong>Constitutive equation:</strong> τ = μ(∂u/∂y)</p>
+                <div class="learning-section" id="module3">
+                    <div class="section-header">
+                        <div class="section-title">🌊 Module 3: Viscosity & Flow Behavior</div>
+                        <div class="section-badge">Physical Properties</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="content-text">
+                            Unlike solids, fluids cannot support shear stress in equilibrium. When subjected to shear stress, fluids undergo continuous deformation (flow). The relationship between stress and rate of deformation defines the fluid's rheological behavior.
+                        </div>
+
+                        <div class="formula-box">
+                            <div class="formula-title">Newton's Law of Viscosity</div>
+                            <p>For a Newtonian fluid, the shear stress is linearly proportional to the velocity gradient:</p>
+                            <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                                $$\\tau = \\mu \\frac{du}{dy}$$
+                            </p>
+                            <p style="margin-top: 15px; font-size: 14px;">
+                                where:<br>
+                                • τ = shear stress [Pa = N/m²]<br>
+                                • μ = dynamic viscosity [Pa·s = N·s/m²]<br>
+                                • du/dy = velocity gradient [s⁻¹]
+                            </p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">Viscosity Values at 20°C</div>
+                            <p><strong>Gases:</strong> Air: μ = 1.81 × 10⁻⁵ Pa·s</p>
+                            <p><strong>Liquids:</strong> Water: μ = 1.002 × 10⁻³ Pa·s, Engine oil: μ ≈ 0.1 Pa·s</p>
+                        </div>
+
+                        <div class="knowledge-check">
+                            <div class="check-title">Quick Check</div>
+                            <div class="question">What happens when you double the velocity gradient in a Newtonian fluid?</div>
+                            <div class="answer-options">
+                                <div class="answer-option" data-answer="a">A) Shear stress doubles</div>
+                                <div class="answer-option" data-answer="b">B) Shear stress halves</div>
+                                <div class="answer-option" data-answer="c">C) No change in shear stress</div>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('module3', 'a')">Check Answer</button>
+                            <div class="feedback" id="feedback-module3"></div>
+                        </div>
+                    </div>
+                    <div class="section-progress">
+                        <div class="progress-indicator">
+                            <div class="progress-dot completed"></div>
+                            <div class="progress-dot completed"></div>
+                            <div class="progress-dot current"></div>
+                            <div class="progress-dot"></div>
+                            <div class="progress-dot"></div>
+                        </div>
+                        <button class="next-section-btn" onclick="scrollToSection('module4')">Next Module →</button>
+                    </div>
                 </div>
 
-                <div class="highlight-box">
-                    <strong>Non-Newtonian Fluids:</strong><br>
-                    • <strong>Shear-thinning (pseudoplastic):</strong> Viscosity decreases with shear rate (paint, blood)<br>
-                    • <strong>Shear-thickening (dilatant):</strong> Viscosity increases with shear rate (corn starch solution)<br>
-                    • <strong>Bingham plastic:</strong> Requires yield stress to initiate flow (toothpaste, clay)<br>
-                    • <strong>Viscoelastic:</strong> Exhibits both viscous and elastic properties (polymer solutions)
+                <div class="learning-section" id="module4">
+                    <div class="section-header">
+                        <div class="section-title">⚖️ Module 4: Dimensional Analysis</div>
+                        <div class="section-badge">Engineering Tool</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="content-text">
+                            Fluid mechanics employs fundamental dimensions of mass [M], length [L], and time [T]. All fluid properties can be expressed in terms of these basic dimensions.
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">Key Property Dimensions</div>
+                            <p><strong>Density:</strong> ρ [M L⁻³]</p>
+                            <p><strong>Velocity:</strong> V [L T⁻¹]</p>
+                            <p><strong>Pressure:</strong> p [M L⁻¹ T⁻²]</p>
+                            <p><strong>Dynamic viscosity:</strong> μ [M L⁻¹ T⁻¹]</p>
+                            <p><strong>Kinematic viscosity:</strong> ν = μ/ρ [L² T⁻¹]</p>
+                        </div>
+
+                        <div class="formula-box">
+                            <div class="formula-title">Reynolds Number</div>
+                            <p>Ratio of inertial to viscous forces:</p>
+                            <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                                $$Re = \\frac{\\rho V L}{\\mu} = \\frac{V L}{\\nu}$$
+                            </p>
+                            <p style="margin-top: 15px; font-size: 14px;">
+                                <strong>Critical values:</strong><br>
+                                • Pipe Flow: Re<sub>crit</sub> ≈ 2300<br>
+                                • Flow over flat plate: Re<sub>crit</sub> ≈ 5 × 10⁵
+                            </p>
+                        </div>
+                    </div>
+                    <div class="section-progress">
+                        <div class="progress-indicator">
+                            <div class="progress-dot completed"></div>
+                            <div class="progress-dot completed"></div>
+                            <div class="progress-dot completed"></div>
+                            <div class="progress-dot current"></div>
+                            <div class="progress-dot"></div>
+                        </div>
+                        <button class="next-section-btn" onclick="scrollToSection('module5')">Next Module →</button>
+                    </div>
                 </div>
 
-                <h2 class="section-heading">System of Units and Dimensions</h2>
+                <div class="learning-section" id="module5">
+                    <div class="section-header">
+                        <div class="section-title">🎯 Module 5: Applications & Summary</div>
+                        <div class="section-badge">Real World</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="content-text">
+                            Fluid mechanics principles are applied across numerous engineering disciplines and natural phenomena, from designing aircraft to understanding blood flow.
+                        </div>
 
-                <div class="content-text">
-                    Fluid mechanics employs fundamental dimensions of mass [M], length [L], and time [T]. All fluid properties can be expressed in terms of these basic dimensions.
+                        <div class="example-box">
+                            <div class="example-title">Key Engineering Applications</div>
+                            <p><strong>Aerospace:</strong> Airfoil design, rocket nozzles, atmospheric re-entry</p>
+                            <p><strong>Automotive:</strong> Aerodynamics, engine cooling, fuel injection</p>
+                            <p><strong>Civil:</strong> Water distribution, dam design, wind loading</p>
+                            <p><strong>Biomedical:</strong> Blood flow modeling, respiratory mechanics</p>
+                        </div>
+
+                        <div class="highlight-box">
+                            <strong>No-Slip Boundary Condition:</strong><br>
+                            At solid surfaces, fluid velocity equals surface velocity:<br>
+                            $$\\vec{V}_{fluid} = \\vec{V}_{wall}$$<br>
+                            For stationary walls: <strong>V<sub>fluid</sub> = 0</strong>
+                        </div>
+
+                        <div class="knowledge-check">
+                            <div class="check-title">Final Assessment</div>
+                            <div class="question">Which application does NOT typically use fluid mechanics principles?</div>
+                            <div class="answer-options">
+                                <div class="answer-option" data-answer="a">A) Aircraft wing design</div>
+                                <div class="answer-option" data-answer="b">B) Computer processor design</div>
+                                <div class="answer-option" data-answer="c">C) Heart valve analysis</div>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('module5', 'b')">Check Answer</button>
+                            <div class="feedback" id="feedback-module5"></div>
+                        </div>
+                    </div>
+                    <div class="section-progress">
+                        <div class="progress-indicator">
+                            <div class="progress-dot completed"></div>
+                            <div class="progress-dot completed"></div>
+                            <div class="progress-dot completed"></div>
+                            <div class="progress-dot completed"></div>
+                            <div class="progress-dot current"></div>
+                        </div>
+                        <div class="section-completion">
+                            <span class="completion-badge">🎓 Introduction Complete!</span>
+                            <span>Ready for next chapter</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="example-box">
-                    <div class="example-title">Dimensional Analysis of Key Properties</div>
-                    <p><strong>Density:</strong> ρ [M L⁻³]</p>
-                    <p><strong>Velocity:</strong> V [L T⁻¹]</p>
-                    <p><strong>Pressure:</strong> p [M L⁻¹ T⁻²]</p>
-                    <p><strong>Dynamic viscosity:</strong> μ [M L⁻¹ T⁻¹]</p>
-                    <p><strong>Kinematic viscosity:</strong> ν = μ/ρ [L² T⁻¹]</p>
-                    <p><strong>Surface tension:</strong> σ [M T⁻²]</p>
-                </div>
 
-                <h2 class="section-heading">Applications of Fluid Mechanics</h2>
 
-                <div class="content-text">
-                    Fluid mechanics principles are applied across numerous engineering disciplines and natural phenomena:
-                </div>
-
-                <div class="example-box">
-                    <div class="example-title">Engineering Applications</div>
-                    <p><strong>Aerospace Engineering:</strong></p>
-                    <p>• Airfoil design and optimization (lift generation, drag reduction)</p>
-                    <p>• Rocket nozzle design (supersonic flow, thrust optimization)</p>
-                    <p>• Heat transfer in gas turbine engines</p>
-                    
-                    <p style="margin-top: 15px;"><strong>Mechanical Engineering:</strong></p>
-                    <p>• Pump and turbine design (energy conversion)</p>
-                    <p>• Heat exchanger analysis (convective heat transfer)</p>
-                    <p>• Lubrication systems (tribology applications)</p>
-                    
-                    <p style="margin-top: 15px;"><strong>Civil Engineering:</strong></p>
-                    <p>• Open channel flow (river engineering, flood control)</p>
-                    <p>• Pipe network design (water distribution systems)</p>
-                    <p>• Wind loading on structures (building aerodynamics)</p>
-                    
-                    <p style="margin-top: 15px;"><strong>Chemical Engineering:</strong></p>
-                    <p>• Mass transfer operations (distillation, absorption)</p>
-                    <p>• Reactor design (mixing, heat transfer)</p>
-                    <p>• Process fluid handling (pumping, pipeline design)</p>
+                <div style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, var(--academic-navy), var(--academic-blue)); color: white; border-radius: 12px;">
+                    <h3 style="margin-bottom: 15px; font-size: 24px;">🎓 Congratulations!</h3>
+                    <p style="font-size: 18px; margin-bottom: 10px;">You've completed the Introduction to Fluids</p>
+                    <p style="font-size: 16px; opacity: 0.9;">Master the fundamentals through structured learning modules</p>
+                    <div style="margin-top: 20px;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin: 0 5px;">✓ Fluid Definition</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin: 0 5px;">✓ Continuum Theory</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin: 0 5px;">✓ Viscosity</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin: 0 5px;">✓ Dimensions</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin: 0 5px;">✓ Applications</span>
+                    </div>
                 </div>
 
                 <div class="knowledge-check">
@@ -1948,57 +2160,7 @@
                     <p>• Verify limiting cases and physical reasonableness</p>
                 </div>
 
-                <div class="knowledge-check">
-                    <div class="check-title">Knowledge Check</div>
-                    <div class="question">A fluid element subjected to a constant shear stress will:</div>
-                    <div class="answer-options">
-                        <div class="answer-option" data-answer="a">A) Deform by a finite amount and then remain static</div>
-                        <div class="answer-option" data-answer="b">B) Continuously deform (flow) as long as the stress is applied</div>
-                        <div class="answer-option" data-answer="c">C) Return to its original shape when the stress is removed</div>
-                        <div class="answer-option" data-answer="d">D) Not deform at all if the stress is below the yield stress</div>
-                    </div>
-                    <button class="check-btn" onclick="checkAnswer('introduction', 'b')">Check Answer</button>
-                    <div class="feedback" id="feedback-introduction"></div>
-                </div>
 
-                <div class="knowledge-check">
-                    <div class="check-title">Advanced Knowledge Check</div>
-                    <div class="question">The continuum assumption in fluid mechanics is valid when:</div>
-                    <div class="answer-options">
-                        <div class="answer-option" data-answer="a">A) The Knudsen number is much greater than 1</div>
-                        <div class="answer-option" data-answer="b">B) The Knudsen number is much less than 0.01</div>
-                        <div class="answer-option" data-answer="c">C) The fluid temperature is above the critical point</div>
-                        <div class="answer-option" data-answer="d">D) The fluid velocity exceeds the speed of sound</div>
-                    </div>
-                    <button class="check-btn" onclick="checkAnswer('introduction-advanced', 'b')">Check Answer</button>
-                    <div class="feedback" id="feedback-introduction-advanced"></div>
-                </div>
-
-                <div class="knowledge-check">
-                    <div class="check-title">Mathematical Framework Check</div>
-                    <div class="question">The material derivative D/Dt represents:</div>
-                    <div class="answer-options">
-                        <div class="answer-option" data-answer="a">A) The rate of change at a fixed point in space</div>
-                        <div class="answer-option" data-answer="b">B) The rate of change following a moving fluid particle</div>
-                        <div class="answer-option" data-answer="c">C) The spatial gradient of a property</div>
-                        <div class="answer-option" data-answer="d">D) The time-averaged change in a property</div>
-                    </div>
-                    <button class="check-btn" onclick="checkAnswer('introduction-material', 'b')">Check Answer</button>
-                    <div class="feedback" id="feedback-introduction-material"></div>
-                </div>
-
-                <div class="knowledge-check">
-                    <div class="check-title">Historical Perspective Check</div>
-                    <div class="question">Who is credited with developing the boundary layer theory that revolutionized fluid mechanics?</div>
-                    <div class="answer-options">
-                        <div class="answer-option" data-answer="a">A) Osborne Reynolds</div>
-                        <div class="answer-option" data-answer="b">B) Ludwig Prandtl</div>
-                        <div class="answer-option" data-answer="c">C) Claude-Louis Navier</div>
-                        <div class="answer-option" data-answer="d">D) Daniel Bernoulli</div>
-                    </div>
-                    <button class="check-btn" onclick="checkAnswer('introduction-historical', 'b')">Check Answer</button>
-                    <div class="feedback" id="feedback-introduction-historical"></div>
-                </div>
 
                 ${getNavigationFooter('introduction')}
             `;
@@ -2186,7 +2348,90 @@
                     console.log('Initial MathJax rendering complete');
                 });
             }
+
+            // Initialize micro-learning features
+            initializeMicroLearning();
         });
+
+        // Micro-learning navigation functions
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start'
+                });
+                
+                // Update progress dots
+                updateSectionProgress(sectionId);
+                
+                // Add completion badge effect
+                setTimeout(() => {
+                    showCompletionBadge();
+                }, 1000);
+            }
+        }
+
+        function updateSectionProgress(currentSection) {
+            const sectionMapping = {
+                'module2': 1,
+                'module3': 2,
+                'module4': 3,
+                'module5': 4
+            };
+            
+            const currentIndex = sectionMapping[currentSection] || 0;
+            
+            // Update all progress indicators
+            document.querySelectorAll('.progress-indicator').forEach((indicator, sectionIndex) => {
+                const dots = indicator.querySelectorAll('.progress-dot');
+                dots.forEach((dot, dotIndex) => {
+                    dot.classList.remove('current', 'completed');
+                    if (dotIndex < currentIndex) {
+                        dot.classList.add('completed');
+                    } else if (dotIndex === currentIndex) {
+                        dot.classList.add('current');
+                    }
+                });
+            });
+        }
+
+        function showCompletionBadge() {
+            // Create temporary completion notification
+            const badge = document.createElement('div');
+            badge.innerHTML = '🎉 Module Completed!';
+            badge.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--success-color);
+                color: white;
+                padding: 10px 15px;
+                border-radius: 8px;
+                font-weight: 600;
+                z-index: 1000;
+                animation: slideIn 0.5s ease-out;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            `;
+            
+            document.body.appendChild(badge);
+            
+            setTimeout(() => {
+                badge.remove();
+            }, 3000);
+        }
+
+        function initializeMicroLearning() {
+            // Add CSS animation for completion badge
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
     </script>
 </body>
 </html>
