@@ -467,6 +467,181 @@
             font-size: 1.1em !important;
         }
 
+        /* Interactive Diagrams */
+        .diagram-container {
+            background: #fefefe;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: var(--shadow-light);
+        }
+
+        .diagram-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .diagram-canvas {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .diagram-canvas:hover {
+            box-shadow: var(--shadow-medium);
+        }
+
+        .diagram-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .diagram-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--secondary-color);
+            background: var(--bg-primary);
+            color: var(--secondary-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .diagram-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .diagram-btn.active {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Knowledge Check */
+        .knowledge-check {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+
+        .check-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .check-title::before {
+            content: "\f05a";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 10px;
+            background: var(--secondary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .answer-options {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .answer-option {
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .answer-option:hover {
+            border-color: var(--secondary-color);
+            background: var(--bg-accent);
+        }
+
+        .answer-option.selected {
+            border-color: var(--secondary-color);
+            background: var(--bg-accent);
+        }
+
+        .answer-option.correct {
+            border-color: #10b981;
+            background: #d1fae5;
+        }
+
+        .answer-option.incorrect {
+            border-color: #ef4444;
+            background: #fee2e2;
+        }
+
+        .check-btn {
+            padding: 10px 20px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-color);
+        }
+
+        .check-btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .feedback.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
         /* Custom scrollbar */
         .sidebar::-webkit-scrollbar,
         .content-main::-webkit-scrollbar {
@@ -746,7 +921,7 @@
                 sections: {
                     introduction: {
                         title: "Introduction to Fluids",
-                        content: "introduction" // Current content
+                        content: "introduction"
                     },
                     properties: {
                         title: "Fluid Properties",
@@ -774,8 +949,41 @@
                         content: "acceleration"
                     }
                 }
+            },
+            conservation: {
+                title: "Conservation Laws",
+                sections: {
+                    continuity: {
+                        title: "Continuity Equation",
+                        content: "continuity"
+                    },
+                    momentum: {
+                        title: "Momentum Equation",
+                        content: "momentum"
+                    },
+                    energy: {
+                        title: "Energy Equation",
+                        content: "energy"
+                    }
+                }
+            },
+            applications: {
+                title: "Applications",
+                sections: {
+                    bernoulli: {
+                        title: "Bernoulli's Equation",
+                        content: "bernoulli"
+                    },
+                    "pipe-flow": {
+                        title: "Pipe Flow",
+                        content: "pipe-flow"
+                    },
+                    "external-flow": {
+                        title: "External Flow",
+                        content: "external-flow"
+                    }
+                }
             }
-            // More chapters will be added
         };
 
         // Initialize the application
@@ -864,9 +1072,536 @@
         }
 
         function navigateNext() {
-            // Simple navigation logic (will be enhanced)
-            if (currentSection === 'introduction') {
-                navigateToSection('properties');
+            const allSections = Object.keys(handbookContent[currentChapter]?.sections || {});
+            const currentIndex = allSections.indexOf(currentSection);
+            const nextSection = currentIndex < allSections.length - 1 ? allSections[currentIndex + 1] : null;
+            
+            if (nextSection) {
+                navigateToSection(nextSection);
+            }
+        }
+
+        function setupInteractiveElements() {
+            // Setup diagram interactions
+            setupDiagramInteractions();
+            setupKnowledgeChecks();
+        }
+
+        function setupDiagramInteractions() {
+            // Molecular diagram
+            const molecularCanvas = document.getElementById('molecular-diagram');
+            if (molecularCanvas) {
+                drawMolecularDiagram(molecularCanvas, 'solid');
+                
+                document.querySelectorAll('[data-state]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('[data-state]').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        drawMolecularDiagram(molecularCanvas, e.target.dataset.state);
+                    });
+                });
+            }
+
+            // Viscosity diagram
+            const viscosityCanvas = document.getElementById('viscosity-diagram');
+            if (viscosityCanvas) {
+                drawViscosityDiagram(viscosityCanvas, 'low');
+                
+                document.querySelectorAll('[data-viscosity]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('[data-viscosity]').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        drawViscosityDiagram(viscosityCanvas, e.target.dataset.viscosity);
+                    });
+                });
+            }
+
+            // Flow types diagram
+            const flowTypesCanvas = document.getElementById('flow-types-diagram');
+            if (flowTypesCanvas) {
+                drawFlowTypesDiagram(flowTypesCanvas, 'laminar');
+                
+                document.querySelectorAll('[data-flow]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('[data-flow]').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        drawFlowTypesDiagram(flowTypesCanvas, e.target.dataset.flow);
+                    });
+                });
+            }
+
+            // Velocity field diagram
+            const velocityFieldCanvas = document.getElementById('velocity-field-diagram');
+            if (velocityFieldCanvas) {
+                drawVelocityFieldDiagram(velocityFieldCanvas, 'uniform');
+                
+                document.querySelectorAll('[data-field]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('[data-field]').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        drawVelocityFieldDiagram(velocityFieldCanvas, e.target.dataset.field);
+                    });
+                });
+            }
+
+            // Streamlines diagram
+            const streamlinesCanvas = document.getElementById('streamlines-diagram');
+            if (streamlinesCanvas) {
+                drawStreamlinesDiagram(streamlinesCanvas, 'streamlines');
+                
+                document.querySelectorAll('[data-lines]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('[data-lines]').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        drawStreamlinesDiagram(streamlinesCanvas, e.target.dataset.lines);
+                    });
+                });
+            }
+        }
+
+        function setupKnowledgeChecks() {
+            // Setup answer option interactions
+            document.querySelectorAll('.answer-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    // Remove selected class from siblings
+                    option.parentElement.querySelectorAll('.answer-option').forEach(o => {
+                        o.classList.remove('selected');
+                    });
+                    // Add selected class to clicked option
+                    option.classList.add('selected');
+                });
+            });
+        }
+
+        // Interactive diagram drawing functions
+        function drawMolecularDiagram(canvas, state) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw title
+            ctx.fillStyle = '#1f2937';
+            ctx.font = '16px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText(\`\${state.charAt(0).toUpperCase() + state.slice(1)} State\`, width/2, 30);
+            
+            // Draw molecules based on state
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const moleculeRadius = 6;
+            
+            if (state === 'solid') {
+                // Ordered crystal structure
+                ctx.fillStyle = '#3b82f6';
+                for (let i = 0; i < 8; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        const x = centerX - 140 + i * 40;
+                        const y = centerY - 60 + j * 40;
+                        ctx.beginPath();
+                        ctx.arc(x, y, moleculeRadius, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+                // Draw bonds
+                ctx.strokeStyle = '#1e40af';
+                ctx.lineWidth = 2;
+                for (let i = 0; i < 8; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        const x = centerX - 140 + i * 40;
+                        const y = centerY - 60 + j * 40;
+                        if (i < 7) {
+                            ctx.beginPath();
+                            ctx.moveTo(x + moleculeRadius, y);
+                            ctx.lineTo(x + 40 - moleculeRadius, y);
+                            ctx.stroke();
+                        }
+                        if (j < 3) {
+                            ctx.beginPath();
+                            ctx.moveTo(x, y + moleculeRadius);
+                            ctx.lineTo(x, y + 40 - moleculeRadius);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            } else if (state === 'liquid') {
+                // Semi-ordered structure
+                ctx.fillStyle = '#06b6d4';
+                const positions = [];
+                for (let i = 0; i < 30; i++) {
+                    const angle = (i / 30) * 2 * Math.PI;
+                    const radius = 80 + Math.random() * 40;
+                    const x = centerX + Math.cos(angle) * radius + (Math.random() - 0.5) * 30;
+                    const y = centerY + Math.sin(angle) * radius * 0.6 + (Math.random() - 0.5) * 30;
+                    positions.push({x, y});
+                    ctx.beginPath();
+                    ctx.arc(x, y, moleculeRadius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                // Draw some bonds
+                ctx.strokeStyle = '#0891b2';
+                ctx.lineWidth = 1;
+                for (let i = 0; i < positions.length; i++) {
+                    for (let j = i + 1; j < positions.length; j++) {
+                        const dist = Math.sqrt((positions[i].x - positions[j].x)**2 + (positions[i].y - positions[j].y)**2);
+                        if (dist < 50 && Math.random() > 0.7) {
+                            ctx.beginPath();
+                            ctx.moveTo(positions[i].x, positions[i].y);
+                            ctx.lineTo(positions[j].x, positions[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            } else if (state === 'gas') {
+                // Random distribution
+                ctx.fillStyle = '#f59e0b';
+                for (let i = 0; i < 15; i++) {
+                    const x = 50 + Math.random() * (width - 100);
+                    const y = 50 + Math.random() * (height - 100);
+                    ctx.beginPath();
+                    ctx.arc(x, y, moleculeRadius, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Add motion arrows
+                    const arrowLength = 20;
+                    const angle = Math.random() * 2 * Math.PI;
+                    const endX = x + Math.cos(angle) * arrowLength;
+                    const endY = y + Math.sin(angle) * arrowLength;
+                    
+                    ctx.strokeStyle = '#d97706';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(endX, endY);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function drawViscosityDiagram(canvas, viscosity) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw plates
+            const plateHeight = 20;
+            const gap = 100;
+            const topPlateY = height/2 - gap/2 - plateHeight;
+            const bottomPlateY = height/2 + gap/2;
+            
+            // Top moving plate
+            ctx.fillStyle = '#374151';
+            ctx.fillRect(50, topPlateY, width - 100, plateHeight);
+            
+            // Bottom stationary plate
+            ctx.fillRect(50, bottomPlateY, width - 100, plateHeight);
+            
+            // Velocity profile
+            const steps = 10;
+            const velocityColors = {
+                low: '#ef4444',
+                medium: '#f59e0b', 
+                high: '#3b82f6'
+            };
+            
+            ctx.strokeStyle = velocityColors[viscosity];
+            ctx.lineWidth = 3;
+            
+            for (let i = 0; i <= steps; i++) {
+                const y = topPlateY + plateHeight + (i / steps) * gap;
+                let velocity;
+                
+                if (viscosity === 'low') {
+                    velocity = 1 - i / steps; // Linear profile
+                } else if (viscosity === 'medium') {
+                    velocity = Math.pow(1 - i / steps, 1.5); // Slightly curved
+                } else {
+                    velocity = Math.pow(1 - i / steps, 3); // Very curved
+                }
+                
+                const arrowLength = velocity * 80;
+                const startX = width/2 - 100;
+                const endX = startX + arrowLength;
+                
+                ctx.beginPath();
+                ctx.moveTo(startX, y);
+                ctx.lineTo(endX, y);
+                ctx.stroke();
+                
+                // Arrow head
+                if (arrowLength > 10) {
+                    ctx.beginPath();
+                    ctx.moveTo(endX, y);
+                    ctx.lineTo(endX - 8, y - 4);
+                    ctx.moveTo(endX, y);
+                    ctx.lineTo(endX - 8, y + 4);
+                    ctx.stroke();
+                }
+            }
+            
+            // Labels
+            ctx.fillStyle = '#1f2937';
+            ctx.font = '14px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText('Moving Plate', 60, topPlateY + 15);
+            ctx.fillText('Stationary Plate', 60, bottomPlateY + 15);
+            ctx.fillText(\`\${viscosity.charAt(0).toUpperCase() + viscosity.slice(1)} Viscosity\`, width/2 + 50, height/2 - 40);
+        }
+
+        function drawFlowTypesDiagram(canvas, flowType) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw pipe
+            const pipeY = height/2 - 30;
+            const pipeHeight = 60;
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(50, pipeY);
+            ctx.lineTo(width - 50, pipeY);
+            ctx.moveTo(50, pipeY + pipeHeight);
+            ctx.lineTo(width - 50, pipeY + pipeHeight);
+            ctx.stroke();
+            
+            // Draw flow based on type
+            if (flowType === 'laminar') {
+                // Smooth streamlines
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                for (let i = 1; i < 6; i++) {
+                    const y = pipeY + (i / 6) * pipeHeight;
+                    ctx.beginPath();
+                    ctx.moveTo(60, y);
+                    ctx.lineTo(width - 60, y);
+                    ctx.stroke();
+                }
+                ctx.fillStyle = '#1f2937';
+                ctx.font = '16px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Laminar Flow (Re < 2300)', width/2, 50);
+            } else if (flowType === 'turbulent') {
+                // Irregular, wavy lines
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 2;
+                for (let i = 1; i < 6; i++) {
+                    const baseY = pipeY + (i / 6) * pipeHeight;
+                    ctx.beginPath();
+                    ctx.moveTo(60, baseY);
+                    for (let x = 60; x < width - 60; x += 10) {
+                        const y = baseY + Math.sin((x - 60) * 0.1) * (Math.random() * 10 - 5);
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+                }
+                ctx.fillStyle = '#1f2937';
+                ctx.font = '16px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Turbulent Flow (Re > 4000)', width/2, 50);
+            } else {
+                // Transition - mix of both
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 2;
+                for (let i = 1; i < 6; i++) {
+                    const baseY = pipeY + (i / 6) * pipeHeight;
+                    ctx.beginPath();
+                    ctx.moveTo(60, baseY);
+                    for (let x = 60; x < width - 60; x += 10) {
+                        const disturbance = x > width/2 ? Math.sin((x - 60) * 0.1) * (Math.random() * 5 - 2.5) : 0;
+                        const y = baseY + disturbance;
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+                }
+                ctx.fillStyle = '#1f2937';
+                ctx.font = '16px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Transitional Flow (2300 < Re < 4000)', width/2, 50);
+            }
+        }
+
+        function drawVelocityFieldDiagram(canvas, fieldType) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, width, height);
+            
+            const spacing = 40;
+            const arrowLength = 20;
+            
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            
+            for (let x = spacing; x < width - spacing; x += spacing) {
+                for (let y = spacing; y < height - spacing; y += spacing) {
+                    let vx = 0, vy = 0;
+                    
+                    if (fieldType === 'uniform') {
+                        vx = 1;
+                        vy = 0;
+                    } else if (fieldType === 'source') {
+                        const dx = x - width/2;
+                        const dy = y - height/2;
+                        const r = Math.sqrt(dx*dx + dy*dy);
+                        if (r > 0) {
+                            vx = dx/r;
+                            vy = dy/r;
+                        }
+                    } else if (fieldType === 'vortex') {
+                        const dx = x - width/2;
+                        const dy = y - height/2;
+                        vx = -dy/100;
+                        vy = dx/100;
+                    }
+                    
+                    const magnitude = Math.sqrt(vx*vx + vy*vy);
+                    if (magnitude > 0) {
+                        vx = (vx/magnitude) * arrowLength;
+                        vy = (vy/magnitude) * arrowLength;
+                        
+                        // Draw arrow
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x + vx, y + vy);
+                        ctx.stroke();
+                        
+                        // Arrow head
+                        const angle = Math.atan2(vy, vx);
+                        const headLength = 6;
+                        ctx.beginPath();
+                        ctx.moveTo(x + vx, y + vy);
+                        ctx.lineTo(x + vx - headLength * Math.cos(angle - Math.PI/6), y + vy - headLength * Math.sin(angle - Math.PI/6));
+                        ctx.moveTo(x + vx, y + vy);
+                        ctx.lineTo(x + vx - headLength * Math.cos(angle + Math.PI/6), y + vy - headLength * Math.sin(angle + Math.PI/6));
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            // Title
+            ctx.fillStyle = '#1f2937';
+            ctx.font = '16px Inter';
+            ctx.textAlign = 'center';
+            const titles = {
+                uniform: 'Uniform Flow Field',
+                source: 'Source Flow Field', 
+                vortex: 'Vortex Flow Field'
+            };
+            ctx.fillText(titles[fieldType], width/2, 30);
+        }
+
+        function drawStreamlinesDiagram(canvas, lineType) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, width, height);
+            
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            
+            if (lineType === 'streamlines') {
+                // Draw streamlines around a cylinder
+                const cylinderX = width/2;
+                const cylinderY = height/2;
+                const cylinderR = 30;
+                
+                // Draw cylinder
+                ctx.fillStyle = '#374151';
+                ctx.beginPath();
+                ctx.arc(cylinderX, cylinderY, cylinderR, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Draw streamlines
+                ctx.strokeStyle = '#3b82f6';
+                for (let i = -3; i <= 3; i++) {
+                    const startY = cylinderY + i * 40;
+                    ctx.beginPath();
+                    ctx.moveTo(50, startY);
+                    
+                    for (let x = 50; x < width - 50; x += 5) {
+                        const dx = x - cylinderX;
+                        const dy = startY - cylinderY;
+                        const r = Math.sqrt(dx*dx + dy*dy);
+                        
+                        let y = startY;
+                        if (r > cylinderR + 5) {
+                            // Streamline deflection around cylinder
+                            const deflection = (cylinderR * cylinderR) / (r * r) * dy * 0.5;
+                            y = startY - deflection;
+                        }
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+                }
+                
+                ctx.fillStyle = '#1f2937';
+                ctx.font = '16px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Streamlines (instantaneous)', width/2, 50);
+            }
+            // Additional line types would be implemented similarly...
+        }
+
+        // Knowledge check functions
+        function checkAnswer(sectionKey, correctAnswer) {
+            const selectedOption = document.querySelector(\`#feedback-\${sectionKey}\`).parentElement.querySelector('.answer-option.selected');
+            const feedback = document.getElementById(\`feedback-\${sectionKey}\`);
+            
+            if (!selectedOption) {
+                alert('Please select an answer first.');
+                return;
+            }
+            
+            const selectedAnswer = selectedOption.dataset.answer;
+            const isCorrect = selectedAnswer === correctAnswer;
+            
+            // Update option styles
+            selectedOption.parentElement.querySelectorAll('.answer-option').forEach(option => {
+                if (option.dataset.answer === correctAnswer) {
+                    option.classList.add('correct');
+                } else if (option.classList.contains('selected') && option.dataset.answer !== correctAnswer) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            // Show feedback
+            feedback.className = \`feedback \${isCorrect ? 'correct' : 'incorrect'}\`;
+            feedback.textContent = isCorrect ? 
+                'Correct! Well done.' : 
+                \`Incorrect. The correct answer is \${correctAnswer.toUpperCase()}.\`;
+            feedback.style.display = 'block';
+            
+            // Disable button
+            selectedOption.parentElement.parentElement.querySelector('.check-btn').disabled = true;
+            
+            // Update progress if correct
+            if (isCorrect && !completedSections.includes(sectionKey)) {
+                completedSections.push(sectionKey);
+                updateProgress();
+                updateSectionStatus(sectionKey);
             }
         }
 
@@ -883,13 +1618,364 @@
         }
 
         function loadSectionContent(sectionKey) {
-            // For now, we'll just update the title
-            // In a full implementation, this would load different content
             const container = document.getElementById('content-container');
-            container.classList.add('fade-in');
+            container.classList.remove('fade-in');
             
-            // Content loading logic would go here
-            console.log(`Loading content for section: ${sectionKey}`);
+            // Load content based on section
+            setTimeout(() => {
+                container.innerHTML = getSectionContent(sectionKey);
+                container.classList.add('fade-in');
+                
+                // Re-render MathJax if present
+                if (window.MathJax) {
+                    MathJax.typesetPromise([container]).then(() => {
+                        console.log('MathJax re-rendered for section:', sectionKey);
+                    });
+                }
+                
+                // Setup interactive elements
+                setupInteractiveElements();
+                
+            }, 150);
+        }
+
+        function getSectionContent(sectionKey) {
+            const contentMap = {
+                introduction: getIntroductionContent(),
+                properties: getPropertiesContent(),
+                classification: getClassificationContent(),
+                "velocity-field": getVelocityFieldContent(),
+                streamlines: getStreamlinesContent()
+            };
+            
+            return contentMap[sectionKey] || getDefaultContent(sectionKey);
+        }
+
+        function getIntroductionContent() {
+            return `
+                <h1 class="page-title">Introduction to Fluids</h1>
+                <p class="page-subtitle">Understanding the fundamentals of fluid mechanics</p>
+
+                <div class="definition-box">
+                    <div class="definition-title">Definition: Fluid</div>
+                    <p>A <strong>fluid</strong> is a substance that continuously deforms (flows) under an applied shear stress, regardless of how small that stress may be. This includes both liquids and gases.</p>
+                </div>
+
+                <div class="content-text">
+                    Fluid mechanics is the branch of physics that studies the motion of fluids (liquids and gases) and the forces acting on them. It has applications in numerous fields including aerodynamics, hydraulics, meteorology, oceanography, and biomedical engineering.
+                </div>
+
+                <h2 class="section-heading">Key Characteristics of Fluids</h2>
+
+                <div class="subsection-heading">1. Molecular Structure</div>
+                <div class="content-text">
+                    In fluids, molecules are not rigidly connected to each other, allowing them to move freely. This molecular mobility is what enables fluids to flow and take the shape of their container.
+                </div>
+
+                <div class="diagram-container">
+                    <div class="diagram-title">Molecular Structure Comparison</div>
+                    <canvas class="diagram-canvas" id="molecular-diagram" width="600" height="300"></canvas>
+                    <div class="diagram-controls">
+                        <button class="diagram-btn active" data-state="solid">Solid</button>
+                        <button class="diagram-btn" data-state="liquid">Liquid</button>
+                        <button class="diagram-btn" data-state="gas">Gas</button>
+                    </div>
+                </div>
+
+                <div class="subsection-heading">2. Shear Stress Response</div>
+                <div class="content-text">
+                    Unlike solids, which can withstand shear stress without continuous deformation, fluids will continuously deform when subjected to any shear stress, no matter how small.
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Important Concept:</strong> The fundamental difference between solids and fluids lies in their response to shear stress. A solid will deform elastically under small shear stress and return to its original shape when the stress is removed. A fluid, however, will continue to deform as long as the shear stress is applied.
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Continuum Assumption</div>
+                    <p>For a characteristic length scale $L$ and mean free path $\\lambda$:</p>
+                    $$\\text{Knudsen number: } Kn = \\frac{\\lambda}{L} \\ll 1$$
+                    <p style="margin-top: 15px; font-size: 14px; color: #6b7280;">
+                        When $Kn \\ll 1$, the continuum assumption is valid
+                    </p>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Knowledge Check</div>
+                    <div class="question">What is the fundamental difference between solids and fluids?</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) Fluids have higher density than solids</div>
+                        <div class="answer-option" data-answer="b">B) Fluids continuously deform under any shear stress</div>
+                        <div class="answer-option" data-answer="c">C) Fluids are always transparent</div>
+                        <div class="answer-option" data-answer="d">D) Fluids cannot be compressed</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('introduction', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-introduction"></div>
+                </div>
+
+                ${getNavigationFooter('introduction')}
+            `;
+        }
+
+        function getPropertiesContent() {
+            return `
+                <h1 class="page-title">Fluid Properties</h1>
+                <p class="page-subtitle">Essential characteristics that define fluid behavior</p>
+
+                <div class="content-text">
+                    Understanding fluid properties is crucial for analyzing fluid behavior and solving fluid mechanics problems. These properties can be categorized into fundamental properties and derived properties.
+                </div>
+
+                <h2 class="section-heading">Fundamental Properties</h2>
+
+                <div class="subsection-heading">1. Density (ρ)</div>
+                <div class="content-text">
+                    Density is the mass per unit volume of a fluid. It varies with temperature and pressure, especially for gases.
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Density Definition</div>
+                    $$\\rho = \\frac{m}{V}$$
+                    <p style="margin-top: 10px; font-size: 14px;">where $m$ is mass and $V$ is volume</p>
+                </div>
+
+                <div class="subsection-heading">2. Specific Weight (γ)</div>
+                <div class="content-text">
+                    Specific weight is the weight per unit volume, related to density by gravitational acceleration.
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Specific Weight</div>
+                    $$\\gamma = \\rho g$$
+                    <p style="margin-top: 10px; font-size: 14px;">where $g$ is gravitational acceleration</p>
+                </div>
+
+                <div class="subsection-heading">3. Viscosity (μ)</div>
+                <div class="content-text">
+                    Viscosity is a measure of a fluid's resistance to deformation. It represents the internal friction within the fluid.
+                </div>
+
+                <div class="diagram-container">
+                    <div class="diagram-title">Viscosity Demonstration</div>
+                    <canvas class="diagram-canvas" id="viscosity-diagram" width="600" height="300"></canvas>
+                    <div class="diagram-controls">
+                        <button class="diagram-btn active" data-viscosity="low">Low Viscosity</button>
+                        <button class="diagram-btn" data-viscosity="medium">Medium Viscosity</button>
+                        <button class="diagram-btn" data-viscosity="high">High Viscosity</button>
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Newton's Law of Viscosity</div>
+                    $$\\tau = \\mu \\frac{du}{dy}$$
+                    <p style="margin-top: 10px; font-size: 14px;">where $\\tau$ is shear stress, $\\mu$ is dynamic viscosity, and $\\frac{du}{dy}$ is velocity gradient</p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example: Common Fluid Properties</div>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                        <tr style="border-bottom: 1px solid #ddd; background: #f8f9fa;">
+                            <th style="padding: 10px; text-align: left;">Fluid</th>
+                            <th style="padding: 10px; text-align: left;">Density (kg/m³)</th>
+                            <th style="padding: 10px; text-align: left;">Viscosity (Pa·s)</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 8px;">Water (20°C)</td>
+                            <td style="padding: 8px;">1000</td>
+                            <td style="padding: 8px;">1.0 × 10⁻³</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 8px;">Air (20°C)</td>
+                            <td style="padding: 8px;">1.2</td>
+                            <td style="padding: 8px;">1.8 × 10⁻⁵</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;">Honey</td>
+                            <td style="padding: 8px;">1400</td>
+                            <td style="padding: 8px;">10</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Knowledge Check</div>
+                    <div class="question">Which property represents a fluid's resistance to deformation?</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) Density</div>
+                        <div class="answer-option" data-answer="b">B) Specific weight</div>
+                        <div class="answer-option" data-answer="c">C) Viscosity</div>
+                        <div class="answer-option" data-answer="d">D) Compressibility</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('properties', 'c')">Check Answer</button>
+                    <div class="feedback" id="feedback-properties"></div>
+                </div>
+
+                ${getNavigationFooter('properties')}
+            `;
+        }
+
+        function getClassificationContent() {
+            return `
+                <h1 class="page-title">Flow Classification</h1>
+                <p class="page-subtitle">Understanding different types of fluid flow</p>
+
+                <div class="content-text">
+                    Fluid flows can be classified in several ways based on different characteristics. Understanding these classifications helps in selecting appropriate analysis methods and mathematical models.
+                </div>
+
+                <h2 class="section-heading">Classification by Flow Behavior</h2>
+
+                <div class="subsection-heading">1. Laminar vs Turbulent Flow</div>
+                <div class="content-text">
+                    This classification is based on the flow pattern and mixing characteristics.
+                </div>
+
+                <div class="diagram-container">
+                    <div class="diagram-title">Laminar vs Turbulent Flow</div>
+                    <canvas class="diagram-canvas" id="flow-types-diagram" width="600" height="400"></canvas>
+                    <div class="diagram-controls">
+                        <button class="diagram-btn active" data-flow="laminar">Laminar Flow</button>
+                        <button class="diagram-btn" data-flow="turbulent">Turbulent Flow</button>
+                        <button class="diagram-btn" data-flow="transition">Transition</button>
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Reynolds Number</div>
+                    $$Re = \\frac{\\rho V D}{\\mu} = \\frac{V D}{\\nu}$$
+                    <p style="margin-top: 10px; font-size: 14px;">where $V$ is velocity, $D$ is characteristic length, $\\nu$ is kinematic viscosity</p>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Flow Transition Criteria:</strong><br>
+                    • <strong>Laminar:</strong> Re < 2300 (pipe flow)<br>
+                    • <strong>Transitional:</strong> 2300 < Re < 4000<br>
+                    • <strong>Turbulent:</strong> Re > 4000
+                </div>
+
+                <h2 class="section-heading">Classification by Compressibility</h2>
+
+                <div class="subsection-heading">Incompressible vs Compressible Flow</div>
+                <div class="content-text">
+                    This classification depends on whether fluid density changes significantly during the flow process.
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Compressibility Guidelines</div>
+                    <p><strong>Incompressible Flow:</strong> Mach number M < 0.3 (density variation < 5%)</p>
+                    <p><strong>Compressible Flow:</strong> Mach number M > 0.3 (significant density changes)</p>
+                    <p style="margin-top: 15px;">Mach number: $M = \\frac{V}{c}$ where $c$ is speed of sound</p>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Knowledge Check</div>
+                    <div class="question">At what Reynolds number does pipe flow typically transition from laminar to turbulent?</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) Re ≈ 1000</div>
+                        <div class="answer-option" data-answer="b">B) Re ≈ 2300</div>
+                        <div class="answer-option" data-answer="c">C) Re ≈ 5000</div>
+                        <div class="answer-option" data-answer="d">D) Re ≈ 10000</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('classification', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-classification"></div>
+                </div>
+
+                ${getNavigationFooter('classification')}
+            `;
+        }
+
+        function getVelocityFieldContent() {
+            return `
+                <h1 class="page-title">Velocity Fields</h1>
+                <p class="page-subtitle">Mathematical description of fluid motion</p>
+
+                <div class="content-text">
+                    A velocity field describes the velocity of fluid particles at every point in space and time. This Eulerian approach is fundamental to fluid mechanics analysis.
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Velocity Field</div>
+                    $$\\vec{V}(x,y,z,t) = u(x,y,z,t)\\hat{i} + v(x,y,z,t)\\hat{j} + w(x,y,z,t)\\hat{k}$$
+                    <p style="margin-top: 10px; font-size: 14px;">where $u$, $v$, $w$ are velocity components in $x$, $y$, $z$ directions</p>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="diagram-title">2D Velocity Field Visualization</div>
+                    <canvas class="diagram-canvas" id="velocity-field-diagram" width="600" height="400"></canvas>
+                    <div class="diagram-controls">
+                        <button class="diagram-btn active" data-field="uniform">Uniform Flow</button>
+                        <button class="diagram-btn" data-field="source">Source Flow</button>
+                        <button class="diagram-btn" data-field="vortex">Vortex Flow</button>
+                    </div>
+                </div>
+
+                ${getNavigationFooter('velocity-field')}
+            `;
+        }
+
+        function getStreamlinesContent() {
+            return `
+                <h1 class="page-title">Streamlines & Pathlines</h1>
+                <p class="page-subtitle">Visualizing fluid flow patterns</p>
+
+                <div class="content-text">
+                    Flow visualization techniques help us understand complex fluid motion through different line representations.
+                </div>
+
+                <div class="definition-box">
+                    <div class="definition-title">Definition: Streamline</div>
+                    <p>A <strong>streamline</strong> is a line that is tangent to the velocity vector at every point along the line at a given instant in time.</p>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="diagram-title">Flow Line Visualization</div>
+                    <canvas class="diagram-canvas" id="streamlines-diagram" width="600" height="400"></canvas>
+                    <div class="diagram-controls">
+                        <button class="diagram-btn active" data-lines="streamlines">Streamlines</button>
+                        <button class="diagram-btn" data-lines="pathlines">Pathlines</button>
+                        <button class="diagram-btn" data-lines="streaklines">Streaklines</button>
+                    </div>
+                </div>
+
+                ${getNavigationFooter('streamlines')}
+            `;
+        }
+
+        function getDefaultContent(sectionKey) {
+            const sectionData = handbookContent[currentChapter]?.sections[sectionKey];
+            return `
+                <h1 class="page-title">${sectionData?.title || 'Section'}</h1>
+                <p class="page-subtitle">Content coming soon...</p>
+                
+                <div class="content-text">
+                    This section is under development. Please check back later for comprehensive content on ${sectionData?.title?.toLowerCase() || 'this topic'}.
+                </div>
+                
+                ${getNavigationFooter(sectionKey)}
+            `;
+        }
+
+        function getNavigationFooter(sectionKey) {
+            const allSections = Object.keys(handbookContent[currentChapter]?.sections || {});
+            const currentIndex = allSections.indexOf(sectionKey);
+            const prevSection = currentIndex > 0 ? allSections[currentIndex - 1] : null;
+            const nextSection = currentIndex < allSections.length - 1 ? allSections[currentIndex + 1] : null;
+            
+            return `
+                <div class="navigation-footer">
+                    <button class="nav-btn" ${prevSection ? `onclick="navigateToSection('${prevSection}')"` : 'disabled'}>
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <div class="page-info">
+                        Page ${currentIndex + 1} of ${allSections.length} | Chapter: ${handbookContent[currentChapter]?.title}
+                    </div>
+                    <button class="nav-btn" ${nextSection ? `onclick="navigateToSection('${nextSection}')"` : 'disabled'}>
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            `;
         }
 
         function updateProgress() {
