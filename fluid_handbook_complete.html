@@ -348,11 +348,28 @@
             overflow: hidden;
             box-shadow: var(--shadow-light);
             transition: all 0.3s ease;
+            display: none; /* Hide all modules by default */
+        }
+
+        .learning-section.active {
+            display: block; /* Show only active module */
+            animation: fadeInModule 0.5s ease-in-out;
         }
 
         .learning-section:hover {
             box-shadow: var(--shadow-medium);
             transform: translateY(-2px);
+        }
+
+        @keyframes fadeInModule {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
 
         .section-header {
@@ -1588,7 +1605,7 @@
                 <h1 class="page-title">Introduction to Fluids</h1>
                 <p class="page-subtitle">Master fluid mechanics through structured micro-learning modules</p>
 
-                <div class="learning-section">
+                <div class="learning-section active" id="module1">
                     <div class="section-header">
                         <div class="section-title">📚 Module 1: What is a Fluid?</div>
                         <div class="section-badge">Core Concept</div>
@@ -1815,18 +1832,17 @@
                             <div class="progress-dot current"></div>
                         </div>
                         <div class="section-completion">
-                            <span class="completion-badge">🎓 Introduction Complete!</span>
-                            <span>Ready for next chapter</span>
+                            <button class="next-section-btn" onclick="completeIntroduction()">Complete Introduction 🎓</button>
                         </div>
                     </div>
                 </div>
 
 
 
-                <div style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, var(--academic-navy), var(--academic-blue)); color: white; border-radius: 12px;">
+                <div id="completion-section" style="display: none; text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, var(--academic-navy), var(--academic-blue)); color: white; border-radius: 12px;">
                     <h3 style="margin-bottom: 15px; font-size: 24px;">🎓 Congratulations!</h3>
                     <p style="font-size: 18px; margin-bottom: 10px;">You've completed the Introduction to Fluids</p>
-                    <p style="font-size: 16px; opacity: 0.9;">Master the fundamentals through structured learning modules</p>
+                    <p style="font-size: 16px; opacity: 0.9;">Mastered the fundamentals through structured learning modules</p>
                     <div style="margin-top: 20px;">
                         <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin: 0 5px;">✓ Fluid Definition</span>
                         <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin: 0 5px;">✓ Continuum Theory</span>
@@ -2354,52 +2370,87 @@
         });
 
         // Micro-learning navigation functions
+        let currentModuleIndex = 1;
+        const totalModules = 5;
+
         function scrollToSection(sectionId) {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                element.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start'
-                });
+            const moduleNumber = parseInt(sectionId.replace('module', ''));
+            
+            // Only allow progression to next module
+            if (moduleNumber === currentModuleIndex + 1) {
+                // Hide current module
+                const currentModule = document.getElementById(`module${currentModuleIndex}`);
+                if (currentModule) {
+                    currentModule.classList.remove('active');
+                }
                 
-                // Update progress dots
-                updateSectionProgress(sectionId);
-                
-                // Add completion badge effect
-                setTimeout(() => {
-                    showCompletionBadge();
-                }, 1000);
+                // Show next module
+                const nextModule = document.getElementById(sectionId);
+                if (nextModule) {
+                    nextModule.classList.add('active');
+                    nextModule.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start'
+                    });
+                    
+                    // Update current module index
+                    currentModuleIndex = moduleNumber;
+                    
+                    // Update progress dots
+                    updateSectionProgress();
+                    
+                    // Add completion badge effect
+                    setTimeout(() => {
+                        showCompletionBadge();
+                    }, 500);
+                }
             }
         }
 
-        function updateSectionProgress(currentSection) {
-            const sectionMapping = {
-                'module2': 1,
-                'module3': 2,
-                'module4': 3,
-                'module5': 4
-            };
-            
-            const currentIndex = sectionMapping[currentSection] || 0;
-            
-            // Update all progress indicators
-            document.querySelectorAll('.progress-indicator').forEach((indicator, sectionIndex) => {
+        function updateSectionProgress() {
+            // Update all progress indicators to show current progress
+            document.querySelectorAll('.progress-indicator').forEach((indicator) => {
                 const dots = indicator.querySelectorAll('.progress-dot');
                 dots.forEach((dot, dotIndex) => {
                     dot.classList.remove('current', 'completed');
-                    if (dotIndex < currentIndex) {
+                    if (dotIndex < currentModuleIndex - 1) {
                         dot.classList.add('completed');
-                    } else if (dotIndex === currentIndex) {
+                    } else if (dotIndex === currentModuleIndex - 1) {
                         dot.classList.add('current');
                     }
                 });
             });
         }
 
-        function showCompletionBadge() {
+
+
+        function completeIntroduction() {
+            // Hide the current module
+            const currentModule = document.getElementById(`module${currentModuleIndex}`);
+            if (currentModule) {
+                currentModule.classList.remove('active');
+            }
+            
+            // Show completion section
+            const completionSection = document.getElementById('completion-section');
+            if (completionSection) {
+                completionSection.style.display = 'block';
+                completionSection.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start'
+                });
+            }
+            
+            // Show final completion badge
+            setTimeout(() => {
+                showCompletionBadge('🎓 Introduction to Fluids Mastered!');
+            }, 500);
+        }
+
+        function showCompletionBadge(message = '🎉 Module Completed!') {
             // Create temporary completion notification
             const badge = document.createElement('div');
-            badge.innerHTML = '🎉 Module Completed!';
+            badge.innerHTML = message;
             badge.style.cssText = `
                 position: fixed;
                 top: 20px;
@@ -2431,6 +2482,9 @@
                 }
             `;
             document.head.appendChild(style);
+            
+            // Initialize progress for first module
+            updateSectionProgress();
         }
     </script>
 </body>
