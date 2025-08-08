@@ -1457,41 +1457,92 @@
 
                 <div class="definition-box">
                     <div class="definition-title">Definition: Fluid</div>
-                    <p>A <strong>fluid</strong> is a substance that continuously deforms (flows) under an applied shear stress, regardless of how small that stress may be. This includes both liquids and gases.</p>
+                    <p>A <strong>fluid</strong> is a substance that continuously deforms (flows) under an applied shear stress, regardless of how small that stress may be. This fundamental characteristic distinguishes fluids from solids, which can support shear stress without continuous deformation.</p>
+                    <p style="margin-top: 10px; font-style: italic;">Mathematical criterion: A fluid cannot resist a shear stress in static equilibrium.</p>
                 </div>
 
                 <div class="content-text">
-                    Fluid mechanics is the branch of physics that studies the motion of fluids (liquids and gases) and the forces acting on them. It has applications in numerous fields including aerodynamics, hydraulics, meteorology, oceanography, and biomedical engineering.
+                    Fluid mechanics is the branch of continuum mechanics that studies the motion of fluids (liquids and gases) and the forces acting on them. It combines principles from physics, mathematics, and engineering to analyze fluid behavior in both static and dynamic conditions. The field encompasses theoretical analysis, experimental investigation, and computational simulation methods.
                 </div>
 
-                <h2 class="section-heading">Key Characteristics of Fluids</h2>
-
-                <div class="content-text">
-                    Understanding fluid behavior requires knowledge of several fundamental characteristics:
-                </div>
+                <h2 class="section-heading">Fundamental Concepts and Assumptions</h2>
 
                 <div class="subsection-heading">1. Continuum Assumption</div>
                 <div class="content-text">
-                    Fluids are treated as continuous media, ignoring the molecular structure. This assumption is valid when the characteristic length scale of the flow is much larger than the mean free path of molecules.
+                    The continuum assumption treats fluids as continuous media, ignoring their molecular structure. This macroscopic approach is valid when the characteristic length scale of the flow (L) is much larger than the mean free path of molecules (λ).
                 </div>
 
-                <div class="subsection-heading">2. No-Slip Condition</div>
-                <div class="content-text">
-                    At a solid boundary, the fluid velocity equals the velocity of the boundary. For stationary walls, this means the fluid velocity is zero at the wall.
+                <div class="formula-box">
+                    <div class="formula-title">Knudsen Number</div>
+                    <p>The validity of the continuum assumption is assessed using the Knudsen number:</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$Kn = \\frac{\\lambda}{L}$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        • Kn < 0.01: Continuum flow (Navier-Stokes equations valid)<br>
+                        • 0.01 < Kn < 0.1: Slip flow (modified boundary conditions)<br>
+                        • 0.1 < Kn < 10: Transition flow (kinetic theory required)<br>
+                        • Kn > 10: Free molecular flow (molecular dynamics)
+                    </p>
                 </div>
 
-                <div class="subsection-heading">3. Viscosity</div>
+                <div class="subsection-heading">2. Fluid as a Continuum</div>
                 <div class="content-text">
-                    Viscosity represents the internal friction in a fluid that resists relative motion between fluid layers.
+                    Under the continuum assumption, fluid properties such as density (ρ), velocity (V), pressure (p), and temperature (T) are defined at every point in space and time. These properties are assumed to vary continuously throughout the fluid domain, allowing the use of calculus-based analysis.
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Physical Interpretation:</strong> At any point in the fluid, we can define a representative elementary volume (REV) that is:<br>
+                    • Large enough to contain sufficient molecules for statistical averages<br>
+                    • Small enough compared to the macroscopic flow length scales<br>
+                    • Allows definition of intensive properties as point functions
+                </div>
+
+                <div class="subsection-heading">3. No-Slip Condition</div>
+                <div class="content-text">
+                    The no-slip condition is a fundamental boundary condition in viscous flow analysis. At a solid-fluid interface, the fluid velocity equals the velocity of the solid surface. This condition arises from molecular interactions and intermolecular forces at the interface.
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">No-Slip Boundary Condition</div>
+                    <p>At a solid wall moving with velocity <strong>V<sub>wall</sub></strong>:</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\vec{V}_{fluid} = \\vec{V}_{wall}$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        For stationary walls: <strong>V<sub>fluid</sub> = 0</strong><br>
+                        This condition applies to all velocity components tangential and normal to the surface.
+                    </p>
+                </div>
+
+                <div class="subsection-heading">4. Fluid Stress and Deformation</div>
+                <div class="content-text">
+                    Unlike solids, fluids cannot support shear stress in equilibrium. When subjected to shear stress, fluids undergo continuous deformation (flow). The relationship between stress and rate of deformation defines the fluid's rheological behavior.
                 </div>
 
                 <div class="formula-box">
                     <div class="formula-title">Newton's Law of Viscosity</div>
-                    <p>For a Newtonian fluid, the shear stress is proportional to the velocity gradient:</p>
+                    <p>For a Newtonian fluid, the shear stress is linearly proportional to the velocity gradient:</p>
                     <p style="text-align: center; margin: 15px 0; font-size: 18px;">
                         $$\\tau = \\mu \\frac{du}{dy}$$
                     </p>
-                    <p style="margin-top: 15px; font-size: 14px;">where τ is shear stress, μ is dynamic viscosity, and du/dy is velocity gradient</p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        where:<br>
+                        • τ = shear stress [Pa = N/m²]<br>
+                        • μ = dynamic viscosity [Pa·s = N·s/m²]<br>
+                        • du/dy = velocity gradient [s⁻¹]
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Viscosity Values at 20°C</div>
+                    <p><strong>Gases:</strong></p>
+                    <p>• Air: μ = 1.81 × 10⁻⁵ Pa·s</p>
+                    <p>• Hydrogen: μ = 8.76 × 10⁻⁶ Pa·s</p>
+                    <p><strong>Liquids:</strong></p>
+                    <p>• Water: μ = 1.002 × 10⁻³ Pa·s</p>
+                    <p>• Engine oil (SAE 30): μ ≈ 0.1 Pa·s</p>
+                    <p>• Glycerin: μ = 1.49 Pa·s</p>
                 </div>
 
                 <div class="diagram-container">
@@ -1504,28 +1555,449 @@
                     </div>
                 </div>
 
-                <h2 class="section-heading">Applications of Fluid Mechanics</h2>
+                <h2 class="section-heading">Classification of Fluids</h2>
+
+                <div class="subsection-heading">Newtonian vs Non-Newtonian Fluids</div>
+                <div class="content-text">
+                    Fluids are classified based on their response to applied shear stress:
+                </div>
+
+                <div class="definition-box">
+                    <div class="definition-title">Newtonian Fluids</div>
+                    <p><strong>Characteristics:</strong></p>
+                    <p>• Linear relationship between shear stress and velocity gradient</p>
+                    <p>• Viscosity independent of shear rate</p>
+                    <p>• Examples: Water, air, most gases, simple liquids</p>
+                    <p style="margin-top: 10px;"><strong>Constitutive equation:</strong> τ = μ(∂u/∂y)</p>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Non-Newtonian Fluids:</strong><br>
+                    • <strong>Shear-thinning (pseudoplastic):</strong> Viscosity decreases with shear rate (paint, blood)<br>
+                    • <strong>Shear-thickening (dilatant):</strong> Viscosity increases with shear rate (corn starch solution)<br>
+                    • <strong>Bingham plastic:</strong> Requires yield stress to initiate flow (toothpaste, clay)<br>
+                    • <strong>Viscoelastic:</strong> Exhibits both viscous and elastic properties (polymer solutions)
+                </div>
+
+                <h2 class="section-heading">System of Units and Dimensions</h2>
+
+                <div class="content-text">
+                    Fluid mechanics employs fundamental dimensions of mass [M], length [L], and time [T]. All fluid properties can be expressed in terms of these basic dimensions.
+                </div>
 
                 <div class="example-box">
-                    <div class="example-title">Real-World Applications</div>
-                    <p><strong>Aerospace:</strong> Aircraft design, rocket propulsion, atmospheric entry</p>
-                    <p><strong>Automotive:</strong> Aerodynamics, engine cooling, fuel injection</p>
-                    <p><strong>Civil Engineering:</strong> Water distribution, dam design, wind loading</p>
-                    <p><strong>Biomedical:</strong> Blood flow, respiratory system, drug delivery</p>
-                    <p><strong>Environmental:</strong> Ocean currents, weather prediction, pollution dispersal</p>
+                    <div class="example-title">Dimensional Analysis of Key Properties</div>
+                    <p><strong>Density:</strong> ρ [M L⁻³]</p>
+                    <p><strong>Velocity:</strong> V [L T⁻¹]</p>
+                    <p><strong>Pressure:</strong> p [M L⁻¹ T⁻²]</p>
+                    <p><strong>Dynamic viscosity:</strong> μ [M L⁻¹ T⁻¹]</p>
+                    <p><strong>Kinematic viscosity:</strong> ν = μ/ρ [L² T⁻¹]</p>
+                    <p><strong>Surface tension:</strong> σ [M T⁻²]</p>
+                </div>
+
+                <h2 class="section-heading">Applications of Fluid Mechanics</h2>
+
+                <div class="content-text">
+                    Fluid mechanics principles are applied across numerous engineering disciplines and natural phenomena:
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Engineering Applications</div>
+                    <p><strong>Aerospace Engineering:</strong></p>
+                    <p>• Airfoil design and optimization (lift generation, drag reduction)</p>
+                    <p>• Rocket nozzle design (supersonic flow, thrust optimization)</p>
+                    <p>• Heat transfer in gas turbine engines</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Mechanical Engineering:</strong></p>
+                    <p>• Pump and turbine design (energy conversion)</p>
+                    <p>• Heat exchanger analysis (convective heat transfer)</p>
+                    <p>• Lubrication systems (tribology applications)</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Civil Engineering:</strong></p>
+                    <p>• Open channel flow (river engineering, flood control)</p>
+                    <p>• Pipe network design (water distribution systems)</p>
+                    <p>• Wind loading on structures (building aerodynamics)</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Chemical Engineering:</strong></p>
+                    <p>• Mass transfer operations (distillation, absorption)</p>
+                    <p>• Reactor design (mixing, heat transfer)</p>
+                    <p>• Process fluid handling (pumping, pipeline design)</p>
                 </div>
 
                 <div class="knowledge-check">
                     <div class="check-title">Knowledge Check</div>
-                    <div class="question">What is the key difference between a fluid and a solid?</div>
+                    <div class="question">A fluid element subjected to a constant shear stress will:</div>
                     <div class="answer-options">
-                        <div class="answer-option" data-answer="a">A) Fluids have higher density</div>
-                        <div class="answer-option" data-answer="b">B) Fluids continuously deform under shear stress</div>
-                        <div class="answer-option" data-answer="c">C) Fluids are always transparent</div>
-                        <div class="answer-option" data-answer="d">D) Fluids cannot transmit forces</div>
+                        <div class="answer-option" data-answer="a">A) Deform by a finite amount and then remain static</div>
+                        <div class="answer-option" data-answer="b">B) Continuously deform (flow) as long as the stress is applied</div>
+                        <div class="answer-option" data-answer="c">C) Return to its original shape when the stress is removed</div>
+                        <div class="answer-option" data-answer="d">D) Not deform at all if the stress is below the yield stress</div>
                     </div>
                     <button class="check-btn" onclick="checkAnswer('introduction', 'b')">Check Answer</button>
                     <div class="feedback" id="feedback-introduction"></div>
+                </div>
+
+                <h2 class="section-heading">Mathematical Framework</h2>
+
+                <div class="content-text">
+                    Fluid mechanics employs sophisticated mathematical tools to describe fluid behavior. The foundation rests on conservation principles expressed through partial differential equations.
+                </div>
+
+                <div class="subsection-heading">Field Variables and Descriptions</div>
+                <div class="content-text">
+                    Fluid motion can be described using two complementary approaches:
+                </div>
+
+                <div class="definition-box">
+                    <div class="definition-title">Lagrangian Description</div>
+                    <p><strong>Particle-following approach:</strong> Track individual fluid particles through space and time.</p>
+                    <p><strong>Mathematical representation:</strong></p>
+                    <p style="margin: 10px 0;">Position: <strong>r⃗ = r⃗(a⃗, t)</strong> where a⃗ is the initial position</p>
+                    <p>Velocity: <strong>V⃗ = ∂r⃗/∂t|<sub>a⃗</sub></strong></p>
+                    <p><strong>Applications:</strong> Particle tracking, pollution dispersion, weather forecasting</p>
+                </div>
+
+                <div class="definition-box">
+                    <div class="definition-title">Eulerian Description</div>
+                    <p><strong>Field approach:</strong> Observe fluid properties at fixed points in space as functions of time.</p>
+                    <p><strong>Mathematical representation:</strong></p>
+                    <p style="margin: 10px 0;">Velocity field: <strong>V⃗ = V⃗(x⃗, t)</strong></p>
+                    <p>Property fields: <strong>ρ = ρ(x⃗, t), p = p(x⃗, t), T = T(x⃗, t)</strong></p>
+                    <p><strong>Applications:</strong> Most engineering applications, CFD simulations</p>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Material Derivative</div>
+                    <p>The rate of change following a fluid particle (connecting Lagrangian and Eulerian views):</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\frac{D\\phi}{Dt} = \\frac{\\partial \\phi}{\\partial t} + \\vec{V} \\cdot \\nabla \\phi$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        where:<br>
+                        • <strong>Dφ/Dt</strong> = material (substantial) derivative<br>
+                        • <strong>∂φ/∂t</strong> = local derivative (unsteady effects)<br>
+                        • <strong>V⃗ · ∇φ</strong> = convective derivative (spatial transport)
+                    </p>
+                </div>
+
+                <div class="subsection-heading">Thermodynamic Considerations</div>
+                <div class="content-text">
+                    Fluid behavior is governed by thermodynamic relationships that link mechanical and thermal properties.
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Equation of State</div>
+                    <p>Relates pressure, density, and temperature:</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$p = p(\\rho, T)$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        <strong>Perfect Gas:</strong> p = ρRT (R = specific gas constant)<br>
+                        <strong>Incompressible Liquid:</strong> ρ = constant<br>
+                        <strong>Van der Waals Gas:</strong> (p + a/v²)(v - b) = RT
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Compressibility Effects</div>
+                    <p><strong>Bulk Modulus of Elasticity:</strong></p>
+                    <p style="margin: 10px 0; text-align: center;">$$K = -V\\frac{\\partial p}{\\partial V} = \\rho\\frac{\\partial p}{\\partial \\rho}$$</p>
+                    <p><strong>Speed of Sound:</strong></p>
+                    <p style="margin: 10px 0; text-align: center;">$$c = \\sqrt{\\frac{\\partial p}{\\partial \\rho}} = \\sqrt{\\frac{K}{\\rho}}$$</p>
+                    <p><strong>Typical Values:</strong></p>
+                    <p>• Water: K ≈ 2.2 × 10⁹ Pa, c ≈ 1500 m/s</p>
+                    <p>• Air (20°C): c ≈ 343 m/s</p>
+                </div>
+
+                <div class="subsection-heading">Surface Tension and Interfacial Phenomena</div>
+                <div class="content-text">
+                    At interfaces between different phases, intermolecular forces create surface tension effects that become important for small-scale flows or when significant curvature exists.
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Young-Laplace Equation</div>
+                    <p>Pressure jump across a curved interface:</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\Delta p = \\sigma\\left(\\frac{1}{R_1} + \\frac{1}{R_2}\\right)$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        where:<br>
+                        • σ = surface tension [N/m]<br>
+                        • R₁, R₂ = principal radii of curvature<br>
+                        • For a sphere: Δp = 2σ/R<br>
+                        • For a cylinder: Δp = σ/R
+                    </p>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Dimensionless Numbers in Surface Tension:</strong><br>
+                    • <strong>Weber Number:</strong> We = ρV²L/σ (inertial vs surface tension forces)<br>
+                    • <strong>Bond Number:</strong> Bo = ρgL²/σ (gravitational vs surface tension forces)<br>
+                    • <strong>Capillary Number:</strong> Ca = μV/σ (viscous vs surface tension forces)
+                </div>
+
+                <h2 class="section-heading">Scale Analysis and Approximations</h2>
+
+                <div class="content-text">
+                    Engineering fluid mechanics often involves identifying the dominant physical effects through scale analysis, leading to simplified governing equations.
+                </div>
+
+                <div class="subsection-heading">Reynolds Number and Flow Regimes</div>
+                <div class="formula-box">
+                    <div class="formula-title">Reynolds Number</div>
+                    <p>Ratio of inertial to viscous forces:</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$Re = \\frac{\\rho V L}{\\mu} = \\frac{V L}{\\nu}$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        <strong>Physical interpretation:</strong><br>
+                        • High Re: Inertial forces dominate → turbulent flow likely<br>
+                        • Low Re: Viscous forces dominate → laminar flow<br>
+                        • Critical Re values depend on geometry and flow configuration
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Critical Reynolds Numbers</div>
+                    <p><strong>Pipe Flow:</strong> Re<sub>crit</sub> ≈ 2300 (based on diameter)</p>
+                    <p><strong>Flow over flat plate:</strong> Re<sub>crit</sub> ≈ 5 × 10⁵ (based on distance from leading edge)</p>
+                    <p><strong>Flow over cylinder:</strong> Re<sub>crit</sub> ≈ 200,000 (based on diameter)</p>
+                    <p><strong>Flow in boundary layer:</strong> Re<sub>crit</sub> ≈ 1000 (based on momentum thickness)</p>
+                </div>
+
+                <div class="subsection-heading">Mach Number and Compressibility</div>
+                <div class="formula-box">
+                    <div class="formula-title">Mach Number</div>
+                    <p>Ratio of flow velocity to speed of sound:</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$M = \\frac{V}{c}$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        <strong>Flow regimes:</strong><br>
+                        • M < 0.3: Incompressible flow (density variation < 5%)<br>
+                        • 0.3 < M < 1: Subsonic compressible flow<br>
+                        • M = 1: Sonic flow<br>
+                        • M > 1: Supersonic flow (shock waves possible)
+                    </p>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Knowledge Check</div>
+                    <div class="question">A fluid element subjected to a constant shear stress will:</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) Deform by a finite amount and then remain static</div>
+                        <div class="answer-option" data-answer="b">B) Continuously deform (flow) as long as the stress is applied</div>
+                        <div class="answer-option" data-answer="c">C) Return to its original shape when the stress is removed</div>
+                        <div class="answer-option" data-answer="d">D) Not deform at all if the stress is below the yield stress</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('introduction', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-introduction"></div>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Advanced Knowledge Check</div>
+                    <div class="question">The continuum assumption in fluid mechanics is valid when:</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) The Knudsen number is much greater than 1</div>
+                        <div class="answer-option" data-answer="b">B) The Knudsen number is much less than 0.01</div>
+                        <div class="answer-option" data-answer="c">C) The fluid temperature is above the critical point</div>
+                        <div class="answer-option" data-answer="d">D) The fluid velocity exceeds the speed of sound</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('introduction-advanced', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-introduction-advanced"></div>
+                </div>
+
+                <h2 class="section-heading">Historical Development and Modern Perspectives</h2>
+
+                <div class="content-text">
+                    The development of fluid mechanics spans centuries, evolving from empirical observations to sophisticated theoretical frameworks and computational methods.
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Historical Milestones</div>
+                    <p><strong>Ancient Period:</strong></p>
+                    <p>• Archimedes (287-212 BC): Buoyancy principle, hydrostatics</p>
+                    <p>• Hero of Alexandria (10-70 AD): Early understanding of pneumatics</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Renaissance & Early Modern:</strong></p>
+                    <p>• Leonardo da Vinci (1452-1519): Turbulence observations, flow visualization</p>
+                    <p>• Evangelista Torricelli (1608-1647): Torricelli's law for tank discharge</p>
+                    <p>• Blaise Pascal (1623-1662): Pascal's principle for pressure transmission</p>
+                    
+                    <p style="margin-top: 15px;"><strong>18th-19th Century Foundations:</strong></p>
+                    <p>• Daniel Bernoulli (1700-1782): Bernoulli's equation (1738)</p>
+                    <p>• Leonhard Euler (1707-1783): Euler equations for inviscid flow (1757)</p>
+                    <p>• Claude-Louis Navier (1785-1836): Navier-Stokes equations (1822)</p>
+                    <p>• George Gabriel Stokes (1819-1903): Complete Navier-Stokes formulation (1845)</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Modern Era:</strong></p>
+                    <p>• Osborne Reynolds (1842-1912): Reynolds number, turbulence transition (1883)</p>
+                    <p>• Ludwig Prandtl (1875-1953): Boundary layer theory (1904)</p>
+                    <p>• Theodore von Kármán (1881-1963): Turbulence and vortex dynamics</p>
+                </div>
+
+                <div class="subsection-heading">Modern Computational Fluid Dynamics</div>
+                <div class="content-text">
+                    The advent of digital computers revolutionized fluid mechanics, enabling the solution of complex problems previously intractable by analytical methods.
+                </div>
+
+                <div class="definition-box">
+                    <div class="definition-title">CFD Methodology</div>
+                    <p><strong>Governing Equations:</strong> Navier-Stokes equations + continuity + energy</p>
+                    <p><strong>Numerical Methods:</strong></p>
+                    <p>• Finite Difference Method (FDM): Structured grids, simple geometries</p>
+                    <p>• Finite Element Method (FEM): Complex geometries, structural coupling</p>
+                    <p>• Finite Volume Method (FVM): Conservation properties, most popular in CFD</p>
+                    <p><strong>Turbulence Modeling:</strong></p>
+                    <p>• Direct Numerical Simulation (DNS): Resolves all scales</p>
+                    <p>• Large Eddy Simulation (LES): Resolves large scales, models small scales</p>
+                    <p>• Reynolds-Averaged Navier-Stokes (RANS): Time-averaged approach</p>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Modern CFD Applications:</strong><br>
+                    • <strong>Aerospace:</strong> Aircraft design, engine optimization, atmospheric re-entry<br>
+                    • <strong>Automotive:</strong> Aerodynamics, combustion, HVAC systems<br>
+                    • <strong>Energy:</strong> Wind turbines, gas turbines, heat exchangers<br>
+                    • <strong>Environment:</strong> Weather prediction, pollution dispersion, climate modeling<br>
+                    • <strong>Biomedical:</strong> Blood flow modeling, drug delivery, respiratory mechanics
+                </div>
+
+                <div class="subsection-heading">Experimental Methods and Validation</div>
+                <div class="content-text">
+                    Despite computational advances, experimental fluid mechanics remains crucial for validation, discovery of new phenomena, and development of engineering correlations.
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Modern Experimental Techniques</div>
+                    <p><strong>Flow Visualization:</strong></p>
+                    <p>• Particle Image Velocimetry (PIV): Quantitative velocity field measurement</p>
+                    <p>• Laser Doppler Velocimetry (LDV): Point velocity measurements</p>
+                    <p>• Hot-wire anemometry: Turbulence measurements</p>
+                    <p>• Schlieren photography: Density gradient visualization</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Pressure and Force Measurement:</strong></p>
+                    <p>• Pressure transducers: Unsteady pressure measurement</p>
+                    <p>• Load cells: Force and moment measurement</p>
+                    <p>• Pressure-sensitive paint: Surface pressure distribution</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Advanced Diagnostics:</strong></p>
+                    <p>• Molecular tagging velocimetry: Non-intrusive velocity measurement</p>
+                    <p>• Pressure-sensitive and temperature-sensitive paints</p>
+                    <p>• High-speed imaging: Transient phenomena capture</p>
+                </div>
+
+                <h2 class="section-heading">Scope and Organization of Study</h2>
+
+                <div class="content-text">
+                    This handbook provides a comprehensive treatment of fluid mechanics, progressing from fundamental concepts to advanced applications. The material is organized to build understanding systematically while providing practical engineering insights.
+                </div>
+
+                <div class="definition-box">
+                    <div class="definition-title">Learning Objectives</div>
+                    <p>Upon completing this handbook, you will be able to:</p>
+                    <p>• <strong>Analyze</strong> fluid statics problems involving pressure distribution and buoyancy</p>
+                    <p>• <strong>Apply</strong> conservation principles to solve fluid flow problems</p>
+                    <p>• <strong>Design</strong> piping systems and select appropriate pumps</p>
+                    <p>• <strong>Evaluate</strong> boundary layer development and separation</p>
+                    <p>• <strong>Perform</strong> dimensional analysis for experimental planning</p>
+                    <p>• <strong>Understand</strong> compressible flow phenomena and shock waves</p>
+                    <p>• <strong>Appreciate</strong> turbulence physics and modeling approaches</p>
+                </div>
+
+                <div class="subsection-heading">Mathematical Prerequisites</div>
+                <div class="content-text">
+                    Effective study of fluid mechanics requires solid mathematical foundations:
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Essential Mathematical Tools:</strong><br>
+                    • <strong>Vector Calculus:</strong> Gradient, divergence, curl operations in various coordinate systems<br>
+                    • <strong>Partial Differential Equations:</strong> Classification, solution methods, boundary conditions<br>
+                    • <strong>Ordinary Differential Equations:</strong> Linear and nonlinear systems, stability analysis<br>
+                    • <strong>Complex Analysis:</strong> Conformal mapping, potential flow theory<br>
+                    • <strong>Tensor Analysis:</strong> Stress and strain tensors, coordinate transformations<br>
+                    • <strong>Dimensional Analysis:</strong> Buckingham Pi theorem, similarity theory
+                </div>
+
+                <div class="subsection-heading">Problem-Solving Methodology</div>
+                <div class="content-text">
+                    Successful fluid mechanics problem solving follows a systematic approach:
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Systematic Problem-Solving Steps</div>
+                    <p><strong>1. Problem Understanding:</strong></p>
+                    <p>• Identify the physical system and boundaries</p>
+                    <p>• Determine what is given and what needs to be found</p>
+                    <p>• Sketch the problem with coordinate system</p>
+                    
+                    <p style="margin-top: 10px;"><strong>2. Physical Analysis:</strong></p>
+                    <p>• Identify the relevant physical phenomena</p>
+                    <p>• Make reasonable assumptions and approximations</p>
+                    <p>• Choose appropriate governing equations</p>
+                    
+                    <p style="margin-top: 10px;"><strong>3. Mathematical Formulation:</strong></p>
+                    <p>• Apply conservation principles</p>
+                    <p>• Specify boundary and initial conditions</p>
+                    <p>• Perform dimensional analysis if appropriate</p>
+                    
+                    <p style="margin-top: 10px;"><strong>4. Solution and Verification:</strong></p>
+                    <p>• Solve the mathematical problem</p>
+                    <p>• Check dimensional consistency</p>
+                    <p>• Verify limiting cases and physical reasonableness</p>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Knowledge Check</div>
+                    <div class="question">A fluid element subjected to a constant shear stress will:</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) Deform by a finite amount and then remain static</div>
+                        <div class="answer-option" data-answer="b">B) Continuously deform (flow) as long as the stress is applied</div>
+                        <div class="answer-option" data-answer="c">C) Return to its original shape when the stress is removed</div>
+                        <div class="answer-option" data-answer="d">D) Not deform at all if the stress is below the yield stress</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('introduction', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-introduction"></div>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Advanced Knowledge Check</div>
+                    <div class="question">The continuum assumption in fluid mechanics is valid when:</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) The Knudsen number is much greater than 1</div>
+                        <div class="answer-option" data-answer="b">B) The Knudsen number is much less than 0.01</div>
+                        <div class="answer-option" data-answer="c">C) The fluid temperature is above the critical point</div>
+                        <div class="answer-option" data-answer="d">D) The fluid velocity exceeds the speed of sound</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('introduction-advanced', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-introduction-advanced"></div>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Mathematical Framework Check</div>
+                    <div class="question">The material derivative D/Dt represents:</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) The rate of change at a fixed point in space</div>
+                        <div class="answer-option" data-answer="b">B) The rate of change following a moving fluid particle</div>
+                        <div class="answer-option" data-answer="c">C) The spatial gradient of a property</div>
+                        <div class="answer-option" data-answer="d">D) The time-averaged change in a property</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('introduction-material', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-introduction-material"></div>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Historical Perspective Check</div>
+                    <div class="question">Who is credited with developing the boundary layer theory that revolutionized fluid mechanics?</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) Osborne Reynolds</div>
+                        <div class="answer-option" data-answer="b">B) Ludwig Prandtl</div>
+                        <div class="answer-option" data-answer="c">C) Claude-Louis Navier</div>
+                        <div class="answer-option" data-answer="d">D) Daniel Bernoulli</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('introduction-historical', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-introduction-historical"></div>
                 </div>
 
                 ${getNavigationFooter('introduction')}
