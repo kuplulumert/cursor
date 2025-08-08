@@ -356,7 +356,7 @@
                     <div class="progress-fill"></div>
                 </div>
                 <div class="progress-text" style="font-size: 12px; color: var(--text-secondary); margin-top: 8px; text-align: center;">
-                    1 of 18 sections completed
+                    1 of 9 sections completed
                 </div>
             </div>
 
@@ -380,6 +380,30 @@
                         </div>
                         <div class="section-item" data-section="classification">
                             Flow Classification
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chapter">
+                    <div class="chapter-title" data-chapter="kinematics">
+                        <div>
+                            <i class="fas fa-wind chapter-icon"></i>
+                            Fluid Kinematics
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="chapter-sections">
+                        <div class="section-item" data-section="velocity-field">
+                            Velocity Field
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="streamlines">
+                            Streamlines
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="acceleration">
+                            Acceleration Field
                             <span class="section-status"><i class="fas fa-circle"></i></span>
                         </div>
                     </div>
@@ -498,6 +522,23 @@
                     classification: {
                         title: "Flow Classification",
                         content: "classification"
+                    }
+                }
+            },
+            kinematics: {
+                title: "Fluid Kinematics",
+                sections: {
+                    "velocity-field": {
+                        title: "Velocity Field",
+                        content: "velocity-field"
+                    },
+                    streamlines: {
+                        title: "Streamlines",
+                        content: "streamlines"
+                    },
+                    acceleration: {
+                        title: "Acceleration Field",
+                        content: "acceleration"
                     }
                 }
             },
@@ -693,8 +734,8 @@
         function navigateNext() {
             console.log('Navigate next from:', currentSection);
             
-            // Simple next logic for demo
-            const sections = ['introduction', 'properties', 'classification', 'continuity', 'momentum', 'energy'];
+            // Updated sections list with all available sections
+            const sections = ['introduction', 'properties', 'classification', 'velocity-field', 'streamlines', 'acceleration', 'continuity', 'momentum', 'energy'];
             const currentIndex = sections.indexOf(currentSection);
             
             if (currentIndex < sections.length - 1) {
@@ -719,6 +760,9 @@
                 introduction: getIntroductionContent(),
                 properties: getPropertiesContent(),
                 classification: getClassificationContent(),
+                "velocity-field": getVelocityFieldContent(),
+                streamlines: getStreamlinesContent(),
+                acceleration: getAccelerationContent(),
                 continuity: getContinuityContent(),
                 momentum: getMomentumContent(),
                 energy: getEnergyContent()
@@ -805,7 +849,7 @@
 
                 <div class="footer-nav">
                     <button class="nav-btn" onclick="navigateToSection('introduction')">Previous: Introduction</button>
-                    <button class="nav-btn" onclick="navigateToSection('classification')">Next: Flow Classification</button>
+                    <button class="nav-btn" onclick="navigateToSection('classification')">Next: Classification</button>
                 </div>
             `;
         }
@@ -837,6 +881,122 @@
 
                 <div class="footer-nav">
                     <button class="nav-btn" onclick="navigateToSection('properties')">Previous: Properties</button>
+                    <button class="nav-btn" onclick="navigateToSection('velocity-field')">Next: Velocity Field</button>
+                </div>
+            `;
+        }
+
+        function getVelocityFieldContent() {
+            return `
+                <h1 class="page-title">Velocity Field</h1>
+                <p class="page-subtitle">Describing fluid motion through velocity vectors</p>
+
+                <div class="content-text">
+                    The velocity field describes how fluid particles move throughout the flow domain. It is represented as a vector field where each point has an associated velocity vector.
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Velocity Field Representation</div>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\vec{V}(x,y,z,t) = u(x,y,z,t)\\hat{i} + v(x,y,z,t)\\hat{j} + w(x,y,z,t)\\hat{k}$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">where u, v, w are velocity components in x, y, z directions respectively</p>
+                </div>
+
+                <h2 style="color: var(--primary-color); margin: 30px 0 20px 0; font-size: 1.8em;">Types of Flow</h2>
+
+                <div class="definition-box">
+                    <div class="definition-title">Steady vs Unsteady Flow</div>
+                    <p><strong>Steady Flow:</strong> ∂V/∂t = 0 (velocity does not change with time)</p>
+                    <p><strong>Unsteady Flow:</strong> ∂V/∂t ≠ 0 (velocity changes with time)</p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Common Velocity Profiles</div>
+                    <p><strong>Uniform Flow:</strong> V = constant everywhere</p>
+                    <p><strong>Parabolic Profile:</strong> Pipe flow velocity distribution</p>
+                    <p><strong>Linear Profile:</strong> Couette flow between parallel plates</p>
+                </div>
+
+                <div class="footer-nav">
+                    <button class="nav-btn" onclick="navigateToSection('classification')">Previous: Classification</button>
+                    <button class="nav-btn" onclick="navigateToSection('streamlines')">Next: Streamlines</button>
+                </div>
+            `;
+        }
+
+        function getStreamlinesContent() {
+            return `
+                <h1 class="page-title">Streamlines</h1>
+                <p class="page-subtitle">Visualization of fluid flow patterns</p>
+
+                <div class="content-text">
+                    Streamlines are curves whose tangent at any point is in the direction of the velocity vector at that point. They provide a powerful way to visualize flow patterns.
+                </div>
+
+                <div class="definition-box">
+                    <div class="definition-title">Streamline Definition</div>
+                    <p>A streamline is a curve whose tangent at every point is parallel to the velocity vector at that point.</p>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Streamline Equation</div>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\frac{dx}{u} = \\frac{dy}{v} = \\frac{dz}{w}$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">where u, v, w are velocity components and dx, dy, dz are differential displacements</p>
+                </div>
+
+                <h2 style="color: var(--primary-color); margin: 30px 0 20px 0; font-size: 1.8em;">Flow Visualization Tools</h2>
+
+                <div class="highlight-box">
+                    <p><strong>Streamlines:</strong> Instantaneous flow direction (steady flow)</p>
+                    <p><strong>Pathlines:</strong> Actual path followed by fluid particles</p>
+                    <p><strong>Streaklines:</strong> Lines formed by particles passing through a point</p>
+                    <p><strong>Timeline:</strong> Line formed by particles at the same instant</p>
+                </div>
+
+                <div class="footer-nav">
+                    <button class="nav-btn" onclick="navigateToSection('velocity-field')">Previous: Velocity Field</button>
+                    <button class="nav-btn" onclick="navigateToSection('acceleration')">Next: Acceleration</button>
+                </div>
+            `;
+        }
+
+        function getAccelerationContent() {
+            return `
+                <h1 class="page-title">Acceleration Field</h1>
+                <p class="page-subtitle">Rate of change of velocity in fluid flow</p>
+
+                <div class="content-text">
+                    Fluid acceleration describes how the velocity of fluid particles changes as they move through the flow field. This includes both temporal and spatial variations.
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Material Derivative</div>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\frac{D\\vec{V}}{Dt} = \\frac{\\partial \\vec{V}}{\\partial t} + (\\vec{V} \\cdot \\nabla)\\vec{V}$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">Total acceleration = Local acceleration + Convective acceleration</p>
+                </div>
+
+                <h2 style="color: var(--primary-color); margin: 30px 0 20px 0; font-size: 1.8em;">Components of Acceleration</h2>
+
+                <div class="definition-box">
+                    <div class="definition-title">Types of Acceleration</div>
+                    <p><strong>Local Acceleration:</strong> ∂V/∂t - Due to unsteady flow</p>
+                    <p><strong>Convective Acceleration:</strong> (V·∇)V - Due to spatial variation</p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Physical Interpretation</div>
+                    <p><strong>Local:</strong> Velocity changes at a fixed point over time</p>
+                    <p><strong>Convective:</strong> Velocity changes as particle moves through space</p>
+                    <p><strong>Example:</strong> Water flowing through a nozzle experiences convective acceleration</p>
+                </div>
+
+                <div class="footer-nav">
+                    <button class="nav-btn" onclick="navigateToSection('streamlines')">Previous: Streamlines</button>
                     <button class="nav-btn" onclick="navigateToSection('continuity')">Next: Continuity</button>
                 </div>
             `;
@@ -855,7 +1015,7 @@
                 </div>
 
                 <div class="footer-nav">
-                    <button class="nav-btn" onclick="navigateToSection('classification')">Previous: Classification</button>
+                    <button class="nav-btn" onclick="navigateToSection('acceleration')">Previous: Acceleration</button>
                     <button class="nav-btn" onclick="navigateToSection('momentum')">Next: Momentum</button>
                 </div>
             `;
@@ -926,7 +1086,7 @@
         }
 
         function updateProgress() {
-            const totalSections = 6;
+            const totalSections = 9;
             const completedCount = completedSections.length;
             const progressPercent = (completedCount / totalSections) * 100;
             
