@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluid Dynamics Handbook</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Crimson+Pro:wght@400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #7c3aed;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --border-color: #e5e7eb;
+            --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        .handbook-container {
+            display: flex;
+            height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .sidebar {
+            width: 320px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .handbook-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .handbook-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .progress-section {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .progress-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 5.6%;
+            transition: width 0.5s ease;
+        }
+
+        .chapter-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .chapter {
+            margin-bottom: 8px;
+        }
+
+        .chapter-title {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .chapter-title:hover {
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .chapter-icon {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .chapter-sections {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .chapter-sections.expanded {
+            max-height: 500px;
+        }
+
+        .section-item {
+            padding: 10px 20px 10px 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .section-item:hover {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+
+        .section-item.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .section-status {
+            font-size: 8px;
+            color: #cbd5e1;
+        }
+
+        .section-item.active .section-status {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .content-tools {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tool-btn {
+            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .tool-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .content-main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: var(--bg-primary);
+        }
+
+        .content-page {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .page-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-family: 'Crimson Pro', serif;
+        }
+
+        .page-subtitle {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .content-text {
+            font-size: 16px;
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+
+        .definition-box,
+        .formula-box,
+        .example-box,
+        .highlight-box {
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 10px;
+            border-left: 4px solid;
+        }
+
+        .definition-box {
+            background: rgba(16, 185, 129, 0.05);
+            border-left-color: var(--success-color);
+        }
+
+        .formula-box {
+            background: rgba(37, 99, 235, 0.05);
+            border-left-color: var(--primary-color);
+        }
+
+        .example-box {
+            background: rgba(245, 158, 11, 0.05);
+            border-left-color: var(--warning-color);
+        }
+
+        .highlight-box {
+            background: rgba(124, 58, 237, 0.05);
+            border-left-color: var(--secondary-color);
+        }
+
+        .definition-title,
+        .formula-title,
+        .example-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .footer-nav {
+            margin-top: 50px;
+            padding: 20px 0;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .nav-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="handbook-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="handbook-title">
+                    <i class="fas fa-book-open"></i>
+                    Fluid Dynamics Handbook
+                </div>
+                <div class="handbook-subtitle">Interactive Learning Guide</div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-title">Learning Progress</div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-text" style="font-size: 12px; color: var(--text-secondary); margin-top: 8px; text-align: center;">
+                    1 of 18 sections completed
+                </div>
+            </div>
+
+            <nav class="chapter-nav">
+                <div class="chapter">
+                    <div class="chapter-title" data-chapter="fundamentals">
+                        <div>
+                            <i class="fas fa-flask chapter-icon"></i>
+                            Fundamentals
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="chapter-sections expanded">
+                        <div class="section-item active" data-section="introduction">
+                            Introduction to Fluids
+                            <span class="section-status"><i class="fas fa-check-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="properties">
+                            Fluid Properties
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="classification">
+                            Flow Classification
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chapter">
+                    <div class="chapter-title" data-chapter="conservation">
+                        <div>
+                            <i class="fas fa-balance-scale chapter-icon"></i>
+                            Conservation Laws
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="chapter-sections">
+                        <div class="section-item" data-section="continuity">
+                            Continuity Equation
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="momentum">
+                            Momentum Equation
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="energy">
+                            Energy Equation
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="content-area">
+            <div class="content-header">
+                <div class="breadcrumb" id="breadcrumb">
+                    Fundamentals › Introduction to Fluids
+                </div>
+                <div class="content-tools">
+                    <div class="tool-btn" id="bookmark-btn">
+                        <i class="fas fa-bookmark"></i>
+                        Bookmark
+                    </div>
+                    <div class="tool-btn" id="print-btn">
+                        <i class="fas fa-print"></i>
+                        Print
+                    </div>
+                    <div class="tool-btn" id="search-btn">
+                        <i class="fas fa-search"></i>
+                        Search
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-main">
+                <div class="content-page fade-in" id="content-container">
+                    <h1 class="page-title">Introduction to Fluids</h1>
+                    <p class="page-subtitle">Understanding the fundamentals of fluid mechanics</p>
+
+                    <div class="definition-box">
+                        <div class="definition-title">Definition: Fluid</div>
+                        <p>A <strong>fluid</strong> is a substance that continuously deforms (flows) under an applied shear stress, regardless of how small that stress may be. This includes both liquids and gases.</p>
+                    </div>
+
+                    <div class="content-text">
+                        Fluid mechanics is the branch of physics that studies the motion of fluids (liquids and gases) and the forces acting on them. It has applications in numerous fields including aerodynamics, hydraulics, meteorology, oceanography, and biomedical engineering.
+                    </div>
+
+                    <h2 style="color: var(--primary-color); margin: 30px 0 20px 0; font-size: 1.8em;">Key Characteristics of Fluids</h2>
+
+                    <div class="content-text">
+                        <ul style="margin-left: 30px; margin-bottom: 25px;">
+                            <li><strong>No-slip condition:</strong> Fluid velocity at a solid boundary is zero</li>
+                            <li><strong>Continuum assumption:</strong> Fluids are treated as continuous media</li>
+                            <li><strong>Viscosity:</strong> Internal friction that resists relative motion</li>
+                            <li><strong>Compressibility:</strong> Change in density due to pressure variations</li>
+                        </ul>
+                    </div>
+
+                    <div class="formula-box">
+                        <div class="formula-title">Newton's Law of Viscosity</div>
+                        <p>For a Newtonian fluid, the shear stress is proportional to the velocity gradient:</p>
+                        <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                            $$\tau = \mu \frac{du}{dy}$$
+                        </p>
+                        <p style="margin-top: 15px; font-size: 14px;">where τ is shear stress, μ is dynamic viscosity, and du/dy is velocity gradient</p>
+                    </div>
+
+                    <div class="footer-nav">
+                        <button class="nav-btn" disabled>Previous</button>
+                        <button class="nav-btn" id="next-btn">Next: Fluid Properties</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentChapter = 'fundamentals';
+        let currentSection = 'introduction';
+        let completedSections = ['introduction'];
+        let bookmarks = [];
+
+        // Content data structure
+        const handbookContent = {
+            fundamentals: {
+                title: "Fundamentals",
+                sections: {
+                    introduction: {
+                        title: "Introduction to Fluids",
+                        content: "introduction"
+                    },
+                    properties: {
+                        title: "Fluid Properties",
+                        content: "properties"
+                    },
+                    classification: {
+                        title: "Flow Classification",
+                        content: "classification"
+                    }
+                }
+            },
+            conservation: {
+                title: "Conservation Laws",
+                sections: {
+                    continuity: {
+                        title: "Continuity Equation",
+                        content: "continuity"
+                    },
+                    momentum: {
+                        title: "Momentum Equation",
+                        content: "momentum"
+                    },
+                    energy: {
+                        title: "Energy Equation",
+                        content: "energy"
+                    }
+                }
+            }
+        };
+
+        // Initialize the application
+        function init() {
+            console.log('Initializing Fluid Dynamics Handbook...');
+            
+            setupNavigation();
+            setupTools();
+            updateProgress();
+            
+            console.log('Handbook initialized successfully!');
+        }
+
+        function setupNavigation() {
+            console.log('Setting up navigation...');
+            
+            // Chapter title clicks
+            document.querySelectorAll('.chapter-title').forEach(title => {
+                title.addEventListener('click', (e) => {
+                    const chapter = e.currentTarget.dataset.chapter;
+                    console.log('Chapter clicked:', chapter);
+                    toggleChapter(chapter);
+                });
+            });
+
+            // Section clicks
+            document.querySelectorAll('.section-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const section = e.currentTarget.dataset.section;
+                    console.log('Section clicked:', section);
+                    navigateToSection(section);
+                });
+            });
+
+            // Navigation buttons
+            const nextBtn = document.getElementById('next-btn');
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    console.log('Next button clicked');
+                    navigateNext();
+                });
+            }
+        }
+
+        function setupTools() {
+            console.log('Setting up tools...');
+            
+            // Bookmark functionality
+            const bookmarkBtn = document.getElementById('bookmark-btn');
+            if (bookmarkBtn) {
+                bookmarkBtn.addEventListener('click', () => {
+                    console.log('Bookmark clicked');
+                    toggleBookmark();
+                });
+            }
+
+            // Print functionality
+            const printBtn = document.getElementById('print-btn');
+            if (printBtn) {
+                printBtn.addEventListener('click', () => {
+                    console.log('Print clicked');
+                    window.print();
+                });
+            }
+
+            // Search functionality
+            const searchBtn = document.getElementById('search-btn');
+            if (searchBtn) {
+                searchBtn.addEventListener('click', () => {
+                    console.log('Search clicked');
+                    alert('Search functionality coming soon!');
+                });
+            }
+        }
+
+        function toggleChapter(chapterKey) {
+            console.log('Toggling chapter:', chapterKey);
+            
+            const chapterElement = document.querySelector(`[data-chapter="${chapterKey}"]`);
+            const sectionsElement = chapterElement.nextElementSibling;
+            const chevron = chapterElement.querySelector('.fas.fa-chevron-down, .fas.fa-chevron-up');
+            
+            if (sectionsElement.classList.contains('expanded')) {
+                sectionsElement.classList.remove('expanded');
+                chevron.className = 'fas fa-chevron-down';
+            } else {
+                sectionsElement.classList.add('expanded');
+                chevron.className = 'fas fa-chevron-up';
+            }
+        }
+
+        function navigateToSection(sectionKey) {
+            console.log('Navigating to section:', sectionKey);
+            
+            // Find which chapter this section belongs to
+            let targetChapter = null;
+            for (const [chapterKey, chapterData] of Object.entries(handbookContent)) {
+                if (chapterData.sections[sectionKey]) {
+                    targetChapter = chapterKey;
+                    break;
+                }
+            }
+
+            if (!targetChapter) {
+                console.error('Section not found:', sectionKey);
+                return;
+            }
+
+            // Update current state
+            currentChapter = targetChapter;
+            currentSection = sectionKey;
+
+            // Update navigation state
+            document.querySelectorAll('.section-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${sectionKey}"]`).classList.add('active');
+
+            // Update breadcrumb
+            updateBreadcrumb();
+
+            // Load content
+            loadSectionContent(sectionKey);
+
+            // Mark as completed
+            if (!completedSections.includes(sectionKey)) {
+                completedSections.push(sectionKey);
+                updateSectionStatus(sectionKey);
+                updateProgress();
+            }
+        }
+
+        function navigateNext() {
+            console.log('Navigate next from:', currentSection);
+            
+            // Simple next logic for demo
+            const sections = ['introduction', 'properties', 'classification', 'continuity', 'momentum', 'energy'];
+            const currentIndex = sections.indexOf(currentSection);
+            
+            if (currentIndex < sections.length - 1) {
+                navigateToSection(sections[currentIndex + 1]);
+            }
+        }
+
+        function updateBreadcrumb() {
+            const chapterTitle = handbookContent[currentChapter]?.title || 'Unknown Chapter';
+            const sectionTitle = handbookContent[currentChapter]?.sections[currentSection]?.title || 'Unknown Section';
+            
+            document.getElementById('breadcrumb').textContent = `${chapterTitle} › ${sectionTitle}`;
+        }
+
+        function loadSectionContent(sectionKey) {
+            console.log('Loading content for:', sectionKey);
+            
+            const container = document.getElementById('content-container');
+            
+            // Simple content mapping for demo
+            const contentMap = {
+                introduction: getIntroductionContent(),
+                properties: getPropertiesContent(),
+                classification: getClassificationContent(),
+                continuity: getContinuityContent(),
+                momentum: getMomentumContent(),
+                energy: getEnergyContent()
+            };
+            
+            const content = contentMap[sectionKey] || getDefaultContent(sectionKey);
+            container.innerHTML = content;
+            container.className = 'content-page fade-in';
+            
+            // Re-render MathJax
+            if (window.MathJax) {
+                MathJax.typesetPromise([container]).then(() => {
+                    console.log('MathJax rendering complete for:', sectionKey);
+                });
+            }
+        }
+
+        function getIntroductionContent() {
+            return `
+                <h1 class="page-title">Introduction to Fluids</h1>
+                <p class="page-subtitle">Understanding the fundamentals of fluid mechanics</p>
+
+                <div class="definition-box">
+                    <div class="definition-title">Definition: Fluid</div>
+                    <p>A <strong>fluid</strong> is a substance that continuously deforms (flows) under an applied shear stress, regardless of how small that stress may be. This includes both liquids and gases.</p>
+                </div>
+
+                <div class="content-text">
+                    Fluid mechanics is the branch of physics that studies the motion of fluids (liquids and gases) and the forces acting on them. It has applications in numerous fields including aerodynamics, hydraulics, meteorology, oceanography, and biomedical engineering.
+                </div>
+
+                <h2 style="color: var(--primary-color); margin: 30px 0 20px 0; font-size: 1.8em;">Key Characteristics of Fluids</h2>
+
+                <div class="content-text">
+                    <ul style="margin-left: 30px; margin-bottom: 25px;">
+                        <li><strong>No-slip condition:</strong> Fluid velocity at a solid boundary is zero</li>
+                        <li><strong>Continuum assumption:</strong> Fluids are treated as continuous media</li>
+                        <li><strong>Viscosity:</strong> Internal friction that resists relative motion</li>
+                        <li><strong>Compressibility:</strong> Change in density due to pressure variations</li>
+                    </ul>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Newton's Law of Viscosity</div>
+                    <p>For a Newtonian fluid, the shear stress is proportional to the velocity gradient:</p>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\tau = \\mu \\frac{du}{dy}$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">where τ is shear stress, μ is dynamic viscosity, and du/dy is velocity gradient</p>
+                </div>
+
+                <div class="footer-nav">
+                    <button class="nav-btn" disabled>Previous</button>
+                    <button class="nav-btn" id="next-btn" onclick="navigateNext()">Next: Fluid Properties</button>
+                </div>
+            `;
+        }
+
+        function getPropertiesContent() {
+            return `
+                <h1 class="page-title">Fluid Properties</h1>
+                <p class="page-subtitle">Physical and thermodynamic characteristics of fluids</p>
+
+                <div class="content-text">
+                    Understanding fluid properties is essential for analyzing flow behavior and designing fluid systems. Key properties include density, viscosity, compressibility, and surface tension.
+                </div>
+
+                <h2 style="color: var(--primary-color); margin: 30px 0 20px 0; font-size: 1.8em;">Density and Specific Weight</h2>
+
+                <div class="formula-box">
+                    <div class="formula-title">Density Definition</div>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\rho = \\frac{m}{V}$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">where ρ is density, m is mass, and V is volume</p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Typical Fluid Densities</div>
+                    <p><strong>Water (20°C):</strong> 998 kg/m³</p>
+                    <p><strong>Air (20°C, 1 atm):</strong> 1.20 kg/m³</p>
+                    <p><strong>Mercury (20°C):</strong> 13,560 kg/m³</p>
+                </div>
+
+                <div class="footer-nav">
+                    <button class="nav-btn" onclick="navigateToSection('introduction')">Previous: Introduction</button>
+                    <button class="nav-btn" onclick="navigateToSection('classification')">Next: Flow Classification</button>
+                </div>
+            `;
+        }
+
+        function getClassificationContent() {
+            return `
+                <h1 class="page-title">Flow Classification</h1>
+                <p class="page-subtitle">Different types of fluid flow patterns</p>
+
+                <div class="content-text">
+                    Fluid flows can be classified in several ways based on different characteristics such as viscosity effects, time dependence, and flow geometry.
+                </div>
+
+                <h2 style="color: var(--primary-color); margin: 30px 0 20px 0; font-size: 1.8em;">Reynolds Number</h2>
+
+                <div class="formula-box">
+                    <div class="formula-title">Reynolds Number Definition</div>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$Re = \\frac{\\rho V L}{\\mu} = \\frac{V L}{\\nu}$$
+                    </p>
+                    <p style="margin-top: 15px; font-size: 14px;">where V is velocity, L is characteristic length, μ is dynamic viscosity, ν is kinematic viscosity</p>
+                </div>
+
+                <div class="highlight-box">
+                    <p><strong>Laminar Flow:</strong> Re < 2300 (pipe flow)</p>
+                    <p><strong>Transitional Flow:</strong> 2300 < Re < 4000</p>
+                    <p><strong>Turbulent Flow:</strong> Re > 4000</p>
+                </div>
+
+                <div class="footer-nav">
+                    <button class="nav-btn" onclick="navigateToSection('properties')">Previous: Properties</button>
+                    <button class="nav-btn" onclick="navigateToSection('continuity')">Next: Continuity</button>
+                </div>
+            `;
+        }
+
+        function getContinuityContent() {
+            return `
+                <h1 class="page-title">Continuity Equation</h1>
+                <p class="page-subtitle">Conservation of mass in fluid flow</p>
+
+                <div class="formula-box">
+                    <div class="formula-title">Continuity Equation</div>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\frac{\\partial \\rho}{\\partial t} + \\nabla \\cdot (\\rho \\vec{V}) = 0$$
+                    </p>
+                </div>
+
+                <div class="footer-nav">
+                    <button class="nav-btn" onclick="navigateToSection('classification')">Previous: Classification</button>
+                    <button class="nav-btn" onclick="navigateToSection('momentum')">Next: Momentum</button>
+                </div>
+            `;
+        }
+
+        function getMomentumContent() {
+            return `
+                <h1 class="page-title">Momentum Equation</h1>
+                <p class="page-subtitle">Newton's second law for fluid flow</p>
+
+                <div class="formula-box">
+                    <div class="formula-title">Navier-Stokes Equation</div>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\rho \\frac{D\\vec{V}}{Dt} = -\\nabla p + \\mu \\nabla^2 \\vec{V} + \\rho \\vec{g}$$
+                    </p>
+                </div>
+
+                <div class="footer-nav">
+                    <button class="nav-btn" onclick="navigateToSection('continuity')">Previous: Continuity</button>
+                    <button class="nav-btn" onclick="navigateToSection('energy')">Next: Energy</button>
+                </div>
+            `;
+        }
+
+        function getEnergyContent() {
+            return `
+                <h1 class="page-title">Energy Equation</h1>
+                <p class="page-subtitle">Conservation of energy in fluid systems</p>
+
+                <div class="formula-box">
+                    <div class="formula-title">Bernoulli's Equation</div>
+                    <p style="text-align: center; margin: 15px 0; font-size: 18px;">
+                        $$\\frac{p}{\\rho} + \\frac{V^2}{2} + gz = \\text{constant}$$
+                    </p>
+                </div>
+
+                <div class="footer-nav">
+                    <button class="nav-btn" onclick="navigateToSection('momentum')">Previous: Momentum</button>
+                    <button class="nav-btn" disabled>Next</button>
+                </div>
+            `;
+        }
+
+        function getDefaultContent(sectionKey) {
+            return `
+                <h1 class="page-title">Section: ${sectionKey}</h1>
+                <p class="page-subtitle">Content coming soon...</p>
+                
+                <div class="content-text">
+                    This section is under development. Please check back later.
+                </div>
+                
+                <div class="footer-nav">
+                    <button class="nav-btn" onclick="navigateNext()">Continue</button>
+                </div>
+            `;
+        }
+
+        function updateSectionStatus(sectionKey) {
+            const sectionElement = document.querySelector(`[data-section="${sectionKey}"]`);
+            if (sectionElement) {
+                const statusIcon = sectionElement.querySelector('.section-status i');
+                if (statusIcon) {
+                    statusIcon.className = 'fas fa-check-circle';
+                    statusIcon.style.color = 'var(--success-color)';
+                }
+            }
+        }
+
+        function updateProgress() {
+            const totalSections = 6;
+            const completedCount = completedSections.length;
+            const progressPercent = (completedCount / totalSections) * 100;
+            
+            document.querySelector('.progress-fill').style.width = `${progressPercent}%`;
+            document.querySelector('.progress-text').textContent = `${completedCount} of ${totalSections} sections completed`;
+        }
+
+        function toggleBookmark() {
+            const currentPage = `${currentChapter}-${currentSection}`;
+            const bookmarkBtn = document.getElementById('bookmark-btn');
+            
+            if (bookmarks.includes(currentPage)) {
+                bookmarks = bookmarks.filter(b => b !== currentPage);
+                bookmarkBtn.innerHTML = '<i class="fas fa-bookmark"></i> Bookmark';
+            } else {
+                bookmarks.push(currentPage);
+                bookmarkBtn.innerHTML = '<i class="fas fa-bookmark"></i> Bookmarked';
+            }
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            console.log('Window loaded, initializing...');
+            init();
+        });
+
+        // Handle MathJax rendering
+        window.addEventListener('load', function() {
+            if (window.MathJax) {
+                MathJax.typesetPromise().then(() => {
+                    console.log('Initial MathJax rendering complete');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
