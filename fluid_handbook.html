@@ -817,6 +817,184 @@
             color: white;
             border-color: var(--secondary-color);
         }
+
+        /* Notes System */
+        .notes-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .notes-container {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: var(--shadow-heavy);
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notes-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .notes-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .notes-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .notes-sidebar {
+            width: 250px;
+            border-right: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notes-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .note-item {
+            padding: 12px 16px;
+            margin: 2px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .note-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .note-item.active {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .note-title {
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .note-section {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .note-item.active .note-section {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .notes-actions {
+            padding: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .add-note-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .add-note-btn:hover {
+            background: var(--primary-color);
+        }
+
+        .notes-editor {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .note-editor-header {
+            margin-bottom: 15px;
+        }
+
+        .note-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .note-textarea {
+            flex: 1;
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            resize: none;
+        }
+
+        .note-toolbar {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .toolbar-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--bg-secondary);
+        }
+
+        .no-notes {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            color: var(--text-secondary);
+        }
+
+        .no-notes i {
+            font-size: 3em;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
@@ -828,6 +1006,9 @@
                 <p class="handbook-subtitle">Interactive Educational Guide</p>
                 <div class="progress-bar">
                     <div class="progress-fill"></div>
+                </div>
+                <div class="progress-text" style="font-size: 12px; color: var(--text-secondary); margin-top: 8px; text-align: center;">
+                    1 of 18 sections completed
                 </div>
             </div>
 
@@ -927,6 +1108,54 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="chapter">
+                    <div class="chapter-title" data-chapter="dimensional">
+                        <div>
+                            <i class="fas fa-calculator chapter-icon"></i>
+                            Dimensional Analysis
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="chapter-sections">
+                        <div class="section-item" data-section="buckingham-pi">
+                            Buckingham Pi Theorem
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="similarity">
+                            Dynamic Similarity
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="model-testing">
+                            Model Testing
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chapter">
+                    <div class="chapter-title" data-chapter="advanced">
+                        <div>
+                            <i class="fas fa-cogs chapter-icon"></i>
+                            Advanced Topics
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="chapter-sections">
+                        <div class="section-item" data-section="cfd-intro">
+                            CFD Introduction
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="turbulence">
+                            Turbulence Modeling
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                        <div class="section-item" data-section="compressible">
+                            Compressible Flow
+                            <span class="section-status"><i class="fas fa-circle"></i></span>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
 
@@ -950,6 +1179,10 @@
                     <div class="tool-btn" id="search-btn">
                         <i class="fas fa-search"></i>
                         Search
+                    </div>
+                    <div class="tool-btn" id="notes-btn">
+                        <i class="fas fa-sticky-note"></i>
+                        Notes
                     </div>
                 </div>
             </div>
@@ -1086,12 +1319,52 @@
         </div>
     </div>
 
+    <!-- Notes Modal -->
+    <div id="notes-modal" class="notes-modal">
+        <div class="notes-container">
+            <div class="notes-header">
+                <div class="notes-title">
+                    <i class="fas fa-sticky-note"></i>
+                    My Notes
+                </div>
+                <button id="notes-close" class="search-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="notes-body">
+                <div class="notes-sidebar">
+                    <div class="notes-list" id="notes-list">
+                        <div class="no-notes">
+                            <i class="fas fa-sticky-note"></i>
+                            <div>No notes yet</div>
+                            <div style="font-size: 12px; margin-top: 5px;">Create your first note!</div>
+                        </div>
+                    </div>
+                    <div class="notes-actions">
+                        <button class="add-note-btn" id="add-note-btn">
+                            <i class="fas fa-plus"></i> New Note
+                        </button>
+                    </div>
+                </div>
+                <div class="notes-editor" id="notes-editor">
+                    <div class="no-notes">
+                        <i class="fas fa-edit"></i>
+                        <div>Select a note to edit</div>
+                        <div style="font-size: 12px; margin-top: 5px;">or create a new one</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Global variables
         let currentChapter = 'fundamentals';
         let currentSection = 'introduction';
         let completedSections = ['introduction'];
         let bookmarks = [];
+        let notes = [];
+        let currentNoteId = null;
 
         // Content data structure
         const handbookContent = {
@@ -1162,6 +1435,40 @@
                         content: "external-flow"
                     }
                 }
+            },
+            dimensional: {
+                title: "Dimensional Analysis",
+                sections: {
+                    "buckingham-pi": {
+                        title: "Buckingham Pi Theorem",
+                        content: "buckingham-pi"
+                    },
+                    "similarity": {
+                        title: "Dynamic Similarity",
+                        content: "similarity"
+                    },
+                    "model-testing": {
+                        title: "Model Testing",
+                        content: "model-testing"
+                    }
+                }
+            },
+            advanced: {
+                title: "Advanced Topics",
+                sections: {
+                    "cfd-intro": {
+                        title: "CFD Introduction",
+                        content: "cfd-intro"
+                    },
+                    "turbulence": {
+                        title: "Turbulence Modeling",
+                        content: "turbulence"
+                    },
+                    "compressible": {
+                        title: "Compressible Flow",
+                        content: "compressible"
+                    }
+                }
             }
         };
 
@@ -1215,8 +1522,16 @@
                 showSearchModal();
             });
 
+            // Notes functionality
+            document.getElementById('notes-btn').addEventListener('click', () => {
+                showNotesModal();
+            });
+
             // Setup search modal functionality
             setupSearchTools();
+            
+            // Setup notes functionality
+            setupNotesTools();
         }
 
         function setupSearchTools() {
@@ -2274,7 +2589,13 @@
                 energy: getEnergyContent(),
                 bernoulli: getBernoulliContent(),
                 "pipe-flow": getPipeFlowContent(),
-                "external-flow": getExternalFlowContent()
+                "external-flow": getExternalFlowContent(),
+                "buckingham-pi": getBuckinghamPiContent(),
+                "similarity": getSimilarityContent(),
+                "model-testing": getModelTestingContent(),
+                "cfd-intro": getCFDIntroContent(),
+                "turbulence": getTurbulenceContent(),
+                "compressible": getCompressibleContent()
             };
             
             return contentMap[sectionKey] || getDefaultContent(sectionKey);
@@ -2869,7 +3190,459 @@
                     <p style="margin-top: 10px; font-size: 14px;">where $Re_x = \\frac{\\rho U x}{\\mu}$ is local Reynolds number</p>
                 </div>
 
+                <div class="diagram-container">
+                    <div class="diagram-title">Boundary Layer Development</div>
+                    <canvas class="diagram-canvas" id="boundary-layer-diagram" width="600" height="300"></canvas>
+                    <div class="diagram-controls">
+                        <button class="diagram-btn active" data-flow-type="laminar">Laminar BL</button>
+                        <button class="diagram-btn" data-flow-type="turbulent">Turbulent BL</button>
+                        <button class="diagram-btn" data-flow-type="separation">Flow Separation</button>
+                    </div>
+                </div>
+
+                <h2 class="section-heading">Drag and Lift</h2>
+
+                <div class="content-text">
+                    External flows result in forces on objects: drag (resistance to motion) and lift (perpendicular to flow direction).
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Drag and Lift Coefficients</div>
+                    $$C_D = \\frac{F_D}{\\frac{1}{2}\\rho U^2 A}$$
+                    $$C_L = \\frac{F_L}{\\frac{1}{2}\\rho U^2 A}$$
+                    <p style="margin-top: 10px; font-size: 14px;">where $F_D$ is drag force, $F_L$ is lift force, $A$ is reference area</p>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Knowledge Check</div>
+                    <div class="question">What is the no-slip condition in boundary layer theory?</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) Fluid velocity equals free stream velocity at the wall</div>
+                        <div class="answer-option" data-answer="b">B) Fluid velocity is zero at the solid surface</div>
+                        <div class="answer-option" data-answer="c">C) Pressure is constant across the boundary layer</div>
+                        <div class="answer-option" data-answer="d">D) Temperature is uniform in the boundary layer</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('external-flow', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-external-flow"></div>
+                </div>
+
                 ${getNavigationFooter('external-flow')}
+            `;
+        }
+
+        function getBuckinghamPiContent() {
+            return `
+                <h1 class="page-title">Buckingham Pi Theorem</h1>
+                <p class="page-subtitle">Systematic approach to dimensional analysis</p>
+
+                <div class="content-text">
+                    The Buckingham Pi theorem provides a systematic method for reducing the number of variables in physical problems by forming dimensionless groups. This is fundamental to understanding scaling laws and similarity in fluid mechanics.
+                </div>
+
+                <div class="definition-box">
+                    <div class="definition-title">Buckingham Pi Theorem</div>
+                    <p>If a physical relationship involves <strong>n</strong> variables and <strong>k</strong> fundamental dimensions, then the relationship can be expressed in terms of <strong>(n-k)</strong> dimensionless groups called Pi terms.</p>
+                </div>
+
+                <h2 class="section-heading">Methodology</h2>
+
+                <div class="subsection-heading">Step 1: Identify Variables</div>
+                <div class="content-text">
+                    List all relevant variables that affect the phenomenon. For example, drag force on a sphere:
+                    <ul style="margin: 15px 0 15px 30px;">
+                        <li>$F_D$ - drag force [MLT⁻²]</li>
+                        <li>$\\rho$ - fluid density [ML⁻³]</li>
+                        <li>$U$ - velocity [LT⁻¹]</li>
+                        <li>$D$ - sphere diameter [L]</li>
+                        <li>$\\mu$ - dynamic viscosity [ML⁻¹T⁻¹]</li>
+                    </ul>
+                </div>
+
+                <div class="subsection-heading">Step 2: Determine Fundamental Dimensions</div>
+                <div class="content-text">
+                    Identify the fundamental dimensions: Mass [M], Length [L], Time [T]<br>
+                    Therefore: n = 5 variables, k = 3 dimensions, so we expect n-k = 2 Pi terms.
+                </div>
+
+                <div class="subsection-heading">Step 3: Form Pi Terms</div>
+                <div class="content-text">
+                    Combine variables to create dimensionless groups:
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Drag Coefficient Pi Terms</div>
+                    $$\\Pi_1 = \\frac{F_D}{\\rho U^2 D^2} = C_D$$
+                    $$\\Pi_2 = \\frac{\\rho U D}{\\mu} = Re$$
+                    <p style="margin-top: 15px; font-size: 14px;">Therefore: $C_D = f(Re)$</p>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="diagram-title">Interactive Dimensional Analysis Tool</div>
+                    <canvas class="diagram-canvas" id="dimensional-analysis-diagram" width="600" height="400"></canvas>
+                    <div class="diagram-controls">
+                        <button class="diagram-btn active" data-problem="drag">Sphere Drag</button>
+                        <button class="diagram-btn" data-problem="flow">Pipe Flow</button>
+                        <button class="diagram-btn" data-problem="heat">Heat Transfer</button>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example: Pump Power Analysis</div>
+                    <p><strong>Problem:</strong> Find dimensionless groups for pump power.</p>
+                    <p><strong>Variables:</strong> Power P, flow rate Q, head H, density ρ, gravity g</p>
+                    <p style="margin-top: 15px;"><strong>Solution:</strong></p>
+                    <p>n = 5, k = 3, so expect 2 Pi terms:</p>
+                    <p>$\\Pi_1 = \\frac{P}{\\rho g Q H}$ (Power coefficient)</p>
+                    <p>$\\Pi_2 = \\frac{Q}{\\sqrt{gH^3}}$ (Flow coefficient)</p>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Knowledge Check</div>
+                    <div class="question">If you have 6 variables and 3 fundamental dimensions, how many Pi terms will you get?</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) 2</div>
+                        <div class="answer-option" data-answer="b">B) 3</div>
+                        <div class="answer-option" data-answer="c">C) 6</div>
+                        <div class="answer-option" data-answer="d">D) 9</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('buckingham-pi', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-buckingham-pi"></div>
+                </div>
+
+                ${getNavigationFooter('buckingham-pi')}
+            `;
+        }
+
+        function getSimilarityContent() {
+            return `
+                <h1 class="page-title">Dynamic Similarity</h1>
+                <p class="page-subtitle">Scaling laws and similarity criteria</p>
+
+                <div class="content-text">
+                    Dynamic similarity exists between two flows when all corresponding dimensionless parameters are equal. This principle allows us to predict full-scale behavior from model tests.
+                </div>
+
+                <h2 class="section-heading">Types of Similarity</h2>
+
+                <div class="subsection-heading">1. Geometric Similarity</div>
+                <div class="content-text">
+                    All corresponding linear dimensions have the same ratio (scale factor).
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Geometric Scale Factor</div>
+                    $$\\lambda_L = \\frac{L_m}{L_p}$$
+                    <p style="margin-top: 10px; font-size: 14px;">where subscript m denotes model, p denotes prototype</p>
+                </div>
+
+                <div class="subsection-heading">2. Kinematic Similarity</div>
+                <div class="content-text">
+                    Velocity patterns are similar, with velocity ratios constant throughout the flow field.
+                </div>
+
+                <div class="subsection-heading">3. Dynamic Similarity</div>
+                <div class="content-text">
+                    Force ratios are constant throughout the flow field. Requires equality of all relevant dimensionless parameters.
+                </div>
+
+                <h2 class="section-heading">Important Similarity Parameters</h2>
+
+                <div class="formula-box">
+                    <div class="formula-title">Key Dimensionless Numbers</div>
+                    <p><strong>Reynolds Number:</strong> $Re = \\frac{\\rho V L}{\\mu}$ (inertial/viscous forces)</p>
+                    <p><strong>Froude Number:</strong> $Fr = \\frac{V}{\\sqrt{gL}}$ (inertial/gravitational forces)</p>
+                    <p><strong>Mach Number:</strong> $M = \\frac{V}{c}$ (inertial/elastic forces)</p>
+                    <p><strong>Weber Number:</strong> $We = \\frac{\\rho V^2 L}{\\sigma}$ (inertial/surface tension forces)</p>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="diagram-title">Similarity Analysis Visualization</div>
+                    <canvas class="diagram-canvas" id="similarity-diagram" width="600" height="400"></canvas>
+                    <div class="diagram-controls">
+                        <button class="diagram-btn active" data-similarity="reynolds">Reynolds Similarity</button>
+                        <button class="diagram-btn" data-similarity="froude">Froude Similarity</button>
+                        <button class="diagram-btn" data-similarity="mach">Mach Similarity</button>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Similarity Conflict:</strong> Often impossible to match all dimensionless parameters simultaneously in model testing. Must prioritize the most important parameter for the specific application.
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example: Ship Model Testing</div>
+                    <p><strong>Problem:</strong> Test a 1:50 scale ship model to predict prototype drag.</p>
+                    <p><strong>Analysis:</strong></p>
+                    <p>For wave resistance: Match Froude numbers</p>
+                    <p>$Fr_m = Fr_p \\Rightarrow V_m = V_p\\sqrt{\\lambda_L} = V_p\\sqrt{1/50}$</p>
+                    <p>For viscous resistance: Reynolds similarity would require different velocity</p>
+                    <p><strong>Solution:</strong> Use Froude scaling for wave resistance, apply correction factors for viscous effects</p>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Knowledge Check</div>
+                    <div class="question">Which dimensionless number is most important for free surface flows like ship wakes?</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) Reynolds Number</div>
+                        <div class="answer-option" data-answer="b">B) Froude Number</div>
+                        <div class="answer-option" data-answer="c">C) Mach Number</div>
+                        <div class="answer-option" data-answer="d">D) Weber Number</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('similarity', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-similarity"></div>
+                </div>
+
+                ${getNavigationFooter('similarity')}
+            `;
+        }
+
+        function getModelTestingContent() {
+            return `
+                <h1 class="page-title">Model Testing</h1>
+                <p class="page-subtitle">Practical applications of similarity theory</p>
+
+                <div class="content-text">
+                    Model testing is a cornerstone of fluid mechanics engineering, allowing us to study complex flows at reduced scale and cost. Proper application of similarity principles is crucial for meaningful results.
+                </div>
+
+                <h2 class="section-heading">Model Testing Strategy</h2>
+
+                <div class="subsection-heading">1. Define Objectives</div>
+                <div class="content-text">
+                    Clearly identify what phenomena are most important:
+                    <ul style="margin: 15px 0 15px 30px;">
+                        <li><strong>Aerodynamic testing:</strong> Focus on Reynolds and Mach numbers</li>
+                        <li><strong>Ship testing:</strong> Prioritize Froude number for wave effects</li>
+                        <li><strong>Hydraulic structures:</strong> Consider Froude and Weber numbers</li>
+                    </ul>
+                </div>
+
+                <div class="subsection-heading">2. Scale Selection</div>
+                <div class="content-text">
+                    Choose scale factor based on:
+                    <ul style="margin: 15px 0 15px 30px;">
+                        <li>Facility constraints (wind tunnel size, water channel dimensions)</li>
+                        <li>Reynolds number limitations</li>
+                        <li>Measurement accuracy requirements</li>
+                        <li>Manufacturing tolerances</li>
+                    </ul>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="diagram-title">Model Testing Facilities</div>
+                    <canvas class="diagram-canvas" id="model-testing-diagram" width="600" height="400"></canvas>
+                    <div class="diagram-controls">
+                        <button class="diagram-btn active" data-facility="wind-tunnel">Wind Tunnel</button>
+                        <button class="diagram-btn" data-facility="water-channel">Water Channel</button>
+                        <button class="diagram-btn" data-facility="towing-tank">Towing Tank</button>
+                    </div>
+                </div>
+
+                <h2 class="section-heading">Data Scaling and Correction</h2>
+
+                <div class="formula-box">
+                    <div class="formula-title">Force Scaling Relations</div>
+                    <p><strong>Reynolds Similarity:</strong></p>
+                    $$F_p = F_m \\left(\\frac{\\rho_p}{\\rho_m}\\right) \\left(\\frac{V_p}{V_m}\\right)^2 \\left(\\frac{L_p}{L_m}\\right)^2$$
+                    <p style="margin-top: 15px;"><strong>Froude Similarity:</strong></p>
+                    $$F_p = F_m \\left(\\frac{\\rho_p}{\\rho_m}\\right) \\left(\\frac{L_p}{L_m}\\right)^3$$
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Case Study: Aircraft Wing Testing</div>
+                    <p><strong>Prototype:</strong> Boeing 777 wing section</p>
+                    <p><strong>Model:</strong> 1:10 scale in pressurized wind tunnel</p>
+                    <p><strong>Conditions:</strong></p>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                        <tr style="border-bottom: 1px solid #ddd; background: #f8f9fa;">
+                            <th style="padding: 8px; text-align: left;"></th>
+                            <th style="padding: 8px; text-align: left;">Prototype</th>
+                            <th style="padding: 8px; text-align: left;">Model</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 6px;">Chord (m)</td>
+                            <td style="padding: 6px;">5.0</td>
+                            <td style="padding: 6px;">0.5</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 6px;">Velocity (m/s)</td>
+                            <td style="padding: 6px;">250</td>
+                            <td style="padding: 6px;">125</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px;">Pressure (atm)</td>
+                            <td style="padding: 6px;">0.3</td>
+                            <td style="padding: 6px;">6.0</td>
+                        </tr>
+                    </table>
+                    <p style="margin-top: 15px;"><strong>Result:</strong> Matched Reynolds number Re = 5×10⁷</p>
+                </div>
+
+                <div class="knowledge-check">
+                    <div class="check-title">Knowledge Check</div>
+                    <div class="question">Why is it often impossible to achieve perfect similarity in model testing?</div>
+                    <div class="answer-options">
+                        <div class="answer-option" data-answer="a">A) Models are too expensive to build</div>
+                        <div class="answer-option" data-answer="b">B) Multiple dimensionless parameters cannot be matched simultaneously</div>
+                        <div class="answer-option" data-answer="c">C) Measurements are not accurate enough</div>
+                        <div class="answer-option" data-answer="d">D) Computational methods are more reliable</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer('model-testing', 'b')">Check Answer</button>
+                    <div class="feedback" id="feedback-model-testing"></div>
+                </div>
+
+                ${getNavigationFooter('model-testing')}
+            `;
+        }
+
+        function getCFDIntroContent() {
+            return `
+                <h1 class="page-title">Introduction to CFD</h1>
+                <p class="page-subtitle">Computational Fluid Dynamics fundamentals</p>
+
+                <div class="content-text">
+                    Computational Fluid Dynamics (CFD) uses numerical methods to solve the governing equations of fluid flow. This enables analysis of complex geometries and flow conditions that are difficult or impossible to study analytically.
+                </div>
+
+                <h2 class="section-heading">Governing Equations</h2>
+
+                <div class="content-text">
+                    CFD solves the Navier-Stokes equations numerically on a discretized domain (mesh).
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Navier-Stokes Equations</div>
+                    <p><strong>Continuity:</strong> $\\frac{\\partial \\rho}{\\partial t} + \\nabla \\cdot (\\rho \\vec{V}) = 0$</p>
+                    <p><strong>Momentum:</strong> $\\rho \\frac{D\\vec{V}}{Dt} = -\\nabla p + \\mu \\nabla^2 \\vec{V} + \\rho \\vec{g}$</p>
+                    <p><strong>Energy:</strong> $\\rho c_p \\frac{DT}{Dt} = k \\nabla^2 T + \\Phi$</p>
+                </div>
+
+                <h2 class="section-heading">CFD Process</h2>
+
+                <div class="subsection-heading">1. Pre-processing</div>
+                <div class="content-text">
+                    <ul style="margin: 15px 0 15px 30px;">
+                        <li>Geometry creation and cleanup</li>
+                        <li>Mesh generation</li>
+                        <li>Boundary condition specification</li>
+                        <li>Material property definition</li>
+                    </ul>
+                </div>
+
+                <div class="subsection-heading">2. Solving</div>
+                <div class="content-text">
+                    <ul style="margin: 15px 0 15px 30px;">
+                        <li>Discretization of governing equations</li>
+                        <li>Iterative solution of algebraic equations</li>
+                        <li>Convergence monitoring</li>
+                    </ul>
+                </div>
+
+                <div class="subsection-heading">3. Post-processing</div>
+                <div class="content-text">
+                    <ul style="margin: 15px 0 15px 30px;">
+                        <li>Visualization of results</li>
+                        <li>Data extraction and analysis</li>
+                        <li>Validation against experimental data</li>
+                    </ul>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="diagram-title">CFD Mesh Types</div>
+                    <canvas class="diagram-canvas" id="cfd-mesh-diagram" width="600" height="400"></canvas>
+                    <div class="diagram-controls">
+                        <button class="diagram-btn active" data-mesh="structured">Structured</button>
+                        <button class="diagram-btn" data-mesh="unstructured">Unstructured</button>
+                        <button class="diagram-btn" data-mesh="hybrid">Hybrid</button>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>CFD Limitations:</strong> Results are only as good as the input (garbage in, garbage out). Proper validation, verification, and uncertainty quantification are essential.
+                </div>
+
+                ${getNavigationFooter('cfd-intro')}
+            `;
+        }
+
+        function getTurbulenceContent() {
+            return `
+                <h1 class="page-title">Turbulence Modeling</h1>
+                <p class="page-subtitle">Approaches to modeling turbulent flows</p>
+
+                <div class="content-text">
+                    Turbulent flows are characterized by chaotic, unsteady motion with a wide range of length and time scales. Direct numerical simulation (DNS) of all scales is computationally prohibitive for practical applications.
+                </div>
+
+                <h2 class="section-heading">Turbulence Modeling Approaches</h2>
+
+                <div class="subsection-heading">1. Reynolds-Averaged Navier-Stokes (RANS)</div>
+                <div class="content-text">
+                    Time-averaged equations with turbulence closure models.
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Reynolds Stress Tensor</div>
+                    $$\\tau_{ij} = -\\rho \\overline{u_i' u_j'} = \\mu_t \\left(\\frac{\\partial U_i}{\\partial x_j} + \\frac{\\partial U_j}{\\partial x_i}\\right) - \\frac{2}{3}\\rho k \\delta_{ij}$$
+                    <p style="margin-top: 10px; font-size: 14px;">where $\\mu_t$ is turbulent viscosity, $k$ is turbulent kinetic energy</p>
+                </div>
+
+                <div class="subsection-heading">2. Large Eddy Simulation (LES)</div>
+                <div class="content-text">
+                    Resolves large turbulent structures, models small-scale turbulence.
+                </div>
+
+                <div class="subsection-heading">3. Direct Numerical Simulation (DNS)</div>
+                <div class="content-text">
+                    Resolves all turbulent scales. Most accurate but computationally expensive.
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Common RANS Models</div>
+                    <p><strong>k-ε model:</strong> Two-equation model solving for turbulent kinetic energy and dissipation rate</p>
+                    <p><strong>k-ω model:</strong> Two-equation model solving for turbulent kinetic energy and specific dissipation rate</p>
+                    <p><strong>SST model:</strong> Combines advantages of k-ε and k-ω models</p>
+                </div>
+
+                ${getNavigationFooter('turbulence')}
+            `;
+        }
+
+        function getCompressibleContent() {
+            return `
+                <h1 class="page-title">Compressible Flow</h1>
+                <p class="page-subtitle">High-speed gas dynamics</p>
+
+                <div class="content-text">
+                    Compressible flows occur when fluid density changes significantly due to pressure variations. This typically happens at high speeds (Mach number > 0.3) or with large pressure differences.
+                </div>
+
+                <h2 class="section-heading">Key Concepts</h2>
+
+                <div class="formula-box">
+                    <div class="formula-title">Speed of Sound</div>
+                    $$c = \\sqrt{\\gamma R T} = \\sqrt{\\frac{\\gamma p}{\\rho}}$$
+                    <p style="margin-top: 10px; font-size: 14px;">where $\\gamma$ is specific heat ratio, $R$ is gas constant, $T$ is temperature</p>
+                </div>
+
+                <div class="subsection-heading">Mach Number Regimes</div>
+                <div class="content-text">
+                    <ul style="margin: 15px 0 15px 30px;">
+                        <li><strong>Subsonic:</strong> M < 1 (smooth flow)</li>
+                        <li><strong>Transonic:</strong> M ≈ 1 (mixed regions)</li>
+                        <li><strong>Supersonic:</strong> M > 1 (shock waves)</li>
+                        <li><strong>Hypersonic:</strong> M > 5 (high temperature effects)</li>
+                    </ul>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">Isentropic Relations</div>
+                    $$\\frac{T_0}{T} = 1 + \\frac{\\gamma - 1}{2}M^2$$
+                    $$\\frac{p_0}{p} = \\left(1 + \\frac{\\gamma - 1}{2}M^2\\right)^{\\frac{\\gamma}{\\gamma-1}}$$
+                    <p style="margin-top: 10px; font-size: 14px;">where subscript 0 denotes stagnation conditions</p>
+                </div>
+
+                ${getNavigationFooter('compressible')}
             `;
         }
 
@@ -2911,7 +3684,7 @@
         }
 
         function updateProgress() {
-            const totalSections = 12; // Total sections in handbook
+            const totalSections = 18; // Total sections in handbook
             const completedCount = completedSections.length;
             const progressPercent = (completedCount / totalSections) * 100;
             
@@ -3077,6 +3850,211 @@
         function navigateToSearchResult(sectionKey) {
             hideSearchModal();
             navigateToSection(sectionKey);
+        }
+
+        // Notes functionality
+        function showNotesModal() {
+            const modal = document.getElementById('notes-modal');
+            modal.style.display = 'flex';
+            loadNotes();
+        }
+
+        function hideNotesModal() {
+            const modal = document.getElementById('notes-modal');
+            modal.style.display = 'none';
+            saveCurrentNote();
+        }
+
+        function setupNotesTools() {
+            // Notes close button
+            document.getElementById('notes-close').addEventListener('click', hideNotesModal);
+
+            // Close modal when clicking outside
+            document.getElementById('notes-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'notes-modal') {
+                    hideNotesModal();
+                }
+            });
+
+            // Add note button
+            document.getElementById('add-note-btn').addEventListener('click', createNewNote);
+
+            // Load notes from localStorage
+            loadNotesFromStorage();
+        }
+
+        function createNewNote() {
+            const currentSectionData = handbookContent[currentChapter]?.sections[currentSection];
+            const note = {
+                id: generateNoteId(),
+                title: 'New Note',
+                content: '',
+                section: currentSection,
+                chapter: currentChapter,
+                sectionTitle: currentSectionData?.title || 'Unknown Section',
+                chapterTitle: handbookContent[currentChapter]?.title || 'Unknown Chapter',
+                created: new Date().toISOString(),
+                modified: new Date().toISOString()
+            };
+
+            notes.push(note);
+            saveNotesToStorage();
+            renderNotesList();
+            selectNote(note.id);
+        }
+
+        function generateNoteId() {
+            return 'note_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function loadNotes() {
+            renderNotesList();
+            if (notes.length === 0) {
+                showNoNotesMessage();
+            }
+        }
+
+        function renderNotesList() {
+            const notesList = document.getElementById('notes-list');
+            
+            if (notes.length === 0) {
+                notesList.innerHTML = `
+                    <div class="no-notes">
+                        <i class="fas fa-sticky-note"></i>
+                        <div>No notes yet</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Create your first note!</div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            notes.forEach(note => {
+                html += `
+                    <div class="note-item ${note.id === currentNoteId ? 'active' : ''}" onclick="selectNote('${note.id}')">
+                        <div class="note-title">${escapeHtml(note.title)}</div>
+                        <div class="note-section">${escapeHtml(note.chapterTitle)} › ${escapeHtml(note.sectionTitle)}</div>
+                    </div>
+                `;
+            });
+
+            notesList.innerHTML = html;
+        }
+
+        function selectNote(noteId) {
+            saveCurrentNote(); // Save previous note
+            
+            currentNoteId = noteId;
+            const note = notes.find(n => n.id === noteId);
+            
+            if (!note) return;
+
+            renderNotesList(); // Update active state
+            showNoteEditor(note);
+        }
+
+        function showNoteEditor(note) {
+            const editor = document.getElementById('notes-editor');
+            editor.innerHTML = `
+                <div class="note-editor-header">
+                    <input type="text" class="note-input" id="note-title" value="${escapeHtml(note.title)}" placeholder="Note title...">
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px;">
+                        ${escapeHtml(note.chapterTitle)} › ${escapeHtml(note.sectionTitle)}
+                    </div>
+                </div>
+                <textarea class="note-textarea" id="note-content" placeholder="Write your notes here...">${escapeHtml(note.content)}</textarea>
+                <div class="note-toolbar">
+                    <button class="toolbar-btn" onclick="saveCurrentNote()">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                    <button class="toolbar-btn" onclick="deleteNote('${note.id}')">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                    <div style="flex: 1;"></div>
+                    <span style="font-size: 11px; color: var(--text-secondary);">
+                        Modified: ${new Date(note.modified).toLocaleDateString()}
+                    </span>
+                </div>
+            `;
+
+            // Setup auto-save
+            const titleInput = document.getElementById('note-title');
+            const contentTextarea = document.getElementById('note-content');
+            
+            titleInput.addEventListener('input', () => {
+                note.title = titleInput.value || 'Untitled Note';
+                note.modified = new Date().toISOString();
+                renderNotesList();
+            });
+
+            contentTextarea.addEventListener('input', () => {
+                note.content = contentTextarea.value;
+                note.modified = new Date().toISOString();
+            });
+        }
+
+        function showNoNotesMessage() {
+            const editor = document.getElementById('notes-editor');
+            editor.innerHTML = `
+                <div class="no-notes">
+                    <i class="fas fa-edit"></i>
+                    <div>Select a note to edit</div>
+                    <div style="font-size: 12px; margin-top: 5px;">or create a new one</div>
+                </div>
+            `;
+        }
+
+        function saveCurrentNote() {
+            if (!currentNoteId) return;
+
+            const titleInput = document.getElementById('note-title');
+            const contentTextarea = document.getElementById('note-content');
+            
+            if (titleInput && contentTextarea) {
+                const note = notes.find(n => n.id === currentNoteId);
+                if (note) {
+                    note.title = titleInput.value || 'Untitled Note';
+                    note.content = contentTextarea.value;
+                    note.modified = new Date().toISOString();
+                    saveNotesToStorage();
+                }
+            }
+        }
+
+        function deleteNote(noteId) {
+            if (confirm('Are you sure you want to delete this note?')) {
+                notes = notes.filter(n => n.id !== noteId);
+                saveNotesToStorage();
+                
+                if (currentNoteId === noteId) {
+                    currentNoteId = null;
+                    showNoNotesMessage();
+                }
+                
+                renderNotesList();
+            }
+        }
+
+        function saveNotesToStorage() {
+            localStorage.setItem('fluid-handbook-notes', JSON.stringify(notes));
+        }
+
+        function loadNotesFromStorage() {
+            const savedNotes = localStorage.getItem('fluid-handbook-notes');
+            if (savedNotes) {
+                try {
+                    notes = JSON.parse(savedNotes);
+                } catch (e) {
+                    console.error('Error loading notes:', e);
+                    notes = [];
+                }
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function updateSectionStatus(sectionKey) {
