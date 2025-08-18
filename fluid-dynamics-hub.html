@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FluidDynamics Learning Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fd-blue': '#0369a1',
+                        'fd-teal': '#0d9488',
+                        'fd-purple': '#7c3aed',
+                        'fd-orange': '#ea580c',
+                        'fd-green': '#059669',
+                        'fd-red': '#dc2626',
+                        'fd-gray': '#374151'
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .scroll-snap-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        
+        .snap-section {
+            scroll-snap-align: start;
+            min-height: 100vh;
+        }
+        
+        .hero-video-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-video-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><filter id="turbulence"><feTurbulence baseFrequency="0.02" numOctaves="3" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="20"/></filter></defs><rect width="100%" height="100%" fill="rgba(255,255,255,0.1)" filter="url(%23turbulence)"/></svg>') center/cover;
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-circle {
+            transition: stroke-dasharray 0.3s ease;
+        }
+        
+        .slide-panel {
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .slide-panel.open {
+            transform: translateX(0);
+        }
+        
+        .mini-map-dot {
+            transition: all 0.2s ease;
+        }
+        
+        .mini-map-dot.active {
+            transform: scale(1.5);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card-hover-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .card-hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom scrollbar for panels */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Enhanced focus styles for accessibility */
+        button:focus-visible,
+        input:focus-visible,
+        .expand-btn:focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+        
+        /* Responsive font sizing */
+        .responsive-text {
+            font-size: clamp(1rem, 1vw + 0.5rem, 1.25rem);
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .hero-video-bg::before {
+                animation: none;
+            }
+            .fade-in,
+            .card-hover-lift,
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Loading states */
+        .loading-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Mini-Map Navigation Rail -->
+    <nav class="fixed left-0 top-0 h-full w-4 bg-gray-800 z-50 flex flex-col justify-center space-y-4 px-1">
+        <div class="mini-map-dot w-2 h-2 bg-fd-blue rounded-full cursor-pointer active" data-section="hero" title="Dashboard"></div>
+        <div class="mini-map-dot w-2 h-2 bg-fd-teal rounded-full cursor-pointer" data-section="fundamentals" title="Fundamentals"></div>
+        <div class="mini-map-dot w-2 h-2 bg-fd-purple rounded-full cursor-pointer" data-section="advanced" title="Advanced Theory"></div>
+        <div class="mini-map-dot w-2 h-2 bg-fd-orange rounded-full cursor-pointer" data-section="cfd" title="CFD Hub"></div>
+        <div class="mini-map-dot w-2 h-2 bg-fd-green rounded-full cursor-pointer" data-section="experimental" title="Experimental Methods"></div>
+        <div class="mini-map-dot w-2 h-2 bg-fd-red rounded-full cursor-pointer" data-section="applications" title="Applications"></div>
+        <div class="mini-map-dot w-2 h-2 bg-fd-gray rounded-full cursor-pointer" data-section="playground" title="Interactive Playground"></div>
+        <div class="mini-map-dot w-2 h-2 bg-gray-500 rounded-full cursor-pointer" data-section="resources" title="Resources"></div>
+    </nav>
+
+    <!-- Main Scroll Container -->
+    <main class="scroll-snap-container ml-4">
+        <!-- Hero Dashboard Section -->
+        <section id="hero" class="snap-section hero-video-bg flex flex-col">
+            <div class="flex-1 flex items-center justify-center relative">
+                <!-- Hero Animation Background -->
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 backdrop-blur-sm"></div>
+                
+                <!-- Hero Content -->
+                <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
+                    <h1 class="text-6xl font-bold mb-6 animate-float">
+                        Master Fluid Dynamics
+                    </h1>
+                    <p class="text-xl mb-8 opacity-90">
+                        From fundamentals to cutting-edge CFD, learn at your own pace with interactive simulations
+                    </p>
+                    <button class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors shadow-xl">
+                        Start Learning
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Learning Path Tiles -->
+            <div class="bg-white/95 backdrop-blur-md p-8">
+                <div class="max-w-6xl mx-auto">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Choose Your Learning Path</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- Fundamentals Card -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-fd-teal card-hover-lift cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Fundamentals</h3>
+                                <div class="relative w-12 h-12">
+                                    <svg class="progress-ring w-12 h-12" viewBox="0 0 42 42">
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e5e7eb" stroke-width="3"/>
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#0d9488" stroke-width="3" 
+                                                stroke-dasharray="60 40" class="progress-ring-circle"/>
+                                    </svg>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-fd-teal">60%</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm responsive-text">Master the core principles of fluid mechanics, from continuum hypothesis to Navier-Stokes equations.</p>
+                        </div>
+
+                        <!-- CFD Hub Card -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-fd-orange card-hover-lift cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">CFD Hub</h3>
+                                <div class="relative w-12 h-12">
+                                    <svg class="progress-ring w-12 h-12" viewBox="0 0 42 42">
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e5e7eb" stroke-width="3"/>
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#ea580c" stroke-width="3" 
+                                                stroke-dasharray="30 70" class="progress-ring-circle"/>
+                                    </svg>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-fd-orange">30%</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm responsive-text">Dive deep into computational methods, from basic discretization to advanced GPU techniques.</p>
+                        </div>
+
+                        <!-- Experiments Card -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-fd-green card-hover-lift cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Experiments</h3>
+                                <div class="relative w-12 h-12">
+                                    <svg class="progress-ring w-12 h-12" viewBox="0 0 42 42">
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e5e7eb" stroke-width="3"/>
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#059669" stroke-width="3" 
+                                                stroke-dasharray="15 85" class="progress-ring-circle"/>
+                                    </svg>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-fd-green">15%</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm responsive-text">Learn experimental techniques from PIV to wind tunnel testing with real datasets.</p>
+                        </div>
+
+                        <!-- Advanced Theory Card -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-fd-purple card-hover-lift cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Advanced Theory</h3>
+                                <div class="relative w-12 h-12">
+                                    <svg class="progress-ring w-12 h-12" viewBox="0 0 42 42">
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e5e7eb" stroke-width="3"/>
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#7c3aed" stroke-width="3" 
+                                                stroke-dasharray="5 95" class="progress-ring-circle"/>
+                                    </svg>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-fd-purple">5%</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm responsive-text">Explore compressible flow, multiphase systems, and specialized applications.</p>
+                        </div>
+
+                        <!-- Applications Card -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-fd-red card-hover-lift cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Applications</h3>
+                                <div class="relative w-12 h-12">
+                                    <svg class="progress-ring w-12 h-12" viewBox="0 0 42 42">
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e5e7eb" stroke-width="3"/>
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#dc2626" stroke-width="3" 
+                                                stroke-dasharray="25 75" class="progress-ring-circle"/>
+                                    </svg>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-fd-red">25%</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm responsive-text">Real-world case studies from aerospace to biomedical engineering applications.</p>
+                        </div>
+
+                        <!-- Playground Card -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-fd-gray card-hover-lift cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Interactive Playground</h3>
+                                <div class="relative w-12 h-12">
+                                    <svg class="progress-ring w-12 h-12" viewBox="0 0 42 42">
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e5e7eb" stroke-width="3"/>
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#374151" stroke-width="3" 
+                                                stroke-dasharray="80 20" class="progress-ring-circle"/>
+                                    </svg>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-fd-gray">80%</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm responsive-text">Hands-on simulations, calculators, and interactive tools for immediate exploration.</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Tools Toolbar -->
+                    <div class="bg-gray-100 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Quick Tools</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <button class="bg-white px-4 py-2 rounded-md shadow-sm hover:shadow-md transition-shadow text-sm font-medium text-gray-700">
+                                Reynolds Calculator
+                            </button>
+                            <button class="bg-white px-4 py-2 rounded-md shadow-sm hover:shadow-md transition-shadow text-sm font-medium text-gray-700">
+                                Unit Converter
+                            </button>
+                            <button class="bg-white px-4 py-2 rounded-md shadow-sm hover:shadow-md transition-shadow text-sm font-medium text-gray-700">
+                                Moody Chart
+                            </button>
+                            <button class="bg-white px-4 py-2 rounded-md shadow-sm hover:shadow-md transition-shadow text-sm font-medium text-gray-700">
+                                Pipe Flow Calculator
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fundamentals Section -->
+        <section id="fundamentals" class="snap-section bg-gradient-to-br from-teal-50 to-cyan-50 flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Fundamentals Track</h2>
+                    <p class="text-xl text-gray-600 mb-6">Master the core principles that govern fluid behavior, from molecular scales to engineering applications.</p>
+                    
+                    <!-- Progress Bar -->
+                    <div class="bg-white rounded-full h-3 max-w-md mx-auto mb-6 shadow-inner">
+                        <div class="bg-fd-teal h-3 rounded-full" style="width: 60%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-8">6 of 9 lessons completed</p>
+                </div>
+
+                <!-- Interactive Widget -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8 max-w-md mx-auto">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Dimensional Analysis Quiz</h3>
+                    <div class="space-y-3">
+                        <input type="text" placeholder="Density (ρ)" class="w-full px-3 py-2 border rounded-md">
+                        <input type="text" placeholder="Velocity (U)" class="w-full px-3 py-2 border rounded-md">
+                        <input type="text" placeholder="Length (L)" class="w-full px-3 py-2 border rounded-md">
+                        <input type="text" placeholder="Viscosity (μ)" class="w-full px-3 py-2 border rounded-md">
+                    </div>
+                    <button class="w-full bg-fd-teal text-white py-2 rounded-md mt-4 hover:bg-teal-600 transition-colors" id="fundamentals-btn">
+                        Generate Π-Groups
+                    </button>
+                    <div id="pi-groups-result" class="mt-4 text-sm text-gray-600"></div>
+                </div>
+
+                <button class="bg-fd-teal text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-teal-600 transition-colors shadow-xl expand-btn" data-module="fundamentals">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+
+        <!-- Advanced Theory Section -->
+        <section id="advanced" class="snap-section bg-gradient-to-br from-purple-50 to-indigo-50 flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Advanced Theory</h2>
+                    <p class="text-xl text-gray-600 mb-6">Explore complex phenomena: compressible flows, multiphase systems, and specialized applications.</p>
+                    
+                    <div class="bg-white rounded-full h-3 max-w-md mx-auto mb-6 shadow-inner">
+                        <div class="bg-fd-purple h-3 rounded-full" style="width: 5%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-8">1 of 5 modules completed</p>
+                </div>
+
+                <button class="bg-fd-purple text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-600 transition-colors shadow-xl expand-btn" data-module="advanced">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+
+        <!-- CFD Hub Section -->
+        <section id="cfd" class="snap-section bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">CFD Hub</h2>
+                    <p class="text-xl text-gray-600 mb-6">From basic discretization to GPU acceleration and machine learning closures.</p>
+                    
+                    <div class="bg-white rounded-full h-3 max-w-md mx-auto mb-6 shadow-inner">
+                        <div class="bg-fd-orange h-3 rounded-full" style="width: 30%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-8">3 of 9 modules completed</p>
+                </div>
+
+                <!-- Mesh Quality Widget -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8 max-w-md mx-auto">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Mesh Quality Checker</h3>
+                    <div class="space-y-3">
+                        <label class="block text-left text-sm font-medium text-gray-700">y⁺ Value</label>
+                        <input type="range" id="yplus-slider" min="0.1" max="300" step="0.1" value="1" class="w-full">
+                        <div class="flex justify-between text-xs text-gray-500">
+                            <span>0.1</span>
+                            <span id="yplus-value">1.0</span>
+                            <span>300</span>
+                        </div>
+                        <div class="mt-4 p-3 bg-gray-50 rounded-md">
+                            <div class="text-sm font-medium text-gray-700">Wall Function Error:</div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                <div id="error-bar" class="bg-red-500 h-2 rounded-full transition-all duration-300" style="width: 5%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1" id="error-text">Excellent (< 5%)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="bg-fd-orange text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-orange-600 transition-colors shadow-xl expand-btn" data-module="cfd">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+
+        <!-- Experimental Methods Section -->
+        <section id="experimental" class="snap-section bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Experimental Methods</h2>
+                    <p class="text-xl text-gray-600 mb-6">Learn cutting-edge measurement techniques with real datasets and hands-on practice.</p>
+                    
+                    <div class="bg-white rounded-full h-3 max-w-md mx-auto mb-6 shadow-inner">
+                        <div class="bg-fd-green h-3 rounded-full" style="width: 15%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-8">1 of 6 modules completed</p>
+                </div>
+
+                <!-- PIV Demo Widget -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8 max-w-md mx-auto">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Live PIV Demo</h3>
+                    <div data-heavy-widget="piv-demo" class="bg-gray-900 rounded-lg h-48 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-green-500/20 animate-pulse-slow"></div>
+                        <div class="text-white text-center z-10">
+                            <div class="text-2xl mb-2">🎥</div>
+                            <div class="text-sm">30 FPS WebGL Visualization</div>
+                            <div class="text-xs opacity-75 mt-1">Loading when visible...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="bg-fd-green text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-600 transition-colors shadow-xl expand-btn" data-module="experimental">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+
+        <!-- Applications Gallery Section -->
+        <section id="applications" class="snap-section bg-gradient-to-br from-red-50 to-pink-50 flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Applications Gallery</h2>
+                    <p class="text-xl text-gray-600 mb-6">Real-world case studies from aerospace to biomedical engineering.</p>
+                    
+                    <div class="bg-white rounded-full h-3 max-w-md mx-auto mb-6 shadow-inner">
+                        <div class="bg-fd-red h-3 rounded-full" style="width: 25%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-8">2 of 5 application areas completed</p>
+                </div>
+
+                <button class="bg-fd-red text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-red-600 transition-colors shadow-xl expand-btn" data-module="applications">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+
+        <!-- Interactive Playground Section -->
+        <section id="playground" class="snap-section bg-gradient-to-br from-gray-50 to-slate-50 flex items-center justify-center" data-heavy-content="true">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Interactive Playground</h2>
+                    <p class="text-xl text-gray-600 mb-6">Hands-on simulations and tools for immediate exploration and learning.</p>
+                    
+                    <div class="bg-white rounded-full h-3 max-w-md mx-auto mb-6 shadow-inner">
+                        <div class="bg-fd-gray h-3 rounded-full" style="width: 80%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-8">4 of 5 tools mastered</p>
+                </div>
+
+                <!-- WebGL Simulation Preview -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8 max-w-md mx-auto">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">WebGL Flow Solver</h3>
+                    <div data-heavy-widget="webgl-simulation" class="bg-gray-100 rounded-lg h-48 flex items-center justify-center">
+                        <div class="text-gray-500 text-center">
+                            <div class="text-2xl mb-2">⚡</div>
+                            <div class="text-sm">Interactive simulation loading...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="bg-fd-gray text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-600 transition-colors shadow-xl expand-btn" data-module="playground">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section id="resources" class="snap-section bg-gradient-to-br from-slate-50 to-gray-100 flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Resource Library</h2>
+                    <p class="text-xl text-gray-600 mb-6">Comprehensive collection of references, datasets, and community resources.</p>
+                </div>
+
+                <button class="bg-gray-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-700 transition-colors shadow-xl expand-btn" data-module="resources">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Slide-out Panel -->
+    <div id="slide-panel" class="slide-panel fixed top-0 right-0 w-1/2 h-full bg-white shadow-2xl z-40 overflow-y-auto custom-scrollbar">
+        <div class="p-6">
+            <!-- Panel Header -->
+            <div class="flex items-center justify-between mb-6 pb-4 border-b">
+                <nav class="text-sm text-gray-500 responsive-text">
+                    <span>Home</span> › <span id="panel-breadcrumb">Module</span>
+                </nav>
+                <button id="close-panel" class="text-gray-400 hover:text-gray-600 text-2xl transition-colors focus:outline-none focus:text-gray-800">×</button>
+            </div>
+
+            <!-- Panel Content -->
+            <div id="panel-content" class="fade-in">
+                <!-- Content will be dynamically loaded here -->
+            </div>
+
+            <!-- Panel Footer -->
+            <div class="sticky bottom-0 bg-white border-t pt-4 mt-8">
+                <div class="flex justify-between">
+                    <button class="bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors focus-visible:outline-2 focus-visible:outline-blue-500">
+                        Previous
+                    </button>
+                    <button class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors focus-visible:outline-2 focus-visible:outline-blue-300">
+                        Mark Complete
+                    </button>
+                    <button class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors focus-visible:outline-2 focus-visible:outline-blue-300">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay for panel -->
+    <div id="panel-overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 hidden"></div>
+
+    <script>
+        // FluidDynamics Learning Hub - Main Application JavaScript
+
+        class FluidDynamicsApp {
+            constructor() {
+                this.currentSection = 'hero';
+                this.panelOpen = false;
+                this.init();
+            }
+
+            init() {
+                this.setupScrollSnap();
+                this.setupMiniMap();
+                this.setupPanels();
+                this.setupInteractiveWidgets();
+                this.setupIntersectionObserver();
+            }
+
+            setupScrollSnap() {
+                // Smooth scroll behavior for mini-map navigation
+                const miniMapDots = document.querySelectorAll('.mini-map-dot');
+                miniMapDots.forEach(dot => {
+                    dot.addEventListener('click', (e) => {
+                        const sectionId = e.target.dataset.section;
+                        const section = document.getElementById(sectionId);
+                        if (section) {
+                            section.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                });
+            }
+
+            setupMiniMap() {
+                // Update active dot based on current section
+                this.updateActiveDot(this.currentSection);
+            }
+
+            updateActiveDot(sectionId) {
+                const dots = document.querySelectorAll('.mini-map-dot');
+                dots.forEach(dot => {
+                    if (dot.dataset.section === sectionId) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+                this.currentSection = sectionId;
+            }
+
+            setupPanels() {
+                const expandBtns = document.querySelectorAll('.expand-btn');
+                const closeBtn = document.getElementById('close-panel');
+                const overlay = document.getElementById('panel-overlay');
+
+                expandBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const module = e.target.dataset.module;
+                        this.openPanel(module);
+                    });
+                });
+
+                closeBtn.addEventListener('click', () => {
+                    this.closePanel();
+                });
+
+                overlay.addEventListener('click', () => {
+                    this.closePanel();
+                });
+            }
+
+            openPanel(module) {
+                const panel = document.getElementById('slide-panel');
+                const overlay = document.getElementById('panel-overlay');
+                const breadcrumb = document.getElementById('panel-breadcrumb');
+                const content = document.getElementById('panel-content');
+
+                // Update breadcrumb
+                breadcrumb.textContent = this.getModuleName(module);
+
+                // Load module content
+                content.innerHTML = this.getModuleContent(module);
+
+                // Show panel
+                panel.classList.add('open');
+                overlay.classList.remove('hidden');
+                this.panelOpen = true;
+
+                // Prevent body scroll
+                document.body.style.overflow = 'hidden';
+            }
+
+            closePanel() {
+                const panel = document.getElementById('slide-panel');
+                const overlay = document.getElementById('panel-overlay');
+
+                panel.classList.remove('open');
+                overlay.classList.add('hidden');
+                this.panelOpen = false;
+
+                // Restore body scroll
+                document.body.style.overflow = 'auto';
+            }
+
+            getModuleName(module) {
+                const names = {
+                    'fundamentals': 'Fundamentals Track',
+                    'advanced': 'Advanced Theory',
+                    'cfd': 'CFD Hub',
+                    'experimental': 'Experimental Methods',
+                    'applications': 'Applications Gallery',
+                    'playground': 'Interactive Playground',
+                    'resources': 'Resource Library'
+                };
+                return names[module] || 'Module';
+            }
+
+            getModuleContent(module) {
+                const content = {
+                    'fundamentals': `
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Fundamentals Track</h2>
+                        <div class="space-y-4">
+                            ${this.createLessonCard('F-01', 'Continuum hypothesis & fluid properties', 'Learn when and why we can treat fluids as continuous media', true)}
+                            ${this.createLessonCard('F-02', 'Hydrostatics: pressure fields, buoyancy', 'Master pressure distribution and buoyant forces', true)}
+                            ${this.createLessonCard('F-03', 'Flow kinematics: streamlines, pathlines, vorticity', 'Understand flow visualization and rotation measures', true)}
+                            ${this.createLessonCard('F-04', 'Integral conservation laws (mass, momentum, energy)', 'Apply control volume analysis to real problems', false)}
+                            ${this.createLessonCard('F-05', 'Differential analysis & Navier–Stokes equations', 'Derive and understand the fundamental equations', false)}
+                            ${this.createLessonCard('F-06', 'Dimensional analysis & similarity (Π-theorem)', 'Master scaling laws and similitude', false)}
+                            ${this.createLessonCard('F-07', 'Potential flow & superposition', 'Solve inviscid flow problems analytically', false)}
+                            ${this.createLessonCard('F-08', 'Viscous flow & boundary layers', 'Understand viscous effects and transition', false)}
+                            ${this.createLessonCard('F-09', 'Turbulence basics: spectra, Kolmogorov scales', 'Introduction to chaotic flow behavior', false)}
+                        </div>
+                    `,
+                    'cfd': `
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">CFD Hub</h2>
+                        <div class="space-y-4">
+                            ${this.createLessonCard('C-01', 'Discretisation methods (FDM, FVM, FEM, LBM)', 'Compare numerical approaches for fluid equations', true)}
+                            ${this.createLessonCard('C-02', 'Meshing & grid quality', 'Create and assess computational grids', true)}
+                            ${this.createLessonCard('C-03', 'Turbulence modelling (RANS, LES, DES, DNS)', 'Model turbulent flows computationally', true)}
+                            ${this.createLessonCard('C-04', 'Multiphase & moving-mesh', 'Handle complex interface problems', false)}
+                            ${this.createLessonCard('C-05', 'High-order & GPU techniques', 'Accelerate computations with modern hardware', false)}
+                            ${this.createLessonCard('C-06', 'Data-driven CFD (ML closures, PINNs, ROMs)', 'Apply machine learning to fluid problems', false)}
+                            ${this.createLessonCard('C-07', 'Verification & validation, GCI, benchmarks', 'Ensure solution accuracy and reliability', false)}
+                            ${this.createLessonCard('C-08', 'Toolkits & code labs', 'Hands-on with OpenFOAM, SU2, and commercial codes', false)}
+                            ${this.createLessonCard('C-09', 'Post-processing & visualisation', 'Extract insights from simulation data', false)}
+                        </div>
+                    `,
+                    'experimental': `
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Experimental Methods</h2>
+                        <div class="space-y-4">
+                            ${this.createLessonCard('E-01', 'Particle-image velocimetry (PIV)', 'Measure velocity fields optically', true)}
+                            ${this.createLessonCard('E-02', 'Laser Doppler velocimetry (LDV)', 'Point-wise velocity measurements', false)}
+                            ${this.createLessonCard('E-03', 'Wind- & water-tunnel testing', 'Controlled environment experimentation', false)}
+                            ${this.createLessonCard('E-04', 'Flow visualisation techniques', 'Make the invisible visible', false)}
+                            ${this.createLessonCard('E-05', 'Uncertainty analysis & error propagation', 'Quantify measurement reliability', false)}
+                            ${this.createLessonCard('E-06', 'Downloadable raw data sets', 'Practice with real experimental data', false)}
+                        </div>
+                    `,
+                    'advanced': `
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Advanced Theory</h2>
+                        <div class="space-y-4">
+                            ${this.createLessonCard('A-01', 'Compressible & gas dynamics', 'High-speed flow phenomena', true)}
+                            ${this.createLessonCard('A-02', 'Multiphase / free-surface flows', 'Multiple fluid interactions', false)}
+                            ${this.createLessonCard('A-03', 'Non-Newtonian rheology', 'Complex fluid behavior', false)}
+                            ${this.createLessonCard('A-04', 'Reacting flows & combustion', 'Chemical reactions in flow', false)}
+                            ${this.createLessonCard('A-05', 'Magnetohydrodynamics & geophysical fluids', 'Specialized applications', false)}
+                        </div>
+                    `,
+                    'applications': `
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Applications Gallery</h2>
+                        <div class="space-y-4">
+                            ${this.createLessonCard('G-01', 'Aerospace – lift, buffet, jet-noise cases', 'Aircraft and spacecraft applications', true)}
+                            ${this.createLessonCard('G-02', 'Energy & Environment', 'Wind-farm wakes, pollutant dispersion', true)}
+                            ${this.createLessonCard('G-03', 'Biomedical – arterial flow, inhaler CFD', 'Medical device design', false)}
+                            ${this.createLessonCard('G-04', 'Marine – hull resistance, propeller cavitation', 'Ship and underwater vehicle design', false)}
+                            ${this.createLessonCard('G-05', 'Industrial – cyclones, HVAC, process piping', 'Manufacturing and building systems', false)}
+                        </div>
+                    `,
+                    'playground': `
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Interactive Playground</h2>
+                        <div class="space-y-6">
+                            <div class="bg-gray-50 rounded-lg p-6">
+                                <h3 class="text-lg font-semibold mb-3">WebGL Potential Flow Solver</h3>
+                                <div class="bg-white rounded border h-64 flex items-center justify-center">
+                                    <div class="text-gray-500">Interactive simulation will load here</div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-6">
+                                <h3 class="text-lg font-semibold mb-3">Real-time Vortex Shedding</h3>
+                                <div class="bg-white rounded border h-64 flex items-center justify-center">
+                                    <div class="text-gray-500">2D flow simulation will load here</div>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    'resources': `
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Resource Library</h2>
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <h3 class="font-semibold text-gray-800 mb-2">Glossary</h3>
+                                    <p class="text-sm text-gray-600">Comprehensive fluid dynamics terminology</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <h3 class="font-semibold text-gray-800 mb-2">Formula Sheets</h3>
+                                    <p class="text-sm text-gray-600">Quick reference for key equations</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <h3 class="font-semibold text-gray-800 mb-2">Problem Sets</h3>
+                                    <p class="text-sm text-gray-600">Practice problems with solutions</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <h3 class="font-semibold text-gray-800 mb-2">Datasets</h3>
+                                    <p class="text-sm text-gray-600">Real experimental and simulation data</p>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                };
+                return content[module] || '<p>Content loading...</p>';
+            }
+
+            createLessonCard(code, title, description, completed = false) {
+                const statusIcon = completed ? '✅' : '⏳';
+                const statusClass = completed ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200';
+                
+                return `
+                    <div class="lesson-card border rounded-lg p-4 ${statusClass} hover:shadow-md transition-shadow" data-lesson="${code}">
+                        <div class="flex items-start justify-between cursor-pointer" onclick="this.closest('.lesson-card').querySelector('.lesson-content').classList.toggle('hidden')">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="text-sm font-mono font-semibold text-gray-600">${code}</span>
+                                    <span class="text-lg">${statusIcon}</span>
+                                </div>
+                                <h3 class="font-semibold text-gray-800 mb-1">${title}</h3>
+                                <p class="text-sm text-gray-600">${description}</p>
+                            </div>
+                            <div class="ml-4">
+                                <button class="text-blue-600 hover:text-blue-800 text-sm font-medium expand-lesson-btn">
+                                    ${completed ? 'Review' : 'Expand'} ↓
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Expandable Content -->
+                        <div class="lesson-content hidden mt-4 pt-4 border-t border-gray-200">
+                            ${this.getLessonContent(code)}
+                        </div>
+                    </div>
+                `;
+            }
+
+            getLessonContent(code) {
+                const content = {
+                    'F-01': `
+                        <div class="space-y-4">
+                            <div class="bg-white rounded-lg p-4 border">
+                                <h4 class="font-semibold text-gray-800 mb-3">Continuum Hypothesis & Fluid Properties</h4>
+                                <p class="text-sm text-gray-700 mb-3">
+                                    The continuum hypothesis is the foundational assumption in fluid mechanics that allows us to treat 
+                                    fluids as continuous media rather than collections of discrete molecules. This mathematical idealization 
+                                    enables the application of calculus and differential equations to fluid motion analysis.
+                                </p>
+                                <p class="text-sm text-gray-700 mb-3">
+                                    <strong>Physical Basis:</strong> At molecular scales, fluids exhibit discrete behavior with molecules 
+                                    separated by mean free paths λ. However, when the characteristic length L of our problem is much 
+                                    larger than λ, we can define meaningful average properties at each point in space.
+                                </p>
+                                <p class="text-sm text-gray-700 mb-3">
+                                    <strong>Fluid Properties:</strong> Under the continuum assumption, we define intensive properties 
+                                    (density ρ, pressure p, temperature T, viscosity μ) and extensive properties (mass m, volume V) 
+                                    that vary continuously in space and time.
+                                </p>
+                                
+                                <button class="text-blue-600 text-sm hover:text-blue-800 math-toggle" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                                    Show me the maths →
+                                </button>
+                                <div class="hidden mt-3 p-3 bg-blue-50 rounded text-sm">
+                                    <strong>Knudsen Number:</strong> Kn = λ/L<br>
+                                    <strong>Validity Criteria:</strong><br>
+                                    • Kn < 0.01: Continuum regime (Navier-Stokes valid)<br>
+                                    • 0.01 < Kn < 0.1: Slip flow regime<br>
+                                    • 0.1 < Kn < 10: Transition regime<br>
+                                    • Kn > 10: Free molecular flow<br><br>
+                                    <strong>Mean Free Path:</strong> λ = μ√(πRT/2M)/p<br>
+                                    Where R = gas constant, T = temperature, M = molecular weight<br><br>
+                                    <strong>Density Definition:</strong> ρ = lim(δV→δV*) δm/δV<br>
+                                    Where δV* is the smallest volume for meaningful averaging
+                                </div>
+                            </div>
+                            
+                            <!-- Advanced Concepts -->
+                            <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                                <h4 class="font-semibold text-gray-800 mb-3">Advanced Concepts</h4>
+                                <div class="text-sm text-gray-700 space-y-2">
+                                    <p><strong>Non-Newtonian Fluids:</strong> Viscosity depends on shear rate (μ = μ(γ̇))</p>
+                                    <p><strong>Compressible Effects:</strong> Density varies with pressure and temperature</p>
+                                    <p><strong>Surface Tension:</strong> σ creates pressure jump across interfaces: Δp = σ(1/R₁ + 1/R₂)</p>
+                                    <p><strong>No-Slip Condition:</strong> Fluid velocity equals wall velocity at solid boundaries</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Inline Quiz -->
+                            <div class="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+                                <h4 class="font-semibold text-gray-800 mb-3">Concept Check</h4>
+                                <div class="quiz-question">
+                                    <p class="text-sm text-gray-700 mb-3">
+                                        At what altitude does the continuum hypothesis start breaking down for air flow around a satellite?
+                                        (Given: λ ≈ 70 km at 100 km altitude, satellite dimension L ≈ 2 m)
+                                    </p>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center text-sm">
+                                            <input type="radio" name="q1" value="a" class="mr-2">
+                                            Sea level (Kn ≈ 10⁻⁷)
+                                        </label>
+                                        <label class="flex items-center text-sm">
+                                            <input type="radio" name="q1" value="b" class="mr-2">
+                                            Commercial flight altitude (Kn ≈ 10⁻⁶)
+                                        </label>
+                                        <label class="flex items-center text-sm">
+                                            <input type="radio" name="q1" value="c" class="mr-2">
+                                            Above 100 km altitude (Kn > 10)
+                                        </label>
+                                    </div>
+                                    <button class="mt-3 bg-yellow-600 text-white px-4 py-1 rounded text-sm hover:bg-yellow-700" onclick="this.closest('.quiz-question').querySelector('.quiz-result').classList.remove('hidden')">
+                                        Check Answer
+                                    </button>
+                                    <div class="quiz-result hidden mt-2 p-2 bg-green-100 rounded text-sm">
+                                        ✅ Correct! Above 100 km, Kn = 70000/2 = 35000 >> 10, requiring kinetic theory instead of continuum mechanics.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    'F-02': `
+                        <div class="space-y-4">
+                            <div class="bg-white rounded-lg p-4 border">
+                                <h4 class="font-semibold text-gray-800 mb-3">Hydrostatics: Pressure Fields & Buoyancy</h4>
+                                <p class="text-sm text-gray-700 mb-3">
+                                    Hydrostatics analyzes fluids in mechanical equilibrium where net forces sum to zero. 
+                                    The absence of relative motion between fluid particles allows us to focus purely on pressure 
+                                    distribution and body forces, forming the foundation for understanding fluid statics.
+                                </p>
+                                <p class="text-sm text-gray-700 mb-3">
+                                    <strong>Fundamental Principle:</strong> In a static fluid, pressure at any point acts equally 
+                                    in all directions (Pascal's principle). The pressure variation is determined solely by body 
+                                    forces, typically gravitational acceleration.
+                                </p>
+                                <p class="text-sm text-gray-700 mb-3">
+                                    <strong>Engineering Applications:</strong> Hydrostatic pressure governs dam design, submarine 
+                                    hull strength, atmospheric pressure variation, and buoyancy calculations for floating structures.
+                                </p>
+                                
+                                <button class="text-blue-600 text-sm hover:text-blue-800 math-toggle" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                                    Show me the maths →
+                                </button>
+                                <div class="hidden mt-3 p-3 bg-blue-50 rounded text-sm">
+                                    <strong>Hydrostatic Equation:</strong> ∇p = ρg⃗<br>
+                                    <strong>For constant density:</strong> dp/dz = -ρg (z-axis pointing up)<br>
+                                    <strong>Pressure at depth h:</strong> p = p₀ + ρgh<br>
+                                    <strong>Manometer equation:</strong> p₁ - p₂ = ρg(h₂ - h₁)<br><br>
+                                    <strong>Archimedes' Principle:</strong><br>
+                                    F⃗_b = -∫∫∫_V ρ_fluid g⃗ dV = -ρ_fluid g⃗ V_displaced<br>
+                                    <strong>Buoyant Force:</strong> |F_b| = ρ_fluid × V_displaced × g<br><br>
+                                    <strong>Stability Criteria:</strong><br>
+                                    • Stable: Metacenter above center of gravity<br>
+                                    • GM = KB + BM - KG > 0 (for floating bodies)
+                                </div>
+                            </div>
+                            
+                            <!-- Advanced Applications -->
+                            <div class="bg-green-50 rounded-lg p-4 border border-green-200">
+                                <h4 class="font-semibold text-gray-800 mb-3">Advanced Applications</h4>
+                                <div class="text-sm text-gray-700 space-y-2">
+                                    <p><strong>Compressible Atmospheres:</strong> dp/dz = -ρ(p,T)g → Barometric formula</p>
+                                    <p><strong>Rotating Fluids:</strong> Include centrifugal force: ∇p = ρ(g⃗ + Ω⃗ × (Ω⃗ × r⃗))</p>
+                                    <p><strong>Surface Tension Effects:</strong> Young-Laplace equation: Δp = σ∇·n̂</p>
+                                    <p><strong>Hydrostatic Paradox:</strong> Pressure depends only on depth, not container shape</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Interactive Problem -->
+                            <div class="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+                                <h4 class="font-semibold text-gray-800 mb-3">Engineering Problem</h4>
+                                <p class="text-sm text-gray-700 mb-3">
+                                    A concrete dam (ρ = 2400 kg/m³) has a triangular cross-section, 60m high and 50m wide at the base. 
+                                    Calculate the hydrostatic force on the dam face and its center of pressure when the reservoir is full.
+                                </p>
+                                <div class="grid grid-cols-2 gap-3 mb-3">
+                                    <input type="number" placeholder="Force (MN)" class="px-3 py-1 border rounded text-sm">
+                                    <input type="number" placeholder="y_cp (m from surface)" class="px-3 py-1 border rounded text-sm">
+                                </div>
+                                <button class="bg-yellow-600 text-white px-4 py-1 rounded text-sm hover:bg-yellow-700" onclick="this.nextElementSibling.classList.remove('hidden')">
+                                    Show Solution
+                                </button>
+                                <div class="hidden mt-3 p-3 bg-green-100 rounded text-sm">
+                                    <strong>Solution:</strong><br>
+                                    F = ρgh_c A = 1000 × 9.81 × 30 × (60×50) = 882.9 MN<br>
+                                    y_cp = h_c + I_xx/(h_c × A) = 30 + (50×60³/12)/(30×3000) = 40 m<br>
+                                    <em>The center of pressure is always below the centroid for submerged surfaces.</em>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    'F-03': `
+                        <div class="space-y-4">
+                            <div class="bg-white rounded-lg p-4 border">
+                                <h4 class="font-semibold text-gray-800 mb-3">Flow Kinematics: Streamlines, Pathlines & Vorticity</h4>
+                                <p class="text-sm text-gray-700 mb-3">
+                                    Flow kinematics describes the motion of fluid particles without considering the forces that cause 
+                                    the motion. We focus on velocity fields, flow visualization, and the mathematical description of 
+                                    fluid deformation and rotation.
+                                </p>
+                                <p class="text-sm text-gray-700 mb-3">
+                                    <strong>Lagrangian vs Eulerian:</strong> Lagrangian follows individual particles (pathlines), 
+                                    while Eulerian describes flow at fixed points in space (streamlines). Both perspectives are 
+                                    essential for understanding complex flow phenomena.
+                                </p>
+                                <p class="text-sm text-gray-700 mb-3">
+                                    <strong>Vorticity:</strong> Measures local rotation of fluid elements. High vorticity regions 
+                                    indicate strong shear and are crucial for understanding turbulence, mixing, and energy dissipation.
+                                </p>
+                                
+                                <button class="text-blue-600 text-sm hover:text-blue-800 math-toggle" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                                    Show me the maths →
+                                </button>
+                                <div class="hidden mt-3 p-3 bg-blue-50 rounded text-sm">
+                                    <strong>Velocity Field:</strong> v⃗(x⃗,t) = u(x,y,z,t)î + v(x,y,z,t)ĵ + w(x,y,z,t)k̂<br><br>
+                                    <strong>Streamlines:</strong> dx⃗/ds = v⃗/|v⃗| (instantaneous tangent to velocity)<br>
+                                    <strong>Pathlines:</strong> dx⃗/dt = v⃗(x⃗,t) (particle trajectory)<br>
+                                    <strong>Streaklines:</strong> Locus of particles passing through a point<br><br>
+                                    <strong>Vorticity:</strong> ω⃗ = ∇ × v⃗<br>
+                                    • ω_x = ∂w/∂y - ∂v/∂z<br>
+                                    • ω_y = ∂u/∂z - ∂w/∂x<br>
+                                    • ω_z = ∂v/∂x - ∂u/∂y<br><br>
+                                    <strong>Strain Rate Tensor:</strong> S_ij = ½(∂u_i/∂x_j + ∂u_j/∂x_i)<br>
+                                    <strong>Circulation:</strong> Γ = ∮_C v⃗·dl⃗ = ∫∫_S ω⃗·n̂ dS (Stokes theorem)
+                                </div>
+                            </div>
+                            
+                            <!-- Flow Visualization -->
+                            <div class="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                                <h4 class="font-semibold text-gray-800 mb-3">Flow Visualization Techniques</h4>
+                                <div class="grid grid-cols-2 gap-3 text-sm text-gray-700">
+                                    <div>
+                                        <p><strong>Streamlines:</strong> Tangent to velocity at each point</p>
+                                        <p><strong>Pathlines:</strong> Actual particle trajectories</p>
+                                        <p><strong>Streaklines:</strong> Dye injection visualization</p>
+                                    </div>
+                                    <div>
+                                        <p><strong>Timeline:</strong> Marked fluid elements at t₀</p>
+                                        <p><strong>Streamtubes:</strong> Bundle of streamlines</p>
+                                        <p><strong>Vortex lines:</strong> Tangent to vorticity vector</p>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-600 mt-2 italic">
+                                    Note: In steady flow, streamlines = pathlines = streaklines
+                                </p>
+                            </div>
+                            
+                            <!-- Interactive Quiz -->
+                            <div class="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+                                <h4 class="font-semibold text-gray-800 mb-3">Vorticity Analysis</h4>
+                                <p class="text-sm text-gray-700 mb-3">
+                                    For the 2D velocity field: u = 2xy, v = x² - y²<br>
+                                    Calculate the vorticity ω_z and identify the flow type.
+                                </p>
+                                <div class="space-y-2">
+                                    <label class="flex items-center text-sm">
+                                        <input type="radio" name="q3" value="a" class="mr-2">
+                                        ω_z = 0 (Irrotational flow)
+                                    </label>
+                                    <label class="flex items-center text-sm">
+                                        <input type="radio" name="q3" value="b" class="mr-2">
+                                        ω_z = -2y (Rotational flow)
+                                    </label>
+                                    <label class="flex items-center text-sm">
+                                        <input type="radio" name="q3" value="c" class="mr-2">
+                                        ω_z = 2x (Shear-dominated flow)
+                                    </label>
+                                </div>
+                                <button class="mt-3 bg-yellow-600 text-white px-4 py-1 rounded text-sm hover:bg-yellow-700" onclick="this.nextElementSibling.classList.remove('hidden')">
+                                    Show Analysis
+                                </button>
+                                <div class="hidden mt-3 p-3 bg-green-100 rounded text-sm">
+                                    <strong>Solution:</strong> ω_z = ∂v/∂x - ∂u/∂y = 2x - 2x = 0<br>
+                                    ✅ This is irrotational flow! Despite apparent "rotation," fluid elements don't spin.<br>
+                                    <em>This represents potential flow around a stagnation point.</em>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    'C-01': `
+                        <div class="space-y-4">
+                            <div class="bg-white rounded-lg p-4 border">
+                                <h4 class="font-semibold text-gray-800 mb-3">Discretization Methods Overview</h4>
+                                <p class="text-sm text-gray-700 mb-3">
+                                    Computational Fluid Dynamics requires converting continuous equations into discrete forms 
+                                    that computers can solve. Four main approaches dominate the field.
+                                </p>
+                                
+                                <div class="grid grid-cols-2 gap-3 text-xs">
+                                    <div class="p-2 bg-blue-50 rounded">
+                                        <strong>FDM:</strong> Simple, structured grids
+                                    </div>
+                                    <div class="p-2 bg-green-50 rounded">
+                                        <strong>FVM:</strong> Conservative, flexible
+                                    </div>
+                                    <div class="p-2 bg-purple-50 rounded">
+                                        <strong>FEM:</strong> Complex geometries
+                                    </div>
+                                    <div class="p-2 bg-orange-50 rounded">
+                                        <strong>LBM:</strong> Mesoscopic approach
+                                    </div>
+                                </div>
+                                
+                                <button class="text-blue-600 text-sm hover:text-blue-800 math-toggle mt-3" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                                    Show discretization equations →
+                                </button>
+                                <div class="hidden mt-3 p-3 bg-blue-50 rounded text-sm">
+                                    <strong>FDM Taylor Series:</strong> f'(x) ≈ [f(x+h) - f(x-h)]/2h<br>
+                                    <strong>FVM Integration:</strong> ∫∇·F dV = ∮F·n dA<br>
+                                    <strong>FEM Weak Form:</strong> ∫ψ(∇·F) dΩ = -∫∇ψ·F dΩ + ∮ψF·n dΓ
+                                </div>
+                            </div>
+                        </div>
+                    `
+                };
+                
+                return content[code] || `
+                    <div class="bg-white rounded-lg p-4 border">
+                        <p class="text-sm text-gray-600">Content for ${code} will be available soon. This lesson includes:</p>
+                        <ul class="text-sm text-gray-600 mt-2 ml-4 list-disc">
+                            <li>3-minute focused reading</li>
+                            <li>Interactive examples</li>
+                            <li>Quick comprehension quiz</li>
+                            <li>Practical applications</li>
+                        </ul>
+                    </div>
+                `;
+            }
+
+            setupInteractiveWidgets() {
+                // Dimensional Analysis Quiz
+                this.setupDimensionalAnalysis();
+                
+                // Mesh Quality Widget
+                this.setupMeshQuality();
+                
+                // Quick Tools
+                this.setupQuickTools();
+            }
+
+            setupDimensionalAnalysis() {
+                const inputs = document.querySelectorAll('#fundamentals input[type="text"]');
+                const button = document.getElementById('fundamentals-btn');
+                const result = document.getElementById('pi-groups-result');
+
+                if (button) {
+                    button.addEventListener('click', () => {
+                        const values = Array.from(inputs).map(input => input.value.trim()).filter(v => v);
+                        
+                        // Enhanced dimensional analysis logic
+                        if (values.length >= 4) {
+                            const variables = values.map(v => v.toLowerCase());
+                            let piGroups = [];
+                            
+                            // Check for common fluid mechanics variables
+                            if (variables.includes('ρ') || variables.includes('rho')) {
+                                if (variables.includes('u') && variables.includes('l') && variables.includes('μ')) {
+                                    piGroups.push('Π₁ = ρUL/μ (Reynolds number)');
+                                }
+                                if (variables.includes('u') && variables.includes('l') && variables.includes('σ')) {
+                                    piGroups.push('Π₂ = ρU²L/σ (Weber number)');
+                                }
+                                if (variables.includes('u') && variables.includes('l') && variables.includes('g')) {
+                                    piGroups.push('Π₃ = U²/(gL) (Froude number)');
+                                }
+                            }
+                            
+                            if (piGroups.length > 0) {
+                                result.innerHTML = `
+                                    <div class="text-left">
+                                        <div class="font-semibold text-green-600 mb-2">Generated Π-Groups:</div>
+                                        <div class="text-xs space-y-1">
+                                            ${piGroups.map(group => `<div>• ${group}</div>`).join('')}
+                                        </div>
+                                        <div class="text-xs text-gray-500 mt-2 italic">
+                                            Buckingham Π theorem: n - k = ${Math.max(0, values.length - 3)} dimensionless groups
+                                        </div>
+                                    </div>
+                                `;
+                            } else {
+                                result.innerHTML = `
+                                    <div class="text-left">
+                                        <div class="font-semibold text-blue-600 mb-1">Basic Analysis:</div>
+                                        <div class="text-xs">
+                                            Variables entered: ${values.length}<br>
+                                            Expected Π-groups: ${Math.max(0, values.length - 3)}<br>
+                                            <em>Enter standard variables (ρ, U, L, μ, σ, g) for detailed analysis</em>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        } else {
+                            result.innerHTML = '<div class="text-red-600 text-sm">Please enter at least 4 variables for meaningful dimensional analysis</div>';
+                        }
+                    });
+                }
+            }
+
+            setupMeshQuality() {
+                const slider = document.getElementById('yplus-slider');
+                const valueDisplay = document.getElementById('yplus-value');
+                const errorBar = document.getElementById('error-bar');
+                const errorText = document.getElementById('error-text');
+
+                if (slider) {
+                    slider.addEventListener('input', (e) => {
+                        const value = parseFloat(e.target.value);
+                        valueDisplay.textContent = value.toFixed(1);
+
+                        // Calculate wall function error based on y+ value
+                        let errorPercent, errorCategory, errorColor;
+                        
+                        if (value < 1) {
+                            errorPercent = 5;
+                            errorCategory = 'Excellent';
+                            errorColor = 'bg-green-500';
+                        } else if (value < 5) {
+                            errorPercent = 10;
+                            errorCategory = 'Good';
+                            errorColor = 'bg-yellow-500';
+                        } else if (value < 30) {
+                            errorPercent = 25;
+                            errorCategory = 'Acceptable';
+                            errorColor = 'bg-orange-500';
+                        } else {
+                            errorPercent = Math.min(80, 20 + (value - 30) * 2);
+                            errorCategory = 'Poor';
+                            errorColor = 'bg-red-500';
+                        }
+
+                        errorBar.style.width = `${errorPercent}%`;
+                        errorBar.className = `h-2 rounded-full transition-all duration-300 ${errorColor}`;
+                        errorText.textContent = `${errorCategory} (${errorPercent.toFixed(0)}%)`;
+                    });
+                }
+            }
+
+            setupQuickTools() {
+                const toolButtons = document.querySelectorAll('.bg-white.px-4.py-2');
+                toolButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const toolName = e.target.textContent.trim();
+                        alert(`${toolName} will open in a new panel. Feature coming soon!`);
+                    });
+                });
+            }
+
+            setupIntersectionObserver() {
+                const sections = document.querySelectorAll('.snap-section');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                            this.updateActiveDot(entry.target.id);
+                        }
+                    });
+                }, {
+                    threshold: 0.5,
+                    rootMargin: '-10% 0px -10% 0px'
+                });
+
+                sections.forEach(section => observer.observe(section));
+            }
+        }
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new FluidDynamicsApp();
+        });
+
+        // Service Worker Registration for offline functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Create inline service worker
+                const swCode = `
+                    const CACHE_NAME = 'fluiddynamics-hub-v1';
+                    const urlsToCache = ['/'];
+                    
+                    self.addEventListener('install', (event) => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then((cache) => cache.addAll(urlsToCache))
+                        );
+                    });
+                    
+                    self.addEventListener('fetch', (event) => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then((response) => response || fetch(event.request))
+                        );
+                    });
+                `;
+                
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                navigator.serviceWorker.register(swUrl)
+                    .then(registration => console.log('SW registered: ', registration))
+                    .catch(registrationError => console.log('SW registration failed: ', registrationError));
+            });
+        }
+    </script>
+</body>
+</html>
