@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FluidDynamics Learning Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fd-blue': '#0369a1',
+                        'fd-teal': '#0d9488',
+                        'fd-purple': '#7c3aed',
+                        'fd-orange': '#ea580c',
+                        'fd-green': '#059669',
+                        'fd-red': '#dc2626',
+                        'fd-gray': '#374151'
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .scroll-snap-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        
+        .snap-section {
+            scroll-snap-align: start;
+            min-height: 100vh;
+        }
+        
+        .hero-video-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-video-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><filter id="turbulence"><feTurbulence baseFrequency="0.02" numOctaves="3" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="20"/></filter></defs><rect width="100%" height="100%" fill="rgba(255,255,255,0.1)" filter="url(%23turbulence)"/></svg>') center/cover;
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-circle {
+            transition: stroke-dasharray 0.3s ease;
+        }
+        
+        .slide-panel {
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .slide-panel.open {
+            transform: translateX(0);
+        }
+        
+        .mini-map-dot {
+            transition: all 0.2s ease;
+        }
+        
+        .mini-map-dot.active {
+            transform: scale(1.5);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card-hover-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .card-hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom scrollbar for panels */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Enhanced focus styles for accessibility */
+        button:focus-visible,
+        input:focus-visible,
+        .expand-btn:focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+        
+        /* Responsive font sizing */
+        .responsive-text {
+            font-size: clamp(1rem, 1vw + 0.5rem, 1.25rem);
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .hero-video-bg::before {
+                animation: none;
+            }
+            .fade-in,
+            .card-hover-lift,
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Loading states */
+        .loading-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Mini-Map Navigation Rail -->
+    <nav class="fixed left-0 top-0 h-full w-4 bg-gray-800 z-50 flex flex-col justify-center space-y-4 px-1">
+        <div class="mini-map-dot w-2 h-2 bg-fd-blue rounded-full cursor-pointer active" data-section="hero" title="Dashboard"></div>
+        <div class="mini-map-dot w-2 h-2 bg-fd-teal rounded-full cursor-pointer" data-section="fundamentals" title="Fundamentals"></div>
+        <div class="mini-map-dot w-2 h-2 bg-fd-purple rounded-full cursor-pointer" data-section="advanced" title="Advanced Theory"></div>
+        <div class="mini-map-dot w-2 h-2 bg-fd-orange rounded-full cursor-pointer" data-section="cfd" title="CFD Hub"></div>
+        <div class="mini-map-dot w-2 h-2 bg-fd-green rounded-full cursor-pointer" data-section="experimental" title="Experimental Methods"></div>
+        <div class="mini-map-dot w-2 h-2 bg-fd-red rounded-full cursor-pointer" data-section="applications" title="Applications"></div>
+        <div class="mini-map-dot w-2 h-2 bg-fd-gray rounded-full cursor-pointer" data-section="playground" title="Interactive Playground"></div>
+        <div class="mini-map-dot w-2 h-2 bg-gray-500 rounded-full cursor-pointer" data-section="resources" title="Resources"></div>
+    </nav>
+
+    <!-- Main Scroll Container -->
+    <main class="scroll-snap-container ml-4">
+        <!-- Hero Dashboard Section -->
+        <section id="hero" class="snap-section hero-video-bg flex flex-col">
+            <div class="flex-1 flex items-center justify-center relative">
+                <!-- Hero Animation Background -->
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 backdrop-blur-sm"></div>
+                
+                <!-- Hero Content -->
+                <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
+                    <h1 class="text-6xl font-bold mb-6 animate-float">
+                        Master Fluid Dynamics
+                    </h1>
+                    <p class="text-xl mb-8 opacity-90">
+                        From fundamentals to cutting-edge CFD, learn at your own pace with interactive simulations
+                    </p>
+                    <button class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors shadow-xl">
+                        Start Learning
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Learning Path Tiles -->
+            <div class="bg-white/95 backdrop-blur-md p-8">
+                <div class="max-w-6xl mx-auto">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Choose Your Learning Path</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- Fundamentals Card -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-fd-teal card-hover-lift cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Fundamentals</h3>
+                                <div class="relative w-12 h-12">
+                                    <svg class="progress-ring w-12 h-12" viewBox="0 0 42 42">
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e5e7eb" stroke-width="3"/>
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#0d9488" stroke-width="3" 
+                                                stroke-dasharray="60 40" class="progress-ring-circle"/>
+                                    </svg>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-fd-teal">60%</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm responsive-text">Master the core principles of fluid mechanics, from continuum hypothesis to Navier-Stokes equations.</p>
+                        </div>
+
+                        <!-- CFD Hub Card -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-fd-orange hover:shadow-xl transition-shadow cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">CFD Hub</h3>
+                                <div class="relative w-12 h-12">
+                                    <svg class="progress-ring w-12 h-12" viewBox="0 0 42 42">
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e5e7eb" stroke-width="3"/>
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#ea580c" stroke-width="3" 
+                                                stroke-dasharray="30 70" class="progress-ring-circle"/>
+                                    </svg>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-fd-orange">30%</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm">Dive deep into computational methods, from basic discretization to advanced GPU techniques.</p>
+                        </div>
+
+                        <!-- Experiments Card -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-fd-green hover:shadow-xl transition-shadow cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Experiments</h3>
+                                <div class="relative w-12 h-12">
+                                    <svg class="progress-ring w-12 h-12" viewBox="0 0 42 42">
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e5e7eb" stroke-width="3"/>
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#059669" stroke-width="3" 
+                                                stroke-dasharray="15 85" class="progress-ring-circle"/>
+                                    </svg>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-fd-green">15%</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm">Learn experimental techniques from PIV to wind tunnel testing with real datasets.</p>
+                        </div>
+
+                        <!-- Advanced Theory Card -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-fd-purple hover:shadow-xl transition-shadow cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Advanced Theory</h3>
+                                <div class="relative w-12 h-12">
+                                    <svg class="progress-ring w-12 h-12" viewBox="0 0 42 42">
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e5e7eb" stroke-width="3"/>
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#7c3aed" stroke-width="3" 
+                                                stroke-dasharray="5 95" class="progress-ring-circle"/>
+                                    </svg>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-fd-purple">5%</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm">Explore compressible flow, multiphase systems, and specialized applications.</p>
+                        </div>
+
+                        <!-- Applications Card -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-fd-red hover:shadow-xl transition-shadow cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Applications</h3>
+                                <div class="relative w-12 h-12">
+                                    <svg class="progress-ring w-12 h-12" viewBox="0 0 42 42">
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e5e7eb" stroke-width="3"/>
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#dc2626" stroke-width="3" 
+                                                stroke-dasharray="25 75" class="progress-ring-circle"/>
+                                    </svg>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-fd-red">25%</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm">Real-world case studies from aerospace to biomedical engineering applications.</p>
+                        </div>
+
+                        <!-- Playground Card -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-fd-gray hover:shadow-xl transition-shadow cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Interactive Playground</h3>
+                                <div class="relative w-12 h-12">
+                                    <svg class="progress-ring w-12 h-12" viewBox="0 0 42 42">
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e5e7eb" stroke-width="3"/>
+                                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#374151" stroke-width="3" 
+                                                stroke-dasharray="80 20" class="progress-ring-circle"/>
+                                    </svg>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-fd-gray">80%</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm">Hands-on simulations, calculators, and interactive tools for immediate exploration.</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Tools Toolbar -->
+                    <div class="bg-gray-100 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Quick Tools</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <button class="bg-white px-4 py-2 rounded-md shadow-sm hover:shadow-md transition-shadow text-sm font-medium text-gray-700">
+                                Reynolds Calculator
+                            </button>
+                            <button class="bg-white px-4 py-2 rounded-md shadow-sm hover:shadow-md transition-shadow text-sm font-medium text-gray-700">
+                                Unit Converter
+                            </button>
+                            <button class="bg-white px-4 py-2 rounded-md shadow-sm hover:shadow-md transition-shadow text-sm font-medium text-gray-700">
+                                Moody Chart
+                            </button>
+                            <button class="bg-white px-4 py-2 rounded-md shadow-sm hover:shadow-md transition-shadow text-sm font-medium text-gray-700">
+                                Pipe Flow Calculator
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fundamentals Section -->
+        <section id="fundamentals" class="snap-section bg-gradient-to-br from-teal-50 to-cyan-50 flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Fundamentals Track</h2>
+                    <p class="text-xl text-gray-600 mb-6">Master the core principles that govern fluid behavior, from molecular scales to engineering applications.</p>
+                    
+                    <!-- Progress Bar -->
+                    <div class="bg-white rounded-full h-3 max-w-md mx-auto mb-6 shadow-inner">
+                        <div class="bg-fd-teal h-3 rounded-full" style="width: 60%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-8">6 of 9 lessons completed</p>
+                </div>
+
+                <!-- Interactive Widget -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8 max-w-md mx-auto">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Dimensional Analysis Quiz</h3>
+                    <div class="space-y-3">
+                        <input type="text" placeholder="Density (ρ)" class="w-full px-3 py-2 border rounded-md">
+                        <input type="text" placeholder="Velocity (U)" class="w-full px-3 py-2 border rounded-md">
+                        <input type="text" placeholder="Length (L)" class="w-full px-3 py-2 border rounded-md">
+                        <input type="text" placeholder="Viscosity (μ)" class="w-full px-3 py-2 border rounded-md">
+                    </div>
+                    <button class="w-full bg-fd-teal text-white py-2 rounded-md mt-4 hover:bg-teal-600 transition-colors">
+                        Generate Π-Groups
+                    </button>
+                    <div id="pi-groups-result" class="mt-4 text-sm text-gray-600"></div>
+                </div>
+
+                <button class="bg-fd-teal text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-teal-600 transition-colors shadow-xl expand-btn" data-module="fundamentals">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+
+        <!-- Advanced Theory Section -->
+        <section id="advanced" class="snap-section bg-gradient-to-br from-purple-50 to-indigo-50 flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Advanced Theory</h2>
+                    <p class="text-xl text-gray-600 mb-6">Explore complex phenomena: compressible flows, multiphase systems, and specialized applications.</p>
+                    
+                    <div class="bg-white rounded-full h-3 max-w-md mx-auto mb-6 shadow-inner">
+                        <div class="bg-fd-purple h-3 rounded-full" style="width: 5%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-8">1 of 5 modules completed</p>
+                </div>
+
+                <button class="bg-fd-purple text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-600 transition-colors shadow-xl expand-btn" data-module="advanced">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+
+        <!-- CFD Hub Section -->
+        <section id="cfd" class="snap-section bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">CFD Hub</h2>
+                    <p class="text-xl text-gray-600 mb-6">From basic discretization to GPU acceleration and machine learning closures.</p>
+                    
+                    <div class="bg-white rounded-full h-3 max-w-md mx-auto mb-6 shadow-inner">
+                        <div class="bg-fd-orange h-3 rounded-full" style="width: 30%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-8">3 of 9 modules completed</p>
+                </div>
+
+                <!-- Mesh Quality Widget -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8 max-w-md mx-auto">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Mesh Quality Checker</h3>
+                    <div class="space-y-3">
+                        <label class="block text-left text-sm font-medium text-gray-700">y⁺ Value</label>
+                        <input type="range" id="yplus-slider" min="0.1" max="300" step="0.1" value="1" class="w-full">
+                        <div class="flex justify-between text-xs text-gray-500">
+                            <span>0.1</span>
+                            <span id="yplus-value">1.0</span>
+                            <span>300</span>
+                        </div>
+                        <div class="mt-4 p-3 bg-gray-50 rounded-md">
+                            <div class="text-sm font-medium text-gray-700">Wall Function Error:</div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                <div id="error-bar" class="bg-red-500 h-2 rounded-full transition-all duration-300" style="width: 5%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1" id="error-text">Excellent (< 5%)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="bg-fd-orange text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-orange-600 transition-colors shadow-xl expand-btn" data-module="cfd">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+
+        <!-- Experimental Methods Section -->
+        <section id="experimental" class="snap-section bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Experimental Methods</h2>
+                    <p class="text-xl text-gray-600 mb-6">Learn cutting-edge measurement techniques with real datasets and hands-on practice.</p>
+                    
+                    <div class="bg-white rounded-full h-3 max-w-md mx-auto mb-6 shadow-inner">
+                        <div class="bg-fd-green h-3 rounded-full" style="width: 15%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-8">1 of 6 modules completed</p>
+                </div>
+
+                <!-- PIV Demo Widget -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8 max-w-md mx-auto">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Live PIV Demo</h3>
+                    <div data-heavy-widget="piv-demo" class="bg-gray-900 rounded-lg h-48 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-green-500/20 animate-pulse-slow"></div>
+                        <div class="text-white text-center z-10">
+                            <div class="text-2xl mb-2">🎥</div>
+                            <div class="text-sm">30 FPS WebGL Visualization</div>
+                            <div class="text-xs opacity-75 mt-1">Loading when visible...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="bg-fd-green text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-600 transition-colors shadow-xl expand-btn" data-module="experimental">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+
+        <!-- Applications Gallery Section -->
+        <section id="applications" class="snap-section bg-gradient-to-br from-red-50 to-pink-50 flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Applications Gallery</h2>
+                    <p class="text-xl text-gray-600 mb-6">Real-world case studies from aerospace to biomedical engineering.</p>
+                    
+                    <div class="bg-white rounded-full h-3 max-w-md mx-auto mb-6 shadow-inner">
+                        <div class="bg-fd-red h-3 rounded-full" style="width: 25%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-8">2 of 5 application areas completed</p>
+                </div>
+
+                <button class="bg-fd-red text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-red-600 transition-colors shadow-xl expand-btn" data-module="applications">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+
+        <!-- Interactive Playground Section -->
+        <section id="playground" class="snap-section bg-gradient-to-br from-gray-50 to-slate-50 flex items-center justify-center" data-heavy-content="true">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Interactive Playground</h2>
+                    <p class="text-xl text-gray-600 mb-6">Hands-on simulations and tools for immediate exploration and learning.</p>
+                    
+                    <div class="bg-white rounded-full h-3 max-w-md mx-auto mb-6 shadow-inner">
+                        <div class="bg-fd-gray h-3 rounded-full" style="width: 80%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-8">4 of 5 tools mastered</p>
+                </div>
+
+                <!-- WebGL Simulation Preview -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8 max-w-md mx-auto">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">WebGL Flow Solver</h3>
+                    <div data-heavy-widget="webgl-simulation" class="bg-gray-100 rounded-lg h-48 flex items-center justify-center">
+                        <div class="text-gray-500 text-center">
+                            <div class="text-2xl mb-2">⚡</div>
+                            <div class="text-sm">Interactive simulation loading...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="bg-fd-gray text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-600 transition-colors shadow-xl expand-btn" data-module="playground">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section id="resources" class="snap-section bg-gradient-to-br from-slate-50 to-gray-100 flex items-center justify-center">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="mb-8">
+                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Resource Library</h2>
+                    <p class="text-xl text-gray-600 mb-6">Comprehensive collection of references, datasets, and community resources.</p>
+                </div>
+
+                <button class="bg-gray-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-700 transition-colors shadow-xl expand-btn" data-module="resources">
+                    Expand Module
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Slide-out Panel -->
+    <div id="slide-panel" class="slide-panel fixed top-0 right-0 w-1/2 h-full bg-white shadow-2xl z-40 overflow-y-auto custom-scrollbar">
+        <div class="p-6">
+            <!-- Panel Header -->
+            <div class="flex items-center justify-between mb-6 pb-4 border-b">
+                <nav class="text-sm text-gray-500 responsive-text">
+                    <span>Home</span> › <span id="panel-breadcrumb">Module</span>
+                </nav>
+                <button id="close-panel" class="text-gray-400 hover:text-gray-600 text-2xl transition-colors focus:outline-none focus:text-gray-800">×</button>
+            </div>
+
+            <!-- Panel Content -->
+            <div id="panel-content" class="fade-in">
+                <!-- Content will be dynamically loaded here -->
+            </div>
+
+            <!-- Panel Footer -->
+            <div class="sticky bottom-0 bg-white border-t pt-4 mt-8">
+                <div class="flex justify-between">
+                    <button class="bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors focus-visible:outline-2 focus-visible:outline-blue-500">
+                        Previous
+                    </button>
+                    <button class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors focus-visible:outline-2 focus-visible:outline-blue-300">
+                        Mark Complete
+                    </button>
+                    <button class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors focus-visible:outline-2 focus-visible:outline-blue-300">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay for panel -->
+    <div id="panel-overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
