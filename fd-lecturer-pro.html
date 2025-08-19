@@ -340,185 +340,200 @@
             "modules": [
                 {
                     "id": "M",
-                    "name": "Mathematical Preliminaries",
+                    "name": "Mathematical & Physical Foundations (Pre/Coreq)",
                     "lessons": [
                         {"code":"M1","title":"Vector & Tensor Calculus"},
-                        {"code":"M2","title":"Integral Theorems & RTT"},
+                        {"code":"M2","title":"Integral Theorems & Reynolds Transport"},
                         {"code":"M3","title":"Differential Equations & Similarity"},
-                        {"code":"M4","title":"Transforms & Spectra"},
-                        {"code":"M5","title":"Asymptotics & Perturbation"},
+                        {"code":"M4","title":"Dimensional Analysis & Π-Groups"},
+                        {"code":"M5","title":"Transforms & Spectra"},
                         {"code":"M6","title":"Probability & Statistics for Fluids"}
                     ]
                 },
+
                 {
-                    "id": "F",
-                    "name": "Foundations",
+                    "id": "FD101",
+                    "name": "Fluid Mechanics I (Undergraduate Core)",
                     "lessons": [
-                        {"code":"F1","title":"Continuum Hypothesis & Properties"},
-                        {"code":"F2","title":"Kinematics: Streamlines, Vorticity, Deformation"},
-                        {"code":"F3","title":"Integral Balances: Mass, Momentum, Energy"},
-                        {"code":"F4","title":"Differential Form: Continuity, Navier–Stokes, Energy"},
-                        {"code":"F5","title":"Constitutive Models: Newtonian Fluids"},
-                        {"code":"F6","title":"Exact Laminar Solutions"},
-                        {"code":"F7","title":"Bernoulli from Navier–Stokes"}
+                        {"code":"FD101-1","title":"Continuum Hypothesis & Properties"},
+                        {"code":"FD101-2","title":"Hydrostatics & Buoyancy"},
+                        {"code":"FD101-3","title":"Kinematics: Stream/Path/Streaklines, Vorticity"},
+                        {"code":"FD101-4","title":"Integral Balances: Mass, Momentum, Energy"},
+                        {"code":"FD101-5","title":"Differential Form: Continuity & Navier–Stokes"},
+                        {"code":"FD101-6","title":"Bernoulli from Navier–Stokes (Assumptions Explicit)"},
+                        {"code":"FD101-7","title":"Exact Laminar Solutions: Couette, Poiseuille, Stokes' First Problem"},
+                        {"code":"FD101-8","title":"Dimensional Analysis & Similitude (with scaling examples)"}
                     ]
                 },
+
                 {
-                    "id": "B",
-                    "name": "Boundary Layers & External Flows",
+                    "id": "FD201",
+                    "name": "Fluid Mechanics II (Undergraduate Core)",
                     "lessons": [
-                        {"code":"B1","title":"Boundary-Layer Concept & Thicknesses"},
-                        {"code":"B2","title":"Blasius Flat-Plate Similarity"},
-                        {"code":"B3","title":"Falkner–Skan & Pressure Gradients"},
-                        {"code":"B4","title":"Separation & Control Concepts"},
-                        {"code":"B5","title":"External Flows: Wakes, Lift & Drag"},
-                        {"code":"B6","title":"Potential Flow Toolkit & Kutta–Joukowski"}
+                        {"code":"FD201-1","title":"Boundary-Layer Concept & Thicknesses"},
+                        {"code":"FD201-2","title":"Blasius Flat-Plate Similarity"},
+                        {"code":"FD201-3","title":"Pressure Gradients & Falkner–Skan"},
+                        {"code":"FD201-4","title":"Separation & Control Concepts"},
+                        {"code":"FD201-5","title":"External Flows: Lift, Drag, Wakes (Kutta–Joukowski)"},
+                        {"code":"FD201-6","title":"Internal Flows: Laminar/Turbulent, Wall Laws"},
+                        {"code":"FD201-7","title":"Minor (Form) Losses via Momentum Balance"},
+                        {"code":"FD201-8","title":"Unsteady Internal Flows & Womersley Number"},
+                        {"code":"FD201-9","title":"Intro to Turbulence & Transition"}
                     ]
                 },
+
                 {
-                    "id": "I",
-                    "name": "Internal Flows",
+                    "id": "CF231",
+                    "name": "Compressible Flow (Upper-Undergrad / Mixed Core)",
                     "lessons": [
-                        {"code":"I1","title":"Developing vs Fully Developed"},
-                        {"code":"I2","title":"Laminar Duct Flows"},
-                        {"code":"I3","title":"Turbulent Duct Flows & Wall Laws"},
-                        {"code":"I4","title":"Minor Losses as Momentum Effects"},
-                        {"code":"I5","title":"Unsteady Internal Flows & Womersley"}
+                        {"code":"CF231-1","title":"Thermo Refresher & Speed of Sound"},
+                        {"code":"CF231-2","title":"Isentropic Relations & Area–Mach"},
+                        {"code":"CF231-3","title":"Normal & Oblique Shocks (Rankine–Hugoniot)"},
+                        {"code":"CF231-4","title":"Prandtl–Meyer Expansions & Shock–Expansion"},
+                        {"code":"CF231-5","title":"Nozzles & Diffusers (Quasi-1D)"},
+                        {"code":"CF231-6","title":"Fanno & Rayleigh Flows"},
+                        {"code":"CF231-7","title":"High-Speed Boundary Layers & Shock/BL Interaction"}
                     ]
                 },
+
                 {
-                    "id": "T",
-                    "name": "Turbulence",
+                    "id": "HMT241",
+                    "name": "Convection, Heat & Mass Transfer in Fluids (Undergrad Core in Thermo-Fluids)",
                     "lessons": [
-                        {"code":"T1","title":"What Is Turbulence"},
-                        {"code":"T2","title":"Reynolds Averaging & RANS"},
-                        {"code":"T3","title":"Free Shear Flows"},
-                        {"code":"T4","title":"Wall-Bounded Turbulence"},
-                        {"code":"T5","title":"Spectra & Cascades"},
-                        {"code":"T6","title":"Transition & Stability Link"},
-                        {"code":"T7","title":"Coherent Structures & Vortex Dynamics"}
+                        {"code":"HMT241-1","title":"Energy Equation & Viscous Dissipation"},
+                        {"code":"HMT241-2","title":"Dimensionless Groups: Pr, Nu, Sc, Le"},
+                        {"code":"HMT241-3","title":"Forced Convection: Internal"},
+                        {"code":"HMT241-4","title":"Forced Convection: External"},
+                        {"code":"HMT241-5","title":"Natural & Mixed Convection"},
+                        {"code":"HMT241-6","title":"Species Transport & Sherwood Analogues"}
                     ]
                 },
+
                 {
-                    "id": "C",
-                    "name": "Compressible & Gas Dynamics",
+                    "id": "FD301",
+                    "name": "Turbulence (Advanced Core)",
                     "lessons": [
-                        {"code":"C1","title":"Thermo Refresher & Speed of Sound"},
-                        {"code":"C2","title":"Isentropic & Area–Mach Relations"},
-                        {"code":"C3","title":"Normal & Oblique Shocks"},
-                        {"code":"C4","title":"Prandtl–Meyer Expansions"},
-                        {"code":"C5","title":"Fanno & Rayleigh Flows"},
-                        {"code":"C6","title":"High-Speed Boundary Layers"},
-                        {"code":"C7","title":"Hypersonics & Rarefaction Intro"}
+                        {"code":"FD301-1","title":"Defining Turbulence, Re & Intermittency"},
+                        {"code":"FD301-2","title":"Reynolds Averaging & RANS Equations"},
+                        {"code":"FD301-3","title":"Free Shear Flows: Jets, Wakes, Mixing Layers"},
+                        {"code":"FD301-4","title":"Wall-Bounded Turbulence: Inner/Outer Scaling, Roughness"},
+                        {"code":"FD301-5","title":"Spectra & Cascades: Kolmogorov −5/3"},
+                        {"code":"FD301-6","title":"Transition Mechanisms & Stability Link"},
+                        {"code":"FD301-7","title":"Coherent Structures & Vortex Dynamics"}
                     ]
                 },
+
                 {
-                    "id": "H",
-                    "name": "Heat & Mass Transfer in Fluids",
+                    "id": "CFD311",
+                    "name": "Computational Fluid Dynamics (Content-Only Theory, Advanced Core)",
                     "lessons": [
-                        {"code":"H1","title":"Energy Equation & Dissipation"},
-                        {"code":"H2","title":"Dimensionless Groups: Pr, Nu, Sc, Le"},
-                        {"code":"H3","title":"Forced Convection (Internal/External)"},
-                        {"code":"H4","title":"Natural & Mixed Convection"},
-                        {"code":"H5","title":"Species Transport"},
-                        {"code":"H6","title":"Reacting Flows Primer"}
+                        {"code":"CFD311-1","title":"PDE Classes & Characteristics in Fluids"},
+                        {"code":"CFD311-2","title":"Discretisation: Consistency, Stability, Convergence"},
+                        {"code":"CFD311-3","title":"Pressure–Velocity Coupling & Projection Methods"},
+                        {"code":"CFD311-4","title":"Shock-Capturing Concepts & Riemann Problems"},
+                        {"code":"CFD311-5","title":"Turbulence-Modelling Theory: RANS, LES, DES, DNS"},
+                        {"code":"CFD311-6","title":"Verification, Validation & Uncertainty (GCI)"}
                     ]
                 },
+
                 {
-                    "id": "P",
-                    "name": "Multiphase, Free-Surface & Interfacial",
+                    "id": "EXP321",
+                    "name": "Experimental Methods in Fluids (Advanced Core)",
                     "lessons": [
-                        {"code":"P1","title":"Interfacial Balance Laws"},
-                        {"code":"P2","title":"Capillarity, Wetting & Marangoni"},
-                        {"code":"P3","title":"Free-Surface & Shallow-Water"},
-                        {"code":"P4","title":"Dispersed Flows & Drag"},
-                        {"code":"P5","title":"Population Balances"},
-                        {"code":"P6","title":"Cavitation & Rayleigh–Plesset"},
-                        {"code":"P7","title":"Two-Fluid/Two-Phase Continuum Models"}
+                        {"code":"EXP321-1","title":"Measurement Principles & Flow Visualisation"},
+                        {"code":"EXP321-2","title":"Wind/Water Tunnel Testing & Similarity"},
+                        {"code":"EXP321-3","title":"Particle-Image Velocimetry (PIV)"},
+                        {"code":"EXP321-4","title":"Laser Doppler Velocimetry (LDV)"},
+                        {"code":"EXP321-5","title":"Uncertainty & Error Propagation"}
                     ]
                 },
+
                 {
-                    "id": "R",
-                    "name": "Non-Newtonian & Rheology",
+                    "id": "MPH401",
+                    "name": "Multiphase, Free-Surface & Interfacial (Graduate Elective)",
                     "lessons": [
-                        {"code":"R1","title":"Material Classes"},
-                        {"code":"R2","title":"Constitutive Models"},
-                        {"code":"R3","title":"Linear Viscoelasticity"},
-                        {"code":"R4","title":"Oldroyd-B & Normal Stresses"},
-                        {"code":"R5","title":"Instabilities in Complex Fluids"},
-                        {"code":"R6","title":"Microfluidics with Non-Newtonians"}
+                        {"code":"MPH401-1","title":"Interfacial Balance Laws & Jump Conditions"},
+                        {"code":"MPH401-2","title":"Capillarity, Wetting & Marangoni"},
+                        {"code":"MPH401-3","title":"Free-Surface & Shallow-Water Equations"},
+                        {"code":"MPH401-4","title":"Dispersed Flows: Drag, Slip & Terminal Velocity"},
+                        {"code":"MPH401-5","title":"Population Balances: Break-up & Coalescence"},
+                        {"code":"MPH401-6","title":"Cavitation & Rayleigh–Plesset"},
+                        {"code":"MPH401-7","title":"Two-Fluid/Two-Phase Continuum Models"}
                     ]
                 },
+
                 {
-                    "id": "G",
-                    "name": "Rotating, Stratified & Geophysical",
+                    "id": "RHE411",
+                    "name": "Non-Newtonian & Rheology (Graduate Elective)",
                     "lessons": [
-                        {"code":"G1","title":"Rotating Frames & Rossby"},
-                        {"code":"G2","title":"Geostrophic & Hydrostatic Balance"},
-                        {"code":"G3","title":"Ekman Layers & Pumps"},
-                        {"code":"G4","title":"Stratification & Internal Waves"},
-                        {"code":"G5","title":"Barotropic/Baroclinic Instability"}
+                        {"code":"RHE411-1","title":"Material Classes & Flow Regimes"},
+                        {"code":"RHE411-2","title":"Generalised Newtonian: Power-Law, Carreau–Yasuda"},
+                        {"code":"RHE411-3","title":"Linear Viscoelasticity: Maxwell/Jeffreys"},
+                        {"code":"RHE411-4","title":"Oldroyd-B, Normal Stresses & Elastic Effects"},
+                        {"code":"RHE411-5","title":"Instabilities: Elastic Turbulence, Rod-Climbing"},
+                        {"code":"RHE411-6","title":"Microfluidics with Complex Fluids"}
                     ]
                 },
+
                 {
-                    "id": "S",
-                    "name": "Stability, Waves & Acoustics",
+                    "id": "GEO421",
+                    "name": "Rotating, Stratified & Geophysical (Graduate Elective)",
                     "lessons": [
-                        {"code":"S1","title":"Linear Stability & Orr–Sommerfeld"},
-                        {"code":"S2","title":"Shear-Flow Instabilities"},
-                        {"code":"S3","title":"Weakly Nonlinear: Landau"},
-                        {"code":"S4","title":"Surface/Gravity/Capillary Waves"},
-                        {"code":"S5","title":"Aeroacoustics Primer"}
+                        {"code":"GEO421-1","title":"Rotating Frames, Coriolis & Rossby"},
+                        {"code":"GEO421-2","title":"Geostrophic & Hydrostatic Balance"},
+                        {"code":"GEO421-3","title":"Ekman Layers & Secondary Flows"},
+                        {"code":"GEO421-4","title":"Stratification, Buoyancy Frequency & Internal Waves"},
+                        {"code":"GEO421-5","title":"Barotropic/Baroclinic Instability (Overview)"}
                     ]
                 },
+
                 {
-                    "id": "N",
-                    "name": "Numerical & Theoretical Methods (Content-Only)",
+                    "id": "STA431",
+                    "name": "Stability, Waves & Acoustics (Graduate Elective)",
                     "lessons": [
-                        {"code":"N1","title":"PDE Classes & Characteristics"},
-                        {"code":"N2","title":"Discretisation: Consistency, Stability, Convergence"},
-                        {"code":"N3","title":"Pressure–Velocity Coupling & Projection"},
-                        {"code":"N4","title":"Shock-Capturing Concepts"},
-                        {"code":"N5","title":"Turbulence-Modelling Theory"},
-                        {"code":"N6","title":"Verification, Validation & Uncertainty"}
+                        {"code":"STA431-1","title":"Linear Stability & Orr–Sommerfeld"},
+                        {"code":"STA431-2","title":"Shear-Flow Instabilities: TS & KH"},
+                        {"code":"STA431-3","title":"Weakly Nonlinear: Landau Amplitude Eqn"},
+                        {"code":"STA431-4","title":"Surface/Gravity/Capillary Waves"},
+                        {"code":"STA431-5","title":"Aeroacoustics Primer: Lighthill's Analogy"}
                     ]
                 },
+
                 {
-                    "id": "X",
-                    "name": "Biofluids, Micro/Nano & Special Topics",
+                    "id": "BIO451",
+                    "name": "Biofluids & Micro/Nano (Graduate Elective)",
                     "lessons": [
-                        {"code":"X1","title":"Haemodynamics & Womersley"},
-                        {"code":"X2","title":"Microfluidics & Slip"},
-                        {"code":"X3","title":"Magnetohydrodynamics & Hartmann"},
-                        {"code":"X4","title":"Reactive/Combustion Coupling"},
-                        {"code":"X5","title":"Vortex Dynamics & Helmholtz"},
-                        {"code":"X6","title":"Flow Control (Theory)"}
+                        {"code":"BIO451-1","title":"Haemodynamics & Womersley"},
+                        {"code":"BIO451-2","title":"Microfluidics: Slip/Knudsen, Electrokinetics (Concepts)"},
+                        {"code":"BIO451-3","title":"MHD & Hartmann Flow (Optional Extension)"}
                     ]
                 },
+
                 {
                     "id": "D",
-                    "name": "Canonical Derivation Library",
+                    "name": "Canonical Derivation Library (Cross-Course)",
                     "lessons": [
                         {"code":"D1","title":"RTT: Finite → Differential"},
                         {"code":"D2","title":"Navier–Stokes from Cauchy Momentum"},
-                        {"code":"D3","title":"Bernoulli from NS"},
-                        {"code":"D4","title":"Blasius & Falkner–Skan"},
-                        {"code":"D5","title":"Stokes' First Problem"},
-                        {"code":"D6","title":"Hagen–Poiseuille"},
+                        {"code":"D3","title":"Bernoulli from NS (Assumption Audit)"},
+                        {"code":"D4","title":"Blasius & Falkner–Skan Reductions"},
+                        {"code":"D5","title":"Stokes' First Problem (Error-Function)"},
+                        {"code":"D6","title":"Hagen–Poiseuille Relation"},
                         {"code":"D7","title":"Potential Flow Around Cylinder & Kutta–Joukowski"},
                         {"code":"D8","title":"Orr–Sommerfeld Equation"},
                         {"code":"D9","title":"Normal/Oblique Shock Relations"},
                         {"code":"D10","title":"Lighthill's Acoustic Analogy"}
                     ]
                 },
+
                 {
                     "id": "A",
                     "name": "Reference Sheets",
                     "lessons": [
-                        {"code":"A1","title":"Coordinate Operators"},
-                        {"code":"A2","title":"Dimensionless Numbers"},
-                        {"code":"A3","title":"Fluid Properties (Ranges)"},
-                        {"code":"A4","title":"Common Assumptions & Breakdowns"}
+                        {"code":"A1","title":"Coordinate Operators & Identities"},
+                        {"code":"A2","title":"Dimensionless Numbers (Definitions & Ranges)"},
+                        {"code":"A3","title":"Common Assumptions & Where They Break"},
+                        {"code":"A4","title":"Fluid Properties (Typical Ranges)"}
                     ]
                 }
             ]
@@ -720,10 +735,12 @@
         // Helper functions for lesson content generation
         function getPrerequisites(lessonCode) {
             const prereqMap = {
-                'F3': 'M1, F1, F2',
-                'F4': 'M1, M2, F3',
-                'B1': 'F4, F6',
-                'T1': 'F4, B1',
+                'FD101-4': 'M1, M2, FD101-1, FD101-3',
+                'FD101-5': 'M1, M2, FD101-4',
+                'FD201-1': 'FD101-5, FD101-7',
+                'FD301-1': 'FD101-5, FD201-1',
+                'CF231-1': 'FD101-5, Thermodynamics',
+                'HMT241-1': 'FD101-5, Heat Transfer',
                 // Add more as needed
             };
             return prereqMap[lessonCode] || 'Basic calculus, vector analysis';
@@ -731,11 +748,23 @@
 
         function getOutcomes(lessonCode) {
             const outcomeMap = {
-                'F3': [
+                'FD101-4': [
                     'Apply conservation principles to finite control volumes',
                     'Derive integral momentum equation from first principles',
                     'Solve practical engineering problems using integral balances',
                     'Understand limitations and assumptions of integral approaches'
+                ],
+                'FD101-5': [
+                    'Derive continuity and Navier–Stokes equations',
+                    'Understand physical meaning of each term',
+                    'Apply appropriate boundary conditions',
+                    'Recognise when simplifications are valid'
+                ],
+                'FD201-1': [
+                    'Define boundary layer thickness measures',
+                    'Understand viscous vs inviscid flow regions',
+                    'Apply boundary layer approximations',
+                    'Estimate when boundary layer theory breaks down'
                 ],
                 // Add more lesson-specific outcomes
             };
@@ -749,9 +778,12 @@
 
         function getTags(lessonCode) {
             const tagMap = {
-                'F3': 'conservation, control volume, integral, momentum',
-                'F4': 'differential, Navier-Stokes, continuity, energy',
-                'B1': 'boundary layer, viscous, external flow',
+                'FD101-4': 'conservation, control volume, integral, momentum',
+                'FD101-5': 'differential, Navier-Stokes, continuity, energy',
+                'FD201-1': 'boundary layer, viscous, external flow',
+                'FD301-1': 'turbulence, Reynolds number, transition',
+                'CF231-1': 'compressible, thermodynamics, speed of sound',
+                'HMT241-1': 'energy equation, dissipation, heat transfer',
                 // Add more tags
             };
             return tagMap[lessonCode] || 'fundamental, theory, analysis';
@@ -759,15 +791,19 @@
 
         function getQuickTake(lessonCode) {
             const quickTakeMap = {
-                'F3': 'Conservation laws applied to finite control volumes give integral momentum and energy equations. Essential for analysing jets, wakes, and engineering devices where detailed flow structure is less important than overall balances.',
-                'F4': 'The differential forms of conservation laws—continuity, Navier–Stokes, and energy equations—govern fluid motion at every point. These PDEs form the foundation for all fluid mechanics analysis.',
+                'FD101-4': 'Conservation laws applied to finite control volumes give integral momentum and energy equations. Essential for analysing jets, wakes, and engineering devices where detailed flow structure is less important than overall balances.',
+                'FD101-5': 'The differential forms of conservation laws—continuity, Navier–Stokes, and energy equations—govern fluid motion at every point. These PDEs form the foundation for all fluid mechanics analysis.',
+                'FD201-1': 'Boundary layers are thin viscous regions near walls where velocity changes from zero to free-stream. Understanding thickness scales and approximations enables practical analysis of external flows.',
+                'FD301-1': 'Turbulence is irregular, three-dimensional, unsteady flow characterised by enhanced mixing and energy dissipation. Reynolds number and flow geometry determine onset and characteristics.',
+                'CF231-1': 'Compressible effects become important when flow speeds approach the speed of sound. Thermodynamic properties couple with fluid motion through pressure waves and density changes.',
+                'HMT241-1': 'Energy conservation in flowing fluids includes kinetic energy, internal energy, and viscous dissipation. Temperature fields couple with velocity through buoyancy and property variations.',
                 // Add more quick takes
             };
             return quickTakeMap[lessonCode] || 'Core concept in fluid mechanics with wide applications in engineering and natural phenomena.';
         }
 
         function getConcept(lessonCode) {
-            if (lessonCode === 'F3') {
+            if (lessonCode === 'FD101-4') {
                 return `
                     <p>The integral approach to fluid mechanics applies conservation principles to finite <strong>control volumes</strong> (CV) rather than infinitesimal fluid elements. This macroscopic viewpoint is particularly powerful for engineering applications.</p>
                     
@@ -784,11 +820,29 @@
                     $$\\frac{DB}{Dt} = \\frac{\\partial}{\\partial t} \\int_{CV} \\rho b \\, dV + \\int_{CS} \\rho b (\\vec{V} \\cdot \\hat{n}) \\, dA$$
                 `;
             }
+            if (lessonCode === 'FD101-5') {
+                return `
+                    <p>The differential forms of conservation laws govern fluid motion at every point in the flow field. These partial differential equations form the mathematical foundation for all fluid mechanics analysis.</p>
+                    
+                    <p><strong>Key assumptions for Navier–Stokes:</strong></p>
+                    <ul>
+                        <li>Continuum hypothesis</li>
+                        <li>Newtonian fluid (linear stress-strain relationship)</li>
+                        <li>Constant fluid properties (for incompressible form)</li>
+                        <li>No-slip boundary condition at solid walls</li>
+                    </ul>
+                    
+                    <p>The <strong>continuity equation</strong> expresses mass conservation:</p>
+                    $$\\frac{\\partial \\rho}{\\partial t} + \\nabla \\cdot (\\rho \\vec{V}) = 0$$
+                    
+                    <p>For incompressible flow: $\\nabla \\cdot \\vec{V} = 0$</p>
+                `;
+            }
             return '<p>Detailed concept explanation for this topic...</p>';
         }
 
         function getGoverningEquations(lessonCode) {
-            if (lessonCode === 'F3') {
+            if (lessonCode === 'FD101-4') {
                 return `
                     <p>Starting from Newton's second law for a system of particles:</p>
                     $$\\sum \\vec{F} = \\frac{D}{Dt} \\int_{sys} \\rho \\vec{V} \\, dV$$
@@ -797,11 +851,20 @@
                     $$\\sum \\vec{F} = \\frac{\\partial}{\\partial t} \\int_{CV} \\rho \\vec{V} \\, dV + \\int_{CS} \\rho \\vec{V} (\\vec{V} \\cdot \\hat{n}) \\, dA$$
                 `;
             }
+            if (lessonCode === 'FD101-5') {
+                return `
+                    <p>Starting from mass conservation and Cauchy's momentum equation:</p>
+                    $$\\frac{\\partial \\rho}{\\partial t} + \\nabla \\cdot (\\rho \\vec{V}) = 0$$
+                    $$\\rho \\frac{D\\vec{V}}{Dt} = \\rho \\vec{g} + \\nabla \\cdot \\boldsymbol{\\tau}$$
+                    
+                    <p>For Newtonian fluids: $\\boldsymbol{\\tau} = -p\\mathbf{I} + \\mu[\\nabla \\vec{V} + (\\nabla \\vec{V})^T] + \\lambda (\\nabla \\cdot \\vec{V})\\mathbf{I}$</p>
+                `;
+            }
             return '<p>Governing equations for this topic...</p>';
         }
 
         function getDerivationSteps(lessonCode) {
-            if (lessonCode === 'F3') {
+            if (lessonCode === 'FD101-4') {
                 return `
                     <ol>
                         <li><strong>Identify forces:</strong> Body forces ($\\int \\rho \\vec{g} \\, dV$) and surface forces ($\\int \\vec{T} \\, dA$)</li>
@@ -811,11 +874,22 @@
                     </ol>
                 `;
             }
+            if (lessonCode === 'FD101-5') {
+                return `
+                    <ol>
+                        <li><strong>Substitute stress tensor:</strong> Insert Newtonian constitutive relation into momentum equation</li>
+                        <li><strong>Expand material derivative:</strong> $\\frac{D\\vec{V}}{Dt} = \\frac{\\partial \\vec{V}}{\\partial t} + (\\vec{V} \\cdot \\nabla)\\vec{V}$</li>
+                        <li><strong>Incompressible assumption:</strong> $\\rho = $ constant, $\\nabla \\cdot \\vec{V} = 0$</li>
+                        <li><strong>Simplify viscous terms:</strong> $\\nabla \\cdot [\\nabla \\vec{V} + (\\nabla \\vec{V})^T] = \\nabla^2 \\vec{V}$ (for constant μ)</li>
+                        <li><strong>Final NS form:</strong> $\\rho[\\frac{\\partial \\vec{V}}{\\partial t} + (\\vec{V} \\cdot \\nabla)\\vec{V}] = -\\nabla p + \\mu \\nabla^2 \\vec{V} + \\rho \\vec{g}$</li>
+                    </ol>
+                `;
+            }
             return '<p>Step-by-step derivation...</p>';
         }
 
         function getResultAndValidity(lessonCode) {
-            if (lessonCode === 'F3') {
+            if (lessonCode === 'FD101-4') {
                 return `
                     <p><strong>Integral momentum equation:</strong></p>
                     $$\\sum \\vec{F} = \\sum \\dot{m}_{out} \\vec{V}_{out} - \\sum \\dot{m}_{in} \\vec{V}_{in}$$
@@ -830,11 +904,27 @@
                     <p><strong>Breaks down when:</strong> Significant viscous effects within CV, non-uniform velocity profiles, or accelerating reference frame.</p>
                 `;
             }
+            if (lessonCode === 'FD101-5') {
+                return `
+                    <p><strong>Incompressible Navier–Stokes equations:</strong></p>
+                    $$\\nabla \\cdot \\vec{V} = 0$$
+                    $$\\rho\\left[\\frac{\\partial \\vec{V}}{\\partial t} + (\\vec{V} \\cdot \\nabla)\\vec{V}\\right] = -\\nabla p + \\mu \\nabla^2 \\vec{V} + \\rho \\vec{g}$$
+                    
+                    <p><strong>Valid when:</strong></p>
+                    <ul>
+                        <li>Mach number $Ma < 0.3$ (density changes negligible)</li>
+                        <li>Newtonian fluid behaviour</li>
+                        <li>Constant fluid properties</li>
+                    </ul>
+                    
+                    <p><strong>Breaks down when:</strong> High-speed flows, non-Newtonian fluids, significant temperature variations, or rarefied gases.</p>
+                `;
+            }
             return '<p>Results and validity conditions...</p>';
         }
 
         function getWorkedExample(lessonCode) {
-            if (lessonCode === 'F3') {
+            if (lessonCode === 'FD101-4') {
                 return `
                     <p><strong>Problem.</strong> Water (ρ = 1000 kg/m³) flows through a reducing elbow from 10 cm diameter to 5 cm diameter. Inlet velocity is 2 m/s, inlet pressure 200 kPa. The elbow turns the flow 90°. Find the force required to hold the elbow in place.</p>
                     
@@ -850,12 +940,29 @@
                     <p>The elbow experiences forces of 1539 N leftward and 209 N downward, requiring equal and opposite reaction forces to remain stationary.</p>
                 `;
             }
+            if (lessonCode === 'FD101-5') {
+                return `
+                    <p><strong>Problem.</strong> Consider 2D steady flow between parallel plates separated by distance $h$. Upper plate moves at speed $U$, lower plate stationary. Find the velocity profile and shear stress distribution.</p>
+                    
+                    <p><strong>Solution.</strong></p>
+                    <ol>
+                        <li><strong>Geometry:</strong> $y \\in [0,h]$, flow in $x$-direction, $v = 0$, $\\frac{\\partial u}{\\partial x} = 0$</li>
+                        <li><strong>Continuity:</strong> $\\frac{\\partial u}{\\partial x} + \\frac{\\partial v}{\\partial y} = 0 \\Rightarrow \\frac{\\partial v}{\\partial y} = 0 \\Rightarrow v = 0$</li>
+                        <li><strong>x-momentum (no pressure gradient):</strong> $0 = \\mu \\frac{\\partial^2 u}{\\partial y^2}$</li>
+                        <li><strong>Integration:</strong> $u(y) = C_1 y + C_2$</li>
+                        <li><strong>Boundary conditions:</strong> $u(0) = 0$, $u(h) = U \\Rightarrow u(y) = \\frac{U y}{h}$</li>
+                        <li><strong>Shear stress:</strong> $\\tau_{yx} = \\mu \\frac{\\partial u}{\\partial y} = \\frac{\\mu U}{h}$ (constant)</li>
+                    </ol>
+                    
+                    <p>This linear Couette flow profile shows constant shear rate and uniform viscous stress throughout the gap.</p>
+                `;
+            }
             return '<p>Worked example for this topic...</p>';
         }
 
         function getCommonPitfalls(lessonCode) {
             const pitfallsMap = {
-                'F3': `
+                'FD101-4': `
                     <ul>
                         <li>Forgetting to include pressure forces on control volume surfaces</li>
                         <li>Sign errors in momentum flux terms (inlet vs outlet convention)</li>
@@ -864,18 +971,35 @@
                         <li>Confusing gauge vs absolute pressure in force calculations</li>
                     </ul>
                 `,
+                'FD101-5': `
+                    <ul>
+                        <li>Forgetting the material derivative includes convective acceleration</li>
+                        <li>Applying incompressible form to high-speed flows (Ma > 0.3)</li>
+                        <li>Incorrect boundary condition specification (especially no-slip)</li>
+                        <li>Dimensional inconsistency in pressure gradient terms</li>
+                        <li>Assuming steady flow when unsteady effects are significant</li>
+                    </ul>
+                `,
             };
             return pitfallsMap[lessonCode] || '<ul><li>Common conceptual misunderstandings</li><li>Mathematical errors in derivations</li><li>Incorrect application of assumptions</li></ul>';
         }
 
         function getConnections(lessonCode) {
             const connectionsMap = {
-                'F3': `
+                'FD101-4': `
                     <ul>
-                        <li><strong>F4:</strong> Differential forms derive from integral principles</li>
-                        <li><strong>I4:</strong> Minor losses analysed using momentum balances</li>
-                        <li><strong>B5:</strong> Drag calculations via momentum deficit in wakes</li>
+                        <li><strong>FD101-5:</strong> Differential forms derive from integral principles</li>
+                        <li><strong>FD201-7:</strong> Minor losses analysed using momentum balances</li>
+                        <li><strong>FD201-5:</strong> Drag calculations via momentum deficit in wakes</li>
                         <li><strong>D1:</strong> RTT derivation from finite to differential</li>
+                    </ul>
+                `,
+                'FD101-5': `
+                    <ul>
+                        <li><strong>FD101-4:</strong> Integral forms provide physical foundation</li>
+                        <li><strong>FD101-7:</strong> Exact solutions demonstrate NS equation applications</li>
+                        <li><strong>FD201-1:</strong> Boundary layer theory builds on NS equations</li>
+                        <li><strong>D2:</strong> Complete derivation from Cauchy momentum principle</li>
                     </ul>
                 `,
             };
@@ -908,10 +1032,17 @@
 
         function getKeyEquations(lessonCode) {
             const equationsMap = {
-                'F3': `
+                'FD101-4': `
                     <ul>
                         <li>$\\sum \\vec{F} = \\sum \\dot{m}_{out} \\vec{V}_{out} - \\sum \\dot{m}_{in} \\vec{V}_{in}$ — Integral momentum equation for steady flow</li>
                         <li>$\\frac{DB}{Dt} = \\frac{\\partial}{\\partial t} \\int_{CV} \\rho b \\, dV + \\int_{CS} \\rho b (\\vec{V} \\cdot \\hat{n}) \\, dA$ — Reynolds Transport Theorem</li>
+                    </ul>
+                `,
+                'FD101-5': `
+                    <ul>
+                        <li>$\\nabla \\cdot \\vec{V} = 0$ — Incompressible continuity equation</li>
+                        <li>$\\rho[\\frac{\\partial \\vec{V}}{\\partial t} + (\\vec{V} \\cdot \\nabla)\\vec{V}] = -\\nabla p + \\mu \\nabla^2 \\vec{V} + \\rho \\vec{g}$ — Incompressible Navier–Stokes</li>
+                        <li>$\\frac{D\\vec{V}}{Dt} = \\frac{\\partial \\vec{V}}{\\partial t} + (\\vec{V} \\cdot \\nabla)\\vec{V}$ — Material derivative</li>
                     </ul>
                 `,
             };
