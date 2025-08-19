@@ -395,20 +395,17 @@
             font-size: 1.3em;
             font-weight: 600;
             margin-bottom: 24px;
-            margin-left: 48px;
             padding-bottom: 12px;
             border-bottom: 2px solid #e5e7eb;
             font-family: 'Georgia', serif;
-            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
         .concept-block h3::before {
             content: counter(concept-counter);
             counter-increment: concept-counter;
-            position: absolute;
-            left: -48px;
-            top: 50%;
-            transform: translateY(-50%);
             width: 32px;
             height: 32px;
             background: #374151;
@@ -421,13 +418,14 @@
             font-weight: 600;
             border: 3px solid white;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
         }
 
         .concept-block h4 {
             color: #374151;
             font-size: 1.15em;
             font-weight: 600;
-            margin: 28px 0 16px 48px;
+            margin: 28px 0 16px 0;
             padding: 12px 20px;
             background: #f9fafb;
             border-left: 4px solid #6b7280;
@@ -440,12 +438,11 @@
             font-size: 1.05em;
             line-height: 1.7;
             margin-bottom: 20px;
-            margin-left: 48px;
             text-align: justify;
         }
 
         .concept-block ul, .concept-block ol {
-            margin: 20px 0 20px 80px;
+            margin: 20px 0 20px 32px;
         }
 
         .concept-block li {
