@@ -1205,11 +1205,6 @@
                             <div class="academic-text">
                                 ${getDerivationSteps(lesson.code)}
                             </div>
-                            
-                            <h3>Result & Validity</h3>
-                            <div class="academic-text">
-                                ${getResultAndValidity(lesson.code)}
-                            </div>
                         </div>
                     </details>
 
@@ -1261,7 +1256,6 @@
                             <li><strong>Material Derivative:</strong> How to track changes in fluid particle properties as they move through space</li>
                             <li><strong>Stress Tensor:</strong> Understanding the mathematical description of forces within fluids</li>
                         </ol>
-                        <p><em>Prerequisites:</em> Multivariable calculus, partial derivatives, basic vector operations</p>
                     </div>
 
                     <div class="concept-block">
@@ -1405,9 +1399,7 @@
             return '<p>Step-by-step derivation...</p>';
         }
 
-        function getResultAndValidity(lessonCode) {
-            return '<p>Results and validity conditions...</p>';
-        }
+
 
         function getWorkedExample(lessonCode) {
             if (lessonCode === 'M1') {
