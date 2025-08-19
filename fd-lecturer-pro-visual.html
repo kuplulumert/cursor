@@ -436,46 +436,57 @@
             font-weight: 600;
         }
 
-        .visual-diagram {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
+        .academic-figure {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
             padding: 24px;
-            margin: 24px 0;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 0.9em;
-            line-height: 1.4;
+            margin: 32px 0;
             text-align: center;
-            color: #374151;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
-        .visual-diagram .title {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        .figure-title {
+            font-family: 'Georgia', serif;
             font-weight: 600;
             margin-bottom: 16px;
             color: #1f2937;
             font-size: 1em;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 8px;
         }
 
-        .emoji-visual {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-            font-size: 1.5em;
-            line-height: 1.6;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .emoji-visual .caption {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            font-size: 0.7em;
+        .figure-caption {
+            font-family: 'Georgia', serif;
+            font-size: 0.9em;
             color: #6b7280;
             margin-top: 12px;
             font-style: italic;
+            text-align: center;
+        }
+
+        .svg-container {
+            margin: 16px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .concept-visual {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .concept-visual .title {
+            font-family: 'Georgia', serif;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1f2937;
+            font-size: 0.95em;
         }
 
         .subsection-break {
@@ -1317,9 +1328,29 @@
                         <h4>Scalars: Just a Number</h4>
                         <p>A scalar is a quantity defined by a single value, or <strong>magnitude</strong>, at any point in space and time.</p>
                         
-                        <div class="emoji-visual">
-                            🌡️ 20°C
-                            <div class="caption">Temperature at a point - just one number</div>
+                        <div class="academic-figure">
+                            <div class="figure-title">Figure 1.1: Scalar Field Representation</div>
+                            <div class="svg-container">
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <!-- Temperature contours -->
+                                    <defs>
+                                        <linearGradient id="tempGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3" />
+                                            <stop offset="50%" style="stop-color:#fbbf24;stop-opacity:0.3" />
+                                            <stop offset="100%" style="stop-color:#ef4444;stop-opacity:0.3" />
+                                        </linearGradient>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#tempGrad)" />
+                                    <!-- Temperature labels -->
+                                    <text x="30" y="100" font-family="Georgia" font-size="14" fill="#1f2937">15°C</text>
+                                    <text x="150" y="100" font-family="Georgia" font-size="14" fill="#1f2937">20°C</text>
+                                    <text x="270" y="100" font-family="Georgia" font-size="14" fill="#1f2937">25°C</text>
+                                    <!-- Point markers -->
+                                    <circle cx="150" cy="100" r="4" fill="#1f2937"/>
+                                    <text x="155" y="85" font-family="Georgia" font-size="12" fill="#1f2937">Point P</text>
+                                </svg>
+                            </div>
+                            <div class="figure-caption">Scalar field: temperature varies spatially, but at any point P, it's just one value</div>
                         </div>
                         
                         <ul>
@@ -1332,18 +1363,48 @@
                         <h4>Vectors: Magnitude and Direction</h4>
                         <p>A vector describes a quantity that has both a magnitude and a direction.</p>
                         
-                        <div class="visual-diagram">
-                            <div class="title">Vector Example: Wind Velocity</div>
-                            <pre>
-        💨 Wind: 5 m/s
-           ↗️
-          /
-         /
-        🏠 ← You are here
-        
-        Vector = Magnitude + Direction
-        |V| = 5 m/s, θ = 45° northeast
-                            </pre>
+                        <div class="academic-figure">
+                            <div class="figure-title">Figure 1.2: Vector Field Representation</div>
+                            <div class="svg-container">
+                                <svg width="350" height="250" viewBox="0 0 350 250">
+                                    <!-- Grid -->
+                                    <defs>
+                                        <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+                                            <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#e5e7eb" stroke-width="0.5"/>
+                                        </pattern>
+                                        <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+                                                refX="9" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="#374151" />
+                                        </marker>
+                                    </defs>
+                                    <rect width="350" height="250" fill="url(#grid)" />
+                                    
+                                    <!-- Velocity vectors at different points -->
+                                    <g stroke="#374151" stroke-width="2" fill="none" marker-end="url(#arrowhead)">
+                                        <line x1="50" y1="80" x2="90" y2="60" />
+                                        <line x1="120" y1="80" x2="170" y2="50" />
+                                        <line x1="200" y1="80" x2="240" y2="70" />
+                                        <line x1="50" y1="150" x2="85" y2="130" />
+                                        <line x1="120" y1="150" x2="160" y2="120" />
+                                        <line x1="200" y1="150" x2="235" y2="140" />
+                                    </g>
+                                    
+                                    <!-- Point labels -->
+                                    <circle cx="120" cy="150" r="3" fill="#ef4444"/>
+                                    <text x="125" y="170" font-family="Georgia" font-size="12" fill="#1f2937">Point P</text>
+                                    <text x="125" y="185" font-family="Georgia" font-size="11" fill="#6b7280">|V| = 4.2 m/s</text>
+                                    <text x="125" y="198" font-family="Georgia" font-size="11" fill="#6b7280">θ = 32°</text>
+                                    
+                                    <!-- Coordinate system -->
+                                    <g stroke="#6b7280" stroke-width="1" fill="none" marker-end="url(#arrowhead)">
+                                        <line x1="20" y1="220" x2="50" y2="220" />
+                                        <line x1="20" y1="220" x2="20" y2="190" />
+                                    </g>
+                                    <text x="55" y="225" font-family="Georgia" font-size="11" fill="#6b7280">x</text>
+                                    <text x="15" y="185" font-family="Georgia" font-size="11" fill="#6b7280">y</text>
+                                </svg>
+                            </div>
+                            <div class="figure-caption">Vector field: each arrow shows both magnitude (length) and direction at that point</div>
                         </div>
                         
                         <ul>
@@ -1357,21 +1418,57 @@
                         <h4>Tensors: Handling Complex, Directional Relationships</h4>
                         <p>A second-rank tensor is a more complex object used to describe properties that have different values depending on the direction you're looking at.</p>
                         
-                        <div class="visual-diagram">
-                            <div class="title">Jell-O Cube Stress Tensor</div>
-                            <pre>
-        Different forces on each face:
-        
-            ↑ τ_yy (normal)
-            |
-        ←---[🟩]---→ τ_xx (normal)
-            |
-            ↓
-            
-        Also: τ_xy, τ_yx (shear forces)
-        
-        Tensor = All forces on all faces
-                            </pre>
+                        <div class="academic-figure">
+                            <div class="figure-title">Figure 1.3: Stress Tensor Components on a Fluid Element</div>
+                            <div class="svg-container">
+                                <svg width="400" height="300" viewBox="0 0 400 300">
+                                    <!-- 3D cube representation -->
+                                    <defs>
+                                        <marker id="forceArrow" markerWidth="8" markerHeight="6" 
+                                                refX="7" refY="3" orient="auto">
+                                            <polygon points="0 0, 8 3, 0 6" fill="#ef4444" />
+                                        </marker>
+                                        <marker id="shearArrow" markerWidth="8" markerHeight="6" 
+                                                refX="7" refY="3" orient="auto">
+                                            <polygon points="0 0, 8 3, 0 6" fill="#3b82f6" />
+                                        </marker>
+                                    </defs>
+                                    
+                                    <!-- Cube faces -->
+                                    <path d="M 100 100 L 200 100 L 200 200 L 100 200 Z" fill="#f8fafc" stroke="#374151" stroke-width="2"/>
+                                    <path d="M 200 100 L 250 50 L 250 150 L 200 200 Z" fill="#edf2f7" stroke="#374151" stroke-width="2"/>
+                                    <path d="M 100 100 L 150 50 L 250 50 L 200 100 Z" fill="#e2e8f0" stroke="#374151" stroke-width="2"/>
+                                    
+                                    <!-- Normal stresses -->
+                                    <g stroke="#ef4444" stroke-width="2" fill="none" marker-end="url(#forceArrow)">
+                                        <line x1="150" y1="80" x2="150" y2="40" />
+                                        <line x1="150" y1="220" x2="150" y2="260" />
+                                        <line x1="80" y1="150" x2="40" y2="150" />
+                                        <line x1="220" y1="150" x2="260" y2="150" />
+                                    </g>
+                                    
+                                    <!-- Shear stresses -->
+                                    <g stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#shearArrow)">
+                                        <line x1="120" y1="85" x2="140" y2="85" />
+                                        <line x1="180" y1="85" x2="160" y2="85" />
+                                        <line x1="85" y1="120" x2="85" y2="140" />
+                                        <line x1="85" y1="180" x2="85" y2="160" />
+                                    </g>
+                                    
+                                    <!-- Labels -->
+                                    <text x="155" y="35" font-family="Georgia" font-size="12" fill="#ef4444">τ_yy</text>
+                                    <text x="155" y="275" font-family="Georgia" font-size="12" fill="#ef4444">τ_yy</text>
+                                    <text x="25" y="155" font-family="Georgia" font-size="12" fill="#ef4444">τ_xx</text>
+                                    <text x="270" y="155" font-family="Georgia" font-size="12" fill="#ef4444">τ_xx</text>
+                                    <text x="145" y="80" font-family="Georgia" font-size="11" fill="#3b82f6">τ_xy</text>
+                                    <text x="70" y="135" font-family="Georgia" font-size="11" fill="#3b82f6">τ_yx</text>
+                                    
+                                    <!-- Legend -->
+                                    <text x="280" y="220" font-family="Georgia" font-size="11" fill="#ef4444">— Normal stress</text>
+                                    <text x="280" y="240" font-family="Georgia" font-size="11" fill="#3b82f6">— Shear stress</text>
+                                </svg>
+                            </div>
+                            <div class="figure-caption">Stress tensor τ<sub>ij</sub>: normal stresses (red) act perpendicular to faces, shear stresses (blue) act tangentially</div>
                         </div>
                         
                         <ul>
@@ -1394,10 +1491,25 @@
                         <h3>The Operator Toolkit: The Flow Inspector's $\\nabla$</h3>
                         <p>The <strong>Del operator ($\\nabla$)</strong> is a single, powerful tool that acts like a flow inspector's complete toolkit. It's designed to answer one basic question in three different ways: <strong>"How is a fluid property changing as I move away from this exact spot?"</strong></p>
                         
-                        <div class="emoji-visual">
-                            🧰 ∇ = Swiss Army Knife
-                            🔧 Gradient | 📊 Divergence | 🌪️ Curl
-                            <div class="caption">Three tools in one operator</div>
+                        <div class="concept-visual">
+                            <div class="title">Del Operator: Three Tools in One</div>
+                            <div style="display: flex; justify-content: space-around; align-items: center; margin: 16px 0;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 2em;">🔧</div>
+                                    <div style="font-size: 0.9em; margin-top: 4px;">∇f</div>
+                                    <div style="font-size: 0.8em; color: #6b7280;">Gradient</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 2em;">📊</div>
+                                    <div style="font-size: 0.9em; margin-top: 4px;">∇·V</div>
+                                    <div style="font-size: 0.8em; color: #6b7280;">Divergence</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 2em;">🌪️</div>
+                                    <div style="font-size: 0.9em; margin-top: 4px;">∇×V</div>
+                                    <div style="font-size: 0.8em; color: #6b7280;">Curl</div>
+                                </div>
+                            </div>
                         </div>
                         
                         <p>Your toolkit ($\\nabla$) has three main functions, each answering a different kind of question about the flow.</p>
@@ -1405,20 +1517,61 @@
                         <h4>1. The Gradient ($\\nabla$): The "Steepness Detector"</h4>
                         <p>This tool measures how fast a <strong>scalar property</strong> (like pressure) is changing and finds the direction of the steepest change.</p>
                         
-                        <div class="visual-diagram">
-                            <div class="title">Pressure Hill in Fog</div>
-                            <pre>
-        High Pressure ⛰️
-             /\\
-            /  \\
-           /    \\  ∇p points ↗️ uphill
-          /      \\
-         /        \\
-        🌫️ You    🌫️  Low Pressure
-        
-        Gradient = Magic compass pointing uphill
-        Fluid flows DOWNHILL (opposite direction)
-                            </pre>
+                        <div class="academic-figure">
+                            <div class="figure-title">Figure 1.4: Pressure Gradient and Flow Direction</div>
+                            <div class="svg-container">
+                                <svg width="400" height="280" viewBox="0 0 400 280">
+                                    <!-- Pressure contours -->
+                                    <defs>
+                                        <radialGradient id="pressureGrad" cx="80%" cy="30%">
+                                            <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.8" />
+                                            <stop offset="30%" style="stop-color:#f59e0b;stop-opacity:0.6" />
+                                            <stop offset="60%" style="stop-color:#eab308;stop-opacity:0.4" />
+                                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0.3" />
+                                        </radialGradient>
+                                        <marker id="gradArrow" markerWidth="10" markerHeight="7" 
+                                                refX="9" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="#16a34a" />
+                                        </marker>
+                                        <marker id="flowArrow" markerWidth="10" markerHeight="7" 
+                                                refX="9" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="#dc2626" />
+                                        </marker>
+                                    </defs>
+                                    
+                                    <!-- Background pressure field -->
+                                    <rect width="400" height="280" fill="url(#pressureGrad)" />
+                                    
+                                    <!-- Pressure contour lines -->
+                                    <g fill="none" stroke="#374151" stroke-width="1" opacity="0.6">
+                                        <ellipse cx="320" cy="80" rx="60" ry="40" />
+                                        <ellipse cx="320" cy="80" rx="100" ry="70" />
+                                        <ellipse cx="320" cy="80" rx="140" ry="100" />
+                                        <ellipse cx="320" cy="80" rx="180" ry="130" />
+                                    </g>
+                                    
+                                    <!-- Pressure labels -->
+                                    <text x="325" y="50" font-family="Georgia" font-size="12" fill="#1f2937" text-anchor="middle">High P</text>
+                                    <text x="50" y="200" font-family="Georgia" font-size="12" fill="#1f2937" text-anchor="middle">Low P</text>
+                                    
+                                    <!-- Gradient vector (pointing uphill) -->
+                                    <g stroke="#16a34a" stroke-width="3" fill="none" marker-end="url(#gradArrow)">
+                                        <line x1="200" y1="150" x2="260" y2="110" />
+                                    </g>
+                                    <text x="240" y="135" font-family="Georgia" font-size="11" fill="#16a34a">∇p</text>
+                                    
+                                    <!-- Flow direction (opposite to gradient) -->
+                                    <g stroke="#dc2626" stroke-width="3" fill="none" marker-end="url(#flowArrow)">
+                                        <line x1="200" y1="150" x2="140" y2="190" />
+                                    </g>
+                                    <text x="160" y="175" font-family="Georgia" font-size="11" fill="#dc2626">Flow</text>
+                                    
+                                    <!-- Point marker -->
+                                    <circle cx="200" cy="150" r="4" fill="#1f2937"/>
+                                    <text x="205" y="145" font-family="Georgia" font-size="11" fill="#1f2937">You</text>
+                                </svg>
+                            </div>
+                            <div class="figure-caption">Gradient ∇p points toward increasing pressure (uphill), but fluid flows downhill (opposite direction)</div>
                         </div>
                         
                         <ul>
@@ -1432,20 +1585,65 @@
                         <h4>2. The Divergence ($\\nabla \\cdot$): The "Source & Drain Finder"</h4>
                         <p>This tool measures whether a <strong>vector property</strong> (like velocity) is spreading out from or bunching up into a point.</p>
                         
-                        <div class="visual-diagram">
-                            <div class="title">Sources and Drains</div>
-                            <pre>
-        POSITIVE Divergence     NEGATIVE Divergence
-        (Source/Sprinkler)      (Sink/Drain)
-        
-           💧→  →💧               💧
-              ↘ ↗                 ↘ ↗
-           💧   🚿   💧              🕳️
-              ↙ ↖                 ↙ ↖
-           💧←  ←💧               💧
-           
-        Fluid spreading OUT     Fluid bunching IN
-                            </pre>
+                        <div class="academic-figure">
+                            <div class="figure-title">Figure 1.5: Divergence - Source and Sink Flows</div>
+                            <div class="svg-container">
+                                <svg width="450" height="200" viewBox="0 0 450 200">
+                                    <defs>
+                                        <marker id="divArrow" markerWidth="8" markerHeight="6" 
+                                                refX="7" refY="3" orient="auto">
+                                            <polygon points="0 0, 8 3, 0 6" fill="#3b82f6" />
+                                        </marker>
+                                    </defs>
+                                    
+                                    <!-- Left side: Source (positive divergence) -->
+                                    <g transform="translate(50, 50)">
+                                        <text x="50" y="15" font-family="Georgia" font-size="14" fill="#1f2937" text-anchor="middle">Positive Divergence</text>
+                                        <text x="50" y="30" font-family="Georgia" font-size="12" fill="#6b7280" text-anchor="middle">∇·V > 0 (Source)</text>
+                                        
+                                        <!-- Central source point -->
+                                        <circle cx="50" cy="75" r="6" fill="#ef4444"/>
+                                        
+                                        <!-- Outward flowing vectors -->
+                                        <g stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#divArrow)">
+                                            <line x1="50" y1="75" x2="85" y2="75" />
+                                            <line x1="50" y1="75" x2="25" y2="50" />
+                                            <line x1="50" y1="75" x2="75" y2="50" />
+                                            <line x1="50" y1="75" x2="25" y2="100" />
+                                            <line x1="50" y1="75" x2="75" y2="100" />
+                                            <line x1="50" y1="75" x2="15" y2="75" />
+                                            <line x1="50" y1="75" x2="50" y2="45" />
+                                            <line x1="50" y1="75" x2="50" y2="105" />
+                                        </g>
+                                        
+                                        <text x="50" y="130" font-family="Georgia" font-size="11" fill="#6b7280" text-anchor="middle">Fluid spreading out</text>
+                                    </g>
+                                    
+                                    <!-- Right side: Sink (negative divergence) -->
+                                    <g transform="translate(250, 50)">
+                                        <text x="50" y="15" font-family="Georgia" font-size="14" fill="#1f2937" text-anchor="middle">Negative Divergence</text>
+                                        <text x="50" y="30" font-family="Georgia" font-size="12" fill="#6b7280" text-anchor="middle">∇·V < 0 (Sink)</text>
+                                        
+                                        <!-- Central sink point -->
+                                        <circle cx="50" cy="75" r="6" fill="#1f2937"/>
+                                        
+                                        <!-- Inward flowing vectors -->
+                                        <g stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#divArrow)">
+                                            <line x1="85" y1="75" x2="56" y2="75" />
+                                            <line x1="75" y1="50" x2="54" y2="71" />
+                                            <line x1="25" y1="50" x2="46" y2="71" />
+                                            <line x1="75" y1="100" x2="54" y2="79" />
+                                            <line x1="25" y1="100" x2="46" y2="79" />
+                                            <line x1="15" y1="75" x2="44" y2="75" />
+                                            <line x1="50" y1="45" x2="50" y2="69" />
+                                            <line x1="50" y1="105" x2="50" y2="81" />
+                                        </g>
+                                        
+                                        <text x="50" y="130" font-family="Georgia" font-size="11" fill="#6b7280" text-anchor="middle">Fluid converging in</text>
+                                    </g>
+                                </svg>
+                            </div>
+                            <div class="figure-caption">Left: source creates outward flow (∇·V > 0). Right: sink creates inward flow (∇·V < 0)</div>
                         </div>
                         
                         <ul>
@@ -1459,18 +1657,86 @@
                         <h4>3. The Curl ($\\nabla \\times$): The "Vortex Meter"</h4>
                         <p>This tool measures the local spinning or rotational motion of the <strong>vector property</strong> (like velocity).</p>
                         
-                        <div class="visual-diagram">
-                            <div class="title">Pinwheel in Flow</div>
-                            <pre>
-        Smooth Flow (No Curl)    Swirling Flow (High Curl)
-        
-        →→→→→→→                    ↗️→↘️
-        →→🎯→→                    ↑ 🌀 ↓
-        →→→→→→→                    ↖️←↙️
-        
-        Pinwheel stays still     Pinwheel spins fast!
-        ∇×V = 0                  ∇×V ≠ 0
-                            </pre>
+                        <div class="academic-figure">
+                            <div class="figure-title">Figure 1.6: Curl - Rotational vs. Non-rotational Flow</div>
+                            <div class="svg-container">
+                                <svg width="500" height="220" viewBox="0 0 500 220">
+                                    <defs>
+                                        <marker id="curlArrow" markerWidth="8" markerHeight="6" 
+                                                refX="7" refY="3" orient="auto">
+                                            <polygon points="0 0, 8 3, 0 6" fill="#7c3aed" />
+                                        </marker>
+                                    </defs>
+                                    
+                                    <!-- Left side: No rotation -->
+                                    <g transform="translate(30, 30)">
+                                        <text x="80" y="15" font-family="Georgia" font-size="14" fill="#1f2937" text-anchor="middle">No Rotation</text>
+                                        <text x="80" y="30" font-family="Georgia" font-size="12" fill="#6b7280" text-anchor="middle">∇×V = 0</text>
+                                        
+                                        <!-- Uniform flow vectors -->
+                                        <g stroke="#7c3aed" stroke-width="2" fill="none" marker-end="url(#curlArrow)">
+                                            <line x1="20" y1="60" x2="50" y2="60" />
+                                            <line x1="20" y1="80" x2="50" y2="80" />
+                                            <line x1="20" y1="100" x2="50" y2="100" />
+                                            <line x1="20" y1="120" x2="50" y2="120" />
+                                            
+                                            <line x1="70" y1="60" x2="100" y2="60" />
+                                            <line x1="70" y1="80" x2="100" y2="80" />
+                                            <line x1="70" y1="100" x2="100" y2="100" />
+                                            <line x1="70" y1="120" x2="100" y2="120" />
+                                            
+                                            <line x1="120" y1="60" x2="150" y2="60" />
+                                            <line x1="120" y1="80" x2="150" y2="80" />
+                                            <line x1="120" y1="100" x2="150" y2="100" />
+                                            <line x1="120" y1="120" x2="150" y2="120" />
+                                        </g>
+                                        
+                                        <!-- Pinwheel (not rotating) -->
+                                        <g transform="translate(80, 90)">
+                                            <circle cx="0" cy="0" r="8" fill="none" stroke="#374151" stroke-width="1"/>
+                                            <line x1="-6" y1="0" x2="6" y2="0" stroke="#374151" stroke-width="1"/>
+                                            <line x1="0" y1="-6" x2="0" y2="6" stroke="#374151" stroke-width="1"/>
+                                        </g>
+                                        
+                                        <text x="80" y="150" font-family="Georgia" font-size="11" fill="#6b7280" text-anchor="middle">Pinwheel stationary</text>
+                                    </g>
+                                    
+                                    <!-- Right side: Rotation -->
+                                    <g transform="translate(280, 30)">
+                                        <text x="80" y="15" font-family="Georgia" font-size="14" fill="#1f2937" text-anchor="middle">Rotation Present</text>
+                                        <text x="80" y="30" font-family="Georgia" font-size="12" fill="#6b7280" text-anchor="middle">∇×V ≠ 0</text>
+                                        
+                                        <!-- Circular flow vectors -->
+                                        <g stroke="#7c3aed" stroke-width="2" fill="none" marker-end="url(#curlArrow)">
+                                            <!-- Top row -->
+                                            <line x1="40" y1="50" x2="60" y2="45" />
+                                            <line x1="80" y1="45" x2="100" y2="50" />
+                                            <line x1="120" y1="50" x2="125" y2="70" />
+                                            
+                                            <!-- Middle rows -->
+                                            <line x1="130" y1="90" x2="125" y2="110" />
+                                            <line x1="120" y1="130" x2="100" y2="135" />
+                                            <line x1="80" y1="140" x2="60" y2="135" />
+                                            <line x1="40" y1="130" x2="35" y2="110" />
+                                            <line x1="30" y1="90" x2="35" y2="70" />
+                                        </g>
+                                        
+                                        <!-- Pinwheel (rotating) -->
+                                        <g transform="translate(80, 90) rotate(45)">
+                                            <circle cx="0" cy="0" r="8" fill="none" stroke="#374151" stroke-width="1"/>
+                                            <line x1="-6" y1="0" x2="6" y2="0" stroke="#374151" stroke-width="1"/>
+                                            <line x1="0" y1="-6" x2="0" y2="6" stroke="#374151" stroke-width="1"/>
+                                        </g>
+                                        
+                                        <!-- Rotation indicator -->
+                                        <path d="M 65 75 A 15 15 0 1 1 95 105" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#curlArrow)"/>
+                                        <text x="110" y="95" font-family="Georgia" font-size="10" fill="#ef4444">ω</text>
+                                        
+                                        <text x="80" y="150" font-family="Georgia" font-size="11" fill="#6b7280" text-anchor="middle">Pinwheel spinning</text>
+                                    </g>
+                                </svg>
+                            </div>
+                            <div class="figure-caption">Left: uniform flow has zero curl. Right: circular flow creates vorticity (ω = ∇×V)</div>
                         </div>
                         
                         <ul>
@@ -1484,21 +1750,68 @@
                         <h3>Following the Flow: The Material Derivative</h3>
                         <p>How does a property of a fluid particle (like its temperature or velocity) change over time? We need to account for two effects.</p>
                         
-                        <div class="visual-diagram">
-                            <div class="title">Car on Mountain with Thermometer</div>
-                            <pre>
-        🏔️ Cold Mountain Top
-           /\\
-          /  \\  ← Cold front moving in
-         /    \\    (Local change)
-        /  🚗  \\
-       /   📊   \\  ← Car moving up
-      /          \\   (Convective change)
-     🌡️ Warm    🌡️
-     
-     Total temperature change = 
-     Local + Convective
-                            </pre>
+                        <div class="academic-figure">
+                            <div class="figure-title">Figure 1.7: Material Derivative - Local vs. Convective Changes</div>
+                            <div class="svg-container">
+                                <svg width="500" height="300" viewBox="0 0 500 300">
+                                    <defs>
+                                        <linearGradient id="mountainGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                                            <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.8" />
+                                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0.8" />
+                                        </linearGradient>
+                                        <marker id="motionArrow" markerWidth="10" markerHeight="7" 
+                                                refX="9" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="#dc2626" />
+                                        </marker>
+                                        <marker id="timeArrow" markerWidth="10" markerHeight="7" 
+                                                refX="9" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed" />
+                                        </marker>
+                                    </defs>
+                                    
+                                    <!-- Mountain profile -->
+                                    <path d="M 50 250 Q 150 100 250 150 Q 350 50 450 200" fill="url(#mountainGrad)" stroke="#374151" stroke-width="2"/>
+                                    
+                                    <!-- Temperature labels -->
+                                    <text x="80" y="240" font-family="Georgia" font-size="12" fill="#1f2937">25°C</text>
+                                    <text x="350" y="70" font-family="Georgia" font-size="12" fill="#1f2937">5°C</text>
+                                    
+                                    <!-- Car at two time points -->
+                                    <g transform="translate(120, 180)">
+                                        <rect x="-8" y="-4" width="16" height="8" fill="#374151" rx="2"/>
+                                        <circle cx="-6" cy="4" r="2" fill="#6b7280"/>
+                                        <circle cx="6" cy="4" r="2" fill="#6b7280"/>
+                                        <text x="0" y="-12" font-family="Georgia" font-size="10" fill="#1f2937" text-anchor="middle">t₁</text>
+                                        <text x="0" y="20" font-family="Georgia" font-size="10" fill="#1f2937" text-anchor="middle">T = 20°C</text>
+                                    </g>
+                                    
+                                    <g transform="translate(280, 120)">
+                                        <rect x="-8" y="-4" width="16" height="8" fill="#374151" rx="2"/>
+                                        <circle cx="-6" cy="4" r="2" fill="#6b7280"/>
+                                        <circle cx="6" cy="4" r="2" fill="#6b7280"/>
+                                        <text x="0" y="-12" font-family="Georgia" font-size="10" fill="#1f2937" text-anchor="middle">t₂</text>
+                                        <text x="0" y="20" font-family="Georgia" font-size="10" fill="#1f2937" text-anchor="middle">T = 12°C</text>
+                                    </g>
+                                    
+                                    <!-- Motion arrow -->
+                                    <g stroke="#dc2626" stroke-width="3" fill="none" marker-end="url(#motionArrow)">
+                                        <line x1="140" y1="170" x2="260" y2="130" />
+                                    </g>
+                                    <text x="200" y="145" font-family="Georgia" font-size="11" fill="#dc2626" text-anchor="middle">Motion (Convective)</text>
+                                    
+                                    <!-- Cold front arrow -->
+                                    <g stroke="#7c3aed" stroke-width="2" fill="none" marker-end="url(#timeArrow)">
+                                        <line x1="50" y1="50" x2="150" y2="50" />
+                                    </g>
+                                    <text x="100" y="45" font-family="Georgia" font-size="11" fill="#7c3aed" text-anchor="middle">Cold Front (Local)</text>
+                                    
+                                    <!-- Equation breakdown -->
+                                    <text x="250" y="280" font-family="Georgia" font-size="12" fill="#1f2937" text-anchor="middle">DT/Dt = ∂T/∂t + (V·∇)T</text>
+                                    <text x="150" y="270" font-family="Georgia" font-size="10" fill="#7c3aed" text-anchor="middle">Local</text>
+                                    <text x="350" y="270" font-family="Georgia" font-size="10" fill="#dc2626" text-anchor="middle">Convective</text>
+                                </svg>
+                            </div>
+                            <div class="figure-caption">Material derivative combines local changes (cold front) and convective changes (car moving uphill)</div>
                         </div>
                         
                         <ul>
