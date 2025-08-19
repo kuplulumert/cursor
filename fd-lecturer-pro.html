@@ -38,7 +38,7 @@
         }
 
         .sidebar {
-            width: 280px;
+            width: 320px;
             background: #f8fafc;
             border-right: 1px solid #e2e8f0;
             overflow-y: auto;
@@ -50,106 +50,99 @@
         }
 
         .sidebar-header {
-            padding: 16px;
+            padding: 20px;
             background: white;
             border-bottom: 1px solid #e2e8f0;
         }
 
         .sidebar-header h1 {
-            font-size: 1.2em;
+            font-size: 1.4em;
             font-weight: 600;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
             color: #1a202c;
         }
 
         .sidebar-header p {
-            font-size: 0.8em;
+            font-size: 0.85em;
             color: #718096;
         }
 
         .sidebar-content {
-            padding: 12px;
+            padding: 16px;
         }
 
         .course-section {
-            margin-bottom: 16px;
+            margin-bottom: 24px;
         }
 
         .course-level {
-            font-size: 0.7em;
+            font-size: 0.75em;
             font-weight: 600;
             text-transform: uppercase;
             color: #4a5568;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             letter-spacing: 0.5px;
-            padding: 0 4px;
         }
 
         .module-item {
             background: white;
             border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            margin-bottom: 6px;
+            border-radius: 8px;
+            margin-bottom: 8px;
             overflow: hidden;
             transition: all 0.2s ease;
         }
 
         .module-item:hover {
             border-color: #3182ce;
-            box-shadow: 0 1px 4px rgba(49, 130, 206, 0.1);
+            box-shadow: 0 2px 8px rgba(49, 130, 206, 0.1);
         }
 
         .module-header {
-            padding: 10px 12px;
+            padding: 16px;
             cursor: pointer;
             background: white;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            min-height: 44px;
         }
 
         .module-header.active {
             background: #f7fafc;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .module-left {
             display: flex;
             align-items: center;
-            flex: 1;
-            min-width: 0;
         }
 
         .step-number {
-            width: 22px;
-            height: 22px;
+            width: 28px;
+            height: 28px;
             background: #3182ce;
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7em;
+            font-size: 0.8em;
             font-weight: 600;
-            margin-right: 8px;
+            margin-right: 12px;
             flex-shrink: 0;
         }
 
         .module-title {
             font-weight: 500;
-            font-size: 0.8em;
+            font-size: 0.9em;
             color: #2d3748;
-            line-height: 1.2;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            line-height: 1.3;
         }
 
         .expand-icon {
-            font-size: 0.7em;
+            font-size: 0.8em;
             color: #a0aec0;
             transition: transform 0.2s ease;
-            flex-shrink: 0;
-            margin-left: 4px;
         }
 
         .module-header.active .expand-icon {
@@ -159,8 +152,6 @@
         .lesson-list {
             display: none;
             background: #f8fafc;
-            max-height: 200px;
-            overflow-y: auto;
         }
 
         .lesson-list.active {
@@ -168,13 +159,12 @@
         }
 
         .lesson-item {
-            padding: 8px 12px 8px 34px;
+            padding: 12px 16px 12px 52px;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-size: 0.75em;
+            font-size: 0.85em;
             border-bottom: 1px solid #edf2f7;
             color: #4a5568;
-            line-height: 1.3;
         }
 
         .lesson-item:last-child {
@@ -194,21 +184,14 @@
         .lesson-code {
             font-family: 'Monaco', 'Menlo', monospace;
             font-weight: 500;
-            margin-right: 6px;
-            font-size: 0.7em;
-            opacity: 0.8;
-        }
-
-        .lesson-title {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            margin-right: 8px;
+            font-size: 0.8em;
         }
 
         .main-content {
-            margin-left: 280px;
+            margin-left: 320px;
             flex: 1;
-            background: white;
+            background: #f8fafc;
         }
 
         .content-header {
@@ -319,10 +302,11 @@
 
         .lesson-content {
             background: white;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            margin: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
             display: none;
+            overflow: hidden;
         }
 
         .lesson-content.active {
@@ -330,118 +314,218 @@
         }
 
         .lesson-header {
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 24px;
-            margin-bottom: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 32px 40px;
+            position: relative;
         }
 
-        .lesson-meta {
-            background: #f7fafc;
-            padding: 16px;
-            border-radius: 8px;
-            margin: 16px 0;
-            font-size: 0.9em;
+        .lesson-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3182ce, #38a169, #d69e2e, #805ad5);
+        }
+
+        .lesson-header h1 {
+            color: white;
+            margin: 0;
+            font-size: 1.8em;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .lesson-body {
+            padding: 0;
+        }
+
+        .concept-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+            padding: 32px 40px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .concept-section h2 {
+            color: #2d3748;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .concept-section h2::before {
+            content: "💡";
+            margin-right: 12px;
+            font-size: 1.2em;
+        }
+
+        .concept-section h3 {
+            color: #4a5568;
+            font-size: 1.2em;
+            margin: 24px 0 16px 0;
+            padding-left: 20px;
             border-left: 4px solid #3182ce;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        .quick-take {
-            background: linear-gradient(135deg, #4299e1, #3182ce);
-            color: white;
-            padding: 24px;
-            border-radius: 12px;
-            margin: 24px 0;
-            font-weight: 500;
-            box-shadow: 0 4px 15px rgba(65, 153, 225, 0.3);
+        .concept-section h4 {
+            color: #2d3748;
+            font-size: 1.1em;
+            margin: 20px 0 12px 0;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #38a169;
         }
 
-        .quick-take h2 {
-            margin-bottom: 12px;
-            color: white;
+        .concept-section p {
+            margin-bottom: 16px;
+            line-height: 1.7;
+            color: #4a5568;
+        }
+
+        .concept-section ul, .concept-section ol {
+            margin: 16px 0 16px 24px;
+        }
+
+        .concept-section li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+
+        .interactive-sections {
+            padding: 20px 40px 40px 40px;
         }
 
         details {
-            margin: 24px 0;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            margin: 20px 0;
+            border-radius: 12px;
             overflow: hidden;
             background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
         }
 
         details summary {
-            background: #f8fafc;
-            padding: 16px 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+            padding: 20px 24px;
             cursor: pointer;
             font-weight: 600;
-            border-bottom: 1px solid #e2e8f0;
-            transition: background 0.2s ease;
+            font-size: 1.1em;
+            color: #2d3748;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        details summary::before {
+            content: "🔧";
+            margin-right: 12px;
+            font-size: 1.2em;
+        }
+
+        details[open] summary::before {
+            content: "🔧";
+        }
+
+        details summary::after {
+            content: "▼";
+            font-size: 0.8em;
+            color: #718096;
+            transition: transform 0.3s ease;
+        }
+
+        details[open] summary::after {
+            transform: rotate(180deg);
         }
 
         details summary:hover {
-            background: #edf2f7;
-        }
-
-        details[open] summary {
-            border-bottom: 1px solid #e2e8f0;
-            background: #edf2f7;
+            background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
         }
 
         details > div {
             padding: 24px;
+            background: #fafbfc;
         }
 
-        .pitfalls {
-            background: #fed7d7;
-            border: 1px solid #feb2b2;
-            border-left: 4px solid #e53e3e;
-            padding: 20px;
-            margin: 24px 0;
-            border-radius: 8px;
+        details h3 {
+            color: #2d3748;
+            margin-bottom: 16px;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #3182ce;
         }
 
-        .pitfalls h2 {
-            color: #c53030;
-            margin-bottom: 12px;
+        .worked-example-details summary::before {
+            content: "💡";
+        }
+
+        .worked-example-details > div {
+            background: linear-gradient(135deg, #fffbf0 0%, #fef7e0 100%);
         }
 
         .connections {
-            background: #c6f6d5;
-            border: 1px solid #9ae6b4;
-            border-left: 4px solid #38a169;
-            padding: 20px;
+            background: linear-gradient(135deg, #f0fff4 0%, #dcfce7 100%);
+            border: 1px solid #bbf7d0;
+            border-left: 4px solid #22c55e;
+            padding: 24px;
             margin: 24px 0;
-            border-radius: 8px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1);
         }
 
         .connections h2 {
-            color: #2f855a;
-            margin-bottom: 12px;
-        }
-
-        .check-yourself {
-            background: #faf5ff;
-            border: 2px solid #d6bcfa;
-            border-radius: 12px;
-            padding: 24px;
-            margin: 24px 0;
-        }
-
-        .check-yourself h2 {
-            color: #553c9a;
+            color: #15803d;
             margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .connections h2::before {
+            content: "🔗";
+            margin-right: 12px;
+            font-size: 1.2em;
         }
 
         .key-equations {
-            background: #fffbeb;
-            border: 1px solid #fed7aa;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 1px solid #fbbf24;
             border-left: 4px solid #f59e0b;
-            padding: 20px;
+            padding: 24px;
             margin: 24px 0;
-            border-radius: 8px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
         }
 
         .key-equations h2 {
             color: #d97706;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .key-equations h2::before {
+            content: "📐";
+            margin-right: 12px;
+            font-size: 1.2em;
+        }
+
+        .key-equations ul li {
+            background: white;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 3px solid #f59e0b;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         ol, ul {
@@ -970,10 +1054,9 @@
                 const lessonItem = document.createElement('div');
                 lessonItem.className = 'lesson-item';
                 lessonItem.dataset.lessonCode = lesson.code;
-                lessonItem.title = lesson.title; // Add tooltip for full title
                 lessonItem.innerHTML = `
                     <span class="lesson-code">${lesson.code}</span>
-                    <span class="lesson-title">${lesson.title}</span>
+                    ${lesson.title}
                 `;
                 lessonItem.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -1124,38 +1207,44 @@
                     <h1>${lesson.title}</h1>
                 </div>
 
-                <h2>Concept</h2>
-                ${getConcept(lesson.code)}
-
-                <details>
-                    <summary><strong>Derivation (full)</strong></summary>
-                    <div>
-                        <h3>Governing Equations & Set-up</h3>
-                        ${getGoverningEquations(lesson.code)}
-                        
-                        <h3>Steps</h3>
-                        ${getDerivationSteps(lesson.code)}
-                        
-                        <h3>Result & Validity</h3>
-                        ${getResultAndValidity(lesson.code)}
+                <div class="lesson-body">
+                    <div class="concept-section">
+                        <h2>Concept</h2>
+                        ${getConcept(lesson.code)}
                     </div>
-                </details>
 
-                <details>
-                    <summary><strong>Worked Example</strong></summary>
-                    <div>
-                        ${getWorkedExample(lesson.code)}
+                    <div class="interactive-sections">
+                        <details>
+                            <summary><strong>Derivation (full)</strong></summary>
+                            <div>
+                                <h3>Governing Equations & Set-up</h3>
+                                ${getGoverningEquations(lesson.code)}
+                                
+                                <h3>Steps</h3>
+                                ${getDerivationSteps(lesson.code)}
+                                
+                                <h3>Result & Validity</h3>
+                                ${getResultAndValidity(lesson.code)}
+                            </div>
+                        </details>
+
+                        <details class="worked-example-details">
+                            <summary><strong>Worked Example</strong></summary>
+                            <div>
+                                ${getWorkedExample(lesson.code)}
+                            </div>
+                        </details>
+
+                        <div class="connections">
+                            <h2>Connections</h2>
+                            ${getConnections(lesson.code)}
+                        </div>
+
+                        <div class="key-equations">
+                            <h2>Key Equations</h2>
+                            ${getKeyEquations(lesson.code)}
+                        </div>
                     </div>
-                </details>
-
-                <div class="connections">
-                    <h2>Connections</h2>
-                    ${getConnections(lesson.code)}
-                </div>
-
-                <div class="key-equations">
-                    <h2>Key Equations</h2>
-                    ${getKeyEquations(lesson.code)}
                 </div>
             `;
         }
