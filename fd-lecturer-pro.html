@@ -379,6 +379,32 @@
 
         .subsection {
             margin: 32px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .subsection.completed {
+            opacity: 0.7;
+        }
+
+        .subsection.completed::after {
+            content: "✓ Completed";
+            position: absolute;
+            top: 8px;
+            right: 16px;
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            animation: completionPulse 0.5s ease;
+        }
+
+        @keyframes completionPulse {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .subsection h3 {
@@ -386,11 +412,50 @@
             font-size: 1.2em;
             font-weight: 600;
             margin-bottom: 16px;
-            padding: 12px 20px;
+            padding: 12px 20px 12px 60px;
             background: #f8fafc;
             border-left: 4px solid #3182ce;
             border-radius: 0 8px 8px 0;
             font-family: 'Georgia', serif;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .subsection h3:hover {
+            background: #edf2f7;
+            transform: translateX(2px);
+        }
+
+        .subsection h3::before {
+            content: attr(data-step);
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            background: #3182ce;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .subsection.completed h3::before {
+            background: #10b981;
+            content: "✓";
+            animation: checkmarkBounce 0.6s ease;
+        }
+
+        @keyframes checkmarkBounce {
+            0% { transform: translateY(-50%) scale(0); }
+            50% { transform: translateY(-50%) scale(1.2); }
+            100% { transform: translateY(-50%) scale(1); }
         }
 
         .subsection h4 {
@@ -398,11 +463,146 @@
             font-size: 1.1em;
             font-weight: 600;
             margin: 24px 0 12px 0;
-            padding: 8px 16px;
+            padding: 8px 16px 8px 48px;
             background: #f1f5f9;
             border-left: 3px solid #64748b;
             border-radius: 0 6px 6px 0;
             font-family: 'Georgia', serif;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .subsection h4:hover {
+            background: #e2e8f0;
+            transform: translateX(2px);
+        }
+
+        .subsection h4::before {
+            content: attr(data-substep);
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background: #64748b;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .subsection.completed h4::before {
+            background: #10b981;
+            content: "✓";
+        }
+
+        .progress-tracker {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            z-index: 200;
+            min-width: 200px;
+        }
+
+        .progress-header {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            background: #f3f4f6;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #3182ce, #10b981);
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            color: #6b7280;
+        }
+
+        .achievement-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 2px solid #10b981;
+            z-index: 1000;
+            text-align: center;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .achievement-popup.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .achievement-icon {
+            font-size: 3em;
+            margin-bottom: 16px;
+            animation: celebrationBounce 1s ease infinite alternate;
+        }
+
+        @keyframes celebrationBounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+
+        .achievement-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 8px;
+        }
+
+        .achievement-text {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .achievement-button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .achievement-button:hover {
+            background: #059669;
         }
 
         .academic-text {
@@ -1182,6 +1382,9 @@
                 const generatedContent = generateLessonContent(selectedModule, selectedLesson);
                 lessonContent.innerHTML = generatedContent;
                 
+                // Initialize interactive learning features
+                initializeLearningProgress();
+                
                 // Re-render MathJax
                 if (window.MathJax) {
                     MathJax.typesetPromise([lessonContent]).catch(function (err) {
@@ -1192,6 +1395,180 @@
                 // Scroll to top of content
                 document.querySelector('.lesson-viewer').scrollTop = 0;
             }, 1000);
+        }
+
+        // Interactive learning progress system
+        let completedSections = new Set();
+        let totalSections = 4; // concepts, derivation, example, connections
+        let sectionTimers = {};
+
+        function initializeLearningProgress() {
+            completedSections.clear();
+            sectionTimers = {};
+            
+            // Add scroll tracking for automatic completion
+            const lessonViewer = document.querySelector('.lesson-viewer');
+            if (lessonViewer) {
+                lessonViewer.addEventListener('scroll', trackReadingProgress);
+            }
+            
+            // Add click tracking for expandable sections
+            const expandableSections = document.querySelectorAll('details[data-section]');
+            expandableSections.forEach(section => {
+                section.addEventListener('toggle', function() {
+                    if (this.open) {
+                        startSectionTimer(this.getAttribute('data-section'));
+                    }
+                });
+            });
+            
+            // Track visible sections
+            observeSections();
+        }
+
+        function trackReadingProgress() {
+            const sections = document.querySelectorAll('[data-section]');
+            sections.forEach(section => {
+                if (isElementInViewport(section) && !completedSections.has(section.getAttribute('data-section'))) {
+                    startSectionTimer(section.getAttribute('data-section'));
+                }
+            });
+        }
+
+        function startSectionTimer(sectionId) {
+            if (sectionTimers[sectionId]) return; // Already tracking
+            
+            sectionTimers[sectionId] = setTimeout(() => {
+                completeSection(sectionId);
+            }, 3000); // Complete after 3 seconds of viewing
+        }
+
+        function completeSection(sectionId) {
+            if (completedSections.has(sectionId)) return;
+            
+            completedSections.add(sectionId);
+            
+            // Visual feedback
+            const section = document.querySelector(`[data-section="${sectionId}"]`);
+            if (section) {
+                section.classList.add('completed');
+                
+                // Add subsection completion indicators for the M1 concept section
+                if (sectionId === 'concepts') {
+                    addSubsectionCompletionIndicators(section);
+                }
+            }
+            
+            // Update progress
+            updateLearningProgress();
+            
+            // Show achievement popup
+            showAchievementPopup(sectionId);
+            
+            // Clear timer
+            if (sectionTimers[sectionId]) {
+                clearTimeout(sectionTimers[sectionId]);
+                delete sectionTimers[sectionId];
+            }
+        }
+
+        function addSubsectionCompletionIndicators(conceptSection) {
+            // Add step numbers to M1 subsections
+            const h3Elements = conceptSection.querySelectorAll('h3');
+            const h4Elements = conceptSection.querySelectorAll('h4');
+            
+            h3Elements.forEach((h3, index) => {
+                if (!h3.hasAttribute('data-step')) {
+                    h3.setAttribute('data-step', index + 1);
+                    h3.parentElement.classList.add('subsection');
+                }
+            });
+            
+            h4Elements.forEach((h4, index) => {
+                if (!h4.hasAttribute('data-substep')) {
+                    h4.setAttribute('data-substep', String.fromCharCode(97 + index)); // a, b, c...
+                    if (!h4.parentElement.classList.contains('subsection')) {
+                        h4.parentElement.classList.add('subsection');
+                    }
+                }
+            });
+            
+            // Mark all subsections as completed
+            setTimeout(() => {
+                const subsections = conceptSection.querySelectorAll('.subsection');
+                subsections.forEach((subsection, index) => {
+                    setTimeout(() => {
+                        subsection.classList.add('completed');
+                    }, index * 500); // Stagger the completion animations
+                });
+            }, 1000);
+        }
+
+        function updateLearningProgress() {
+            const progressFill = document.querySelector('.progress-fill');
+            const progressStats = document.querySelector('.progress-stats');
+            
+            if (progressFill && progressStats) {
+                const percentage = Math.round((completedSections.size / totalSections) * 100);
+                progressFill.style.width = percentage + '%';
+                progressStats.innerHTML = `
+                    <span>${completedSections.size}/${totalSections} completed</span>
+                    <span>${percentage}%</span>
+                `;
+            }
+        }
+
+        function showAchievementPopup(sectionId) {
+            const popup = document.getElementById('achievementPopup');
+            const messages = {
+                'concepts': { title: 'Concepts Mastered!', text: 'You now understand the three levels of description in fluid dynamics.' },
+                'derivation': { title: 'Math Skills Unlocked!', text: 'You\'ve worked through the mathematical derivation.' },
+                'example': { title: 'Problem Solver!', text: 'You\'ve completed a practical worked example.' },
+                'connections': { title: 'Connections Made!', text: 'You see how this connects to other topics.' },
+                'equations': { title: 'Equations Learned!', text: 'You\'ve mastered the key mathematical relations.' }
+            };
+            
+            const message = messages[sectionId] || { title: 'Section Completed!', text: 'Great progress!' };
+            
+            popup.querySelector('.achievement-title').textContent = message.title;
+            popup.querySelector('.achievement-text').textContent = message.text;
+            popup.classList.add('show');
+            
+            // Auto-close after 3 seconds
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000);
+        }
+
+        function closeAchievement() {
+            const popup = document.getElementById('achievementPopup');
+            popup.classList.remove('show');
+        }
+
+        function isElementInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            const viewHeight = window.innerHeight || document.documentElement.clientHeight;
+            return rect.top < viewHeight * 0.8 && rect.bottom > viewHeight * 0.2;
+        }
+
+        function observeSections() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                        const sectionId = entry.target.getAttribute('data-section');
+                        if (sectionId && !completedSections.has(sectionId)) {
+                            startSectionTimer(sectionId);
+                        }
+                    }
+                });
+            }, {
+                threshold: [0.5],
+                rootMargin: '-10% 0px -10% 0px'
+            });
+            
+            // Observe all sections
+            const sections = document.querySelectorAll('[data-section]');
+            sections.forEach(section => observer.observe(section));
         }
 
         function updateProgress() {
@@ -1224,6 +1601,24 @@
             // Sample lesson for demonstration
             
             return `
+                <div class="progress-tracker">
+                    <div class="progress-header">Learning Progress</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-stats">
+                        <span>0/4 completed</span>
+                        <span>0%</span>
+                    </div>
+                </div>
+
+                <div class="achievement-popup" id="achievementPopup">
+                    <div class="achievement-icon">🎉</div>
+                    <div class="achievement-title">Section Completed!</div>
+                    <div class="achievement-text">Great job! You've mastered another concept.</div>
+                    <button class="achievement-button" onclick="closeAchievement()">Continue Learning</button>
+                </div>
+
                 <div class="lesson-header">
                     <h1>${lesson.title}</h1>
                 </div>
@@ -1234,12 +1629,12 @@
                             <div class="section-number">1</div>
                             <h2>Fundamental Concepts</h2>
                         </div>
-                        <div class="academic-text">
+                        <div class="academic-text" data-section="concepts">
                             ${getConcept(lesson.code)}
                         </div>
                     </div>
 
-                    <details class="expandable-section">
+                    <details class="expandable-section" data-section="derivation">
                         <summary>Mathematical Derivation</summary>
                         <div class="expandable-content">
                             <h3>Governing Equations & Set-up</h3>
@@ -1259,7 +1654,7 @@
                         </div>
                     </details>
 
-                    <details class="expandable-section">
+                    <details class="expandable-section" data-section="example">
                         <summary>Worked Example</summary>
                         <div class="expandable-content">
                             <div class="academic-text">
@@ -1268,14 +1663,14 @@
                         </div>
                     </details>
 
-                    <div class="connections-box">
+                    <div class="connections-box" data-section="connections">
                         <h2>Connections to Other Topics</h2>
                         <div class="academic-text">
                             ${getConnections(lesson.code)}
                         </div>
                     </div>
 
-                    <div class="equations-box">
+                    <div class="equations-box" data-section="equations">
                         <h2>Key Mathematical Relations</h2>
                         <div class="academic-text">
                             ${getKeyEquations(lesson.code)}
