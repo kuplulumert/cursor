@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FD-Lecturer-Pro: Fluid Dynamics Micro-Lessons</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        .control-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .module-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .module-card:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+        }
+
+        .module-card.selected {
+            border-color: #2980b9;
+            background: #e8f4f8;
+        }
+
+        .module-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .module-card .lessons {
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+
+        .lesson-selector {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .lesson-selector.active {
+            display: block;
+        }
+
+        .lesson-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .lesson-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-btn:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .generate-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .lesson-content {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .lesson-content.active {
+            display: block;
+        }
+
+        .lesson-header {
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .lesson-meta {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+
+        .quick-take {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+
+        details {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        details summary {
+            background: #f8f9fa;
+            padding: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 1px solid #ddd;
+        }
+
+        details[open] summary {
+            border-bottom: 1px solid #ddd;
+        }
+
+        details > div {
+            padding: 20px;
+        }
+
+        .pitfalls {
+            background: #fff5f5;
+            border-left: 4px solid #e74c3c;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .connections {
+            background: #f0fff4;
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .check-yourself {
+            background: #f8f9fa;
+            border: 2px solid #6c757d;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .key-equations {
+            background: #fffbf0;
+            border-left: 4px solid #f39c12;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        h1 { font-size: 2.2em; color: #2c3e50; margin-bottom: 15px; }
+        h2 { font-size: 1.5em; color: #34495e; margin: 25px 0 15px 0; }
+        h3 { font-size: 1.3em; color: #34495e; margin: 20px 0 10px 0; }
+        h4 { font-size: 1.1em; color: #34495e; margin: 15px 0 8px 0; }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .error {
+            background: #fff5f5;
+            border: 1px solid #e74c3c;
+            color: #c0392b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .module-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>FD-Lecturer-Pro</h1>
+            <p>Rigorous Fluid Dynamics Micro-Lessons with Progressive Disclosure</p>
+        </div>
+
+        <div class="control-panel">
+            <h2>Select Module & Lesson</h2>
+            <div class="module-grid" id="moduleGrid">
+                <!-- Modules will be populated by JavaScript -->
+            </div>
+            
+            <div class="lesson-selector" id="lessonSelector">
+                <h3>Choose a Lesson:</h3>
+                <div class="lesson-buttons" id="lessonButtons">
+                    <!-- Lesson buttons will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <button class="generate-btn" id="generateBtn" disabled>Generate Lesson</button>
+        </div>
+
+        <div class="lesson-content" id="lessonContent">
+            <!-- Generated lesson content will appear here -->
+        </div>
+    </div>
+
+    <script>
+        // Coverage Map - Complete Fluid Dynamics Syllabus
+        const coverageMap = {
+            "modules": [
+                {
+                    "id": "M",
+                    "name": "Mathematical Preliminaries",
+                    "lessons": [
+                        {"code":"M1","title":"Vector & Tensor Calculus"},
+                        {"code":"M2","title":"Integral Theorems & RTT"},
+                        {"code":"M3","title":"Differential Equations & Similarity"},
+                        {"code":"M4","title":"Transforms & Spectra"},
+                        {"code":"M5","title":"Asymptotics & Perturbation"},
+                        {"code":"M6","title":"Probability & Statistics for Fluids"}
+                    ]
+                },
+                {
+                    "id": "F",
+                    "name": "Foundations",
+                    "lessons": [
+                        {"code":"F1","title":"Continuum Hypothesis & Properties"},
+                        {"code":"F2","title":"Kinematics: Streamlines, Vorticity, Deformation"},
+                        {"code":"F3","title":"Integral Balances: Mass, Momentum, Energy"},
+                        {"code":"F4","title":"Differential Form: Continuity, Navier–Stokes, Energy"},
+                        {"code":"F5","title":"Constitutive Models: Newtonian Fluids"},
+                        {"code":"F6","title":"Exact Laminar Solutions"},
+                        {"code":"F7","title":"Bernoulli from Navier–Stokes"}
+                    ]
+                },
+                {
+                    "id": "B",
+                    "name": "Boundary Layers & External Flows",
+                    "lessons": [
+                        {"code":"B1","title":"Boundary-Layer Concept & Thicknesses"},
+                        {"code":"B2","title":"Blasius Flat-Plate Similarity"},
+                        {"code":"B3","title":"Falkner–Skan & Pressure Gradients"},
+                        {"code":"B4","title":"Separation & Control Concepts"},
+                        {"code":"B5","title":"External Flows: Wakes, Lift & Drag"},
+                        {"code":"B6","title":"Potential Flow Toolkit & Kutta–Joukowski"}
+                    ]
+                },
+                {
+                    "id": "I",
+                    "name": "Internal Flows",
+                    "lessons": [
+                        {"code":"I1","title":"Developing vs Fully Developed"},
+                        {"code":"I2","title":"Laminar Duct Flows"},
+                        {"code":"I3","title":"Turbulent Duct Flows & Wall Laws"},
+                        {"code":"I4","title":"Minor Losses as Momentum Effects"},
+                        {"code":"I5","title":"Unsteady Internal Flows & Womersley"}
+                    ]
+                },
+                {
+                    "id": "T",
+                    "name": "Turbulence",
+                    "lessons": [
+                        {"code":"T1","title":"What Is Turbulence"},
+                        {"code":"T2","title":"Reynolds Averaging & RANS"},
+                        {"code":"T3","title":"Free Shear Flows"},
+                        {"code":"T4","title":"Wall-Bounded Turbulence"},
+                        {"code":"T5","title":"Spectra & Cascades"},
+                        {"code":"T6","title":"Transition & Stability Link"},
+                        {"code":"T7","title":"Coherent Structures & Vortex Dynamics"}
+                    ]
+                },
+                {
+                    "id": "C",
+                    "name": "Compressible & Gas Dynamics",
+                    "lessons": [
+                        {"code":"C1","title":"Thermo Refresher & Speed of Sound"},
+                        {"code":"C2","title":"Isentropic & Area–Mach Relations"},
+                        {"code":"C3","title":"Normal & Oblique Shocks"},
+                        {"code":"C4","title":"Prandtl–Meyer Expansions"},
+                        {"code":"C5","title":"Fanno & Rayleigh Flows"},
+                        {"code":"C6","title":"High-Speed Boundary Layers"},
+                        {"code":"C7","title":"Hypersonics & Rarefaction Intro"}
+                    ]
+                },
+                {
+                    "id": "H",
+                    "name": "Heat & Mass Transfer in Fluids",
+                    "lessons": [
+                        {"code":"H1","title":"Energy Equation & Dissipation"},
+                        {"code":"H2","title":"Dimensionless Groups: Pr, Nu, Sc, Le"},
+                        {"code":"H3","title":"Forced Convection (Internal/External)"},
+                        {"code":"H4","title":"Natural & Mixed Convection"},
+                        {"code":"H5","title":"Species Transport"},
+                        {"code":"H6","title":"Reacting Flows Primer"}
+                    ]
+                },
+                {
+                    "id": "P",
+                    "name": "Multiphase, Free-Surface & Interfacial",
+                    "lessons": [
+                        {"code":"P1","title":"Interfacial Balance Laws"},
+                        {"code":"P2","title":"Capillarity, Wetting & Marangoni"},
+                        {"code":"P3","title":"Free-Surface & Shallow-Water"},
+                        {"code":"P4","title":"Dispersed Flows & Drag"},
+                        {"code":"P5","title":"Population Balances"},
+                        {"code":"P6","title":"Cavitation & Rayleigh–Plesset"},
+                        {"code":"P7","title":"Two-Fluid/Two-Phase Continuum Models"}
+                    ]
+                },
+                {
+                    "id": "R",
+                    "name": "Non-Newtonian & Rheology",
+                    "lessons": [
+                        {"code":"R1","title":"Material Classes"},
+                        {"code":"R2","title":"Constitutive Models"},
+                        {"code":"R3","title":"Linear Viscoelasticity"},
+                        {"code":"R4","title":"Oldroyd-B & Normal Stresses"},
+                        {"code":"R5","title":"Instabilities in Complex Fluids"},
+                        {"code":"R6","title":"Microfluidics with Non-Newtonians"}
+                    ]
+                },
+                {
+                    "id": "G",
+                    "name": "Rotating, Stratified & Geophysical",
+                    "lessons": [
+                        {"code":"G1","title":"Rotating Frames & Rossby"},
+                        {"code":"G2","title":"Geostrophic & Hydrostatic Balance"},
+                        {"code":"G3","title":"Ekman Layers & Pumps"},
+                        {"code":"G4","title":"Stratification & Internal Waves"},
+                        {"code":"G5","title":"Barotropic/Baroclinic Instability"}
+                    ]
+                },
+                {
+                    "id": "S",
+                    "name": "Stability, Waves & Acoustics",
+                    "lessons": [
+                        {"code":"S1","title":"Linear Stability & Orr–Sommerfeld"},
+                        {"code":"S2","title":"Shear-Flow Instabilities"},
+                        {"code":"S3","title":"Weakly Nonlinear: Landau"},
+                        {"code":"S4","title":"Surface/Gravity/Capillary Waves"},
+                        {"code":"S5","title":"Aeroacoustics Primer"}
+                    ]
+                },
+                {
+                    "id": "N",
+                    "name": "Numerical & Theoretical Methods (Content-Only)",
+                    "lessons": [
+                        {"code":"N1","title":"PDE Classes & Characteristics"},
+                        {"code":"N2","title":"Discretisation: Consistency, Stability, Convergence"},
+                        {"code":"N3","title":"Pressure–Velocity Coupling & Projection"},
+                        {"code":"N4","title":"Shock-Capturing Concepts"},
+                        {"code":"N5","title":"Turbulence-Modelling Theory"},
+                        {"code":"N6","title":"Verification, Validation & Uncertainty"}
+                    ]
+                },
+                {
+                    "id": "X",
+                    "name": "Biofluids, Micro/Nano & Special Topics",
+                    "lessons": [
+                        {"code":"X1","title":"Haemodynamics & Womersley"},
+                        {"code":"X2","title":"Microfluidics & Slip"},
+                        {"code":"X3","title":"Magnetohydrodynamics & Hartmann"},
+                        {"code":"X4","title":"Reactive/Combustion Coupling"},
+                        {"code":"X5","title":"Vortex Dynamics & Helmholtz"},
+                        {"code":"X6","title":"Flow Control (Theory)"}
+                    ]
+                },
+                {
+                    "id": "D",
+                    "name": "Canonical Derivation Library",
+                    "lessons": [
+                        {"code":"D1","title":"RTT: Finite → Differential"},
+                        {"code":"D2","title":"Navier–Stokes from Cauchy Momentum"},
+                        {"code":"D3","title":"Bernoulli from NS"},
+                        {"code":"D4","title":"Blasius & Falkner–Skan"},
+                        {"code":"D5","title":"Stokes' First Problem"},
+                        {"code":"D6","title":"Hagen–Poiseuille"},
+                        {"code":"D7","title":"Potential Flow Around Cylinder & Kutta–Joukowski"},
+                        {"code":"D8","title":"Orr–Sommerfeld Equation"},
+                        {"code":"D9","title":"Normal/Oblique Shock Relations"},
+                        {"code":"D10","title":"Lighthill's Acoustic Analogy"}
+                    ]
+                },
+                {
+                    "id": "A",
+                    "name": "Reference Sheets",
+                    "lessons": [
+                        {"code":"A1","title":"Coordinate Operators"},
+                        {"code":"A2","title":"Dimensionless Numbers"},
+                        {"code":"A3","title":"Fluid Properties (Ranges)"},
+                        {"code":"A4","title":"Common Assumptions & Breakdowns"}
+                    ]
+                }
+            ]
+        };
+
+        // State management
+        let selectedModule = null;
+        let selectedLesson = null;
+
+        // Initialize the application
+        function init() {
+            renderModules();
+            setupEventListeners();
+        }
+
+        function renderModules() {
+            const moduleGrid = document.getElementById('moduleGrid');
+            moduleGrid.innerHTML = '';
+
+            coverageMap.modules.forEach(module => {
+                const moduleCard = document.createElement('div');
+                moduleCard.className = 'module-card';
+                moduleCard.dataset.moduleId = module.id;
+                
+                moduleCard.innerHTML = `
+                    <h3>${module.id}: ${module.name}</h3>
+                    <div class="lessons">${module.lessons.length} lessons</div>
+                `;
+                
+                moduleCard.addEventListener('click', () => selectModule(module));
+                moduleGrid.appendChild(moduleCard);
+            });
+        }
+
+        function selectModule(module) {
+            // Update UI
+            document.querySelectorAll('.module-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-module-id="${module.id}"]`).classList.add('selected');
+            
+            selectedModule = module;
+            selectedLesson = null;
+            
+            renderLessons(module);
+            updateGenerateButton();
+        }
+
+        function renderLessons(module) {
+            const lessonSelector = document.getElementById('lessonSelector');
+            const lessonButtons = document.getElementById('lessonButtons');
+            
+            lessonButtons.innerHTML = '';
+            
+            module.lessons.forEach(lesson => {
+                const button = document.createElement('button');
+                button.className = 'lesson-btn';
+                button.textContent = `${lesson.code}: ${lesson.title}`;
+                button.addEventListener('click', () => selectLesson(lesson));
+                lessonButtons.appendChild(button);
+            });
+            
+            lessonSelector.classList.add('active');
+        }
+
+        function selectLesson(lesson) {
+            selectedLesson = lesson;
+            
+            // Update button styling
+            document.querySelectorAll('.lesson-btn').forEach(btn => {
+                btn.style.background = '#3498db';
+            });
+            event.target.style.background = '#2980b9';
+            
+            updateGenerateButton();
+        }
+
+        function updateGenerateButton() {
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.disabled = !selectedModule || !selectedLesson;
+        }
+
+        function setupEventListeners() {
+            document.getElementById('generateBtn').addEventListener('click', generateLesson);
+        }
+
+        // Lesson generation function
+        function generateLesson() {
+            if (!selectedModule || !selectedLesson) return;
+            
+            const lessonContent = document.getElementById('lessonContent');
+            lessonContent.innerHTML = '<div class="loading">Generating lesson content...</div>';
+            lessonContent.classList.add('active');
+            
+            // Scroll to lesson content
+            lessonContent.scrollIntoView({ behavior: 'smooth' });
+            
+            // Simulate lesson generation (in real implementation, this would call the AI)
+            setTimeout(() => {
+                const generatedContent = generateLessonContent(selectedModule, selectedLesson);
+                lessonContent.innerHTML = generatedContent;
+                
+                // Re-render MathJax
+                if (window.MathJax) {
+                    MathJax.typesetPromise([lessonContent]).catch(function (err) {
+                        console.log('MathJax typeset failed: ' + err.message);
+                    });
+                }
+            }, 1500);
+        }
+
+        function generateLessonContent(module, lesson) {
+            // This is a sample lesson - in real implementation, this would be generated by AI
+            return generateSampleLesson(module, lesson);
+        }
+
+        function generateSampleLesson(module, lesson) {
+            // Sample lesson for demonstration
+            const prerequisites = getPrerequisites(lesson.code);
+            const outcomes = getOutcomes(lesson.code);
+            const tags = getTags(lesson.code);
+            
+            return `
+                <div class="lesson-header">
+                    <h1>${lesson.title}</h1>
+                    <div class="lesson-meta">
+                        <strong>Module:</strong> ${module.id} · <strong>Lesson:</strong> ${lesson.code} · <strong>Prerequisites:</strong> ${prerequisites}<br>
+                        <strong>Time:</strong> ~5 minutes · <strong>Tags:</strong> ${tags}
+                    </div>
+                    <div class="lesson-meta">
+                        <strong>Outcomes:</strong>
+                        <ul>
+                            ${outcomes.map(outcome => `<li>${outcome}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="quick-take">
+                    <h2>Quick Take</h2>
+                    ${getQuickTake(lesson.code)}
+                </div>
+
+                <h2>Concept</h2>
+                ${getConcept(lesson.code)}
+
+                <details>
+                    <summary><strong>Derivation (full)</strong></summary>
+                    <div>
+                        <h3>Governing Equations & Set-up</h3>
+                        ${getGoverningEquations(lesson.code)}
+                        
+                        <h3>Steps</h3>
+                        ${getDerivationSteps(lesson.code)}
+                        
+                        <h3>Result & Validity</h3>
+                        ${getResultAndValidity(lesson.code)}
+                    </div>
+                </details>
+
+                <details>
+                    <summary><strong>Worked Example</strong></summary>
+                    <div>
+                        ${getWorkedExample(lesson.code)}
+                    </div>
+                </details>
+
+                <div class="pitfalls">
+                    <h2>Common Pitfalls</h2>
+                    ${getCommonPitfalls(lesson.code)}
+                </div>
+
+                <div class="connections">
+                    <h2>Connections</h2>
+                    ${getConnections(lesson.code)}
+                </div>
+
+                <div class="check-yourself">
+                    <h2>Check Yourself</h2>
+                    ${getCheckYourself(lesson.code)}
+                    
+                    <details>
+                        <summary>Answers</summary>
+                        <div>
+                            ${getAnswers(lesson.code)}
+                        </div>
+                    </details>
+                </div>
+
+                <div class="key-equations">
+                    <h2>Key Equations</h2>
+                    ${getKeyEquations(lesson.code)}
+                </div>
+
+                <h2>References & Further Reading</h2>
+                ${getReferences(lesson.code)}
+            `;
+        }
+
+        // Helper functions for lesson content generation
+        function getPrerequisites(lessonCode) {
+            const prereqMap = {
+                'F3': 'M1, F1, F2',
+                'F4': 'M1, M2, F3',
+                'B1': 'F4, F6',
+                'T1': 'F4, B1',
+                // Add more as needed
+            };
+            return prereqMap[lessonCode] || 'Basic calculus, vector analysis';
+        }
+
+        function getOutcomes(lessonCode) {
+            const outcomeMap = {
+                'F3': [
+                    'Apply conservation principles to finite control volumes',
+                    'Derive integral momentum equation from first principles',
+                    'Solve practical engineering problems using integral balances',
+                    'Understand limitations and assumptions of integral approaches'
+                ],
+                // Add more lesson-specific outcomes
+            };
+            return outcomeMap[lessonCode] || [
+                'Understand the fundamental concept',
+                'Apply mathematical techniques',
+                'Solve representative problems',
+                'Connect to broader fluid mechanics principles'
+            ];
+        }
+
+        function getTags(lessonCode) {
+            const tagMap = {
+                'F3': 'conservation, control volume, integral, momentum',
+                'F4': 'differential, Navier-Stokes, continuity, energy',
+                'B1': 'boundary layer, viscous, external flow',
+                // Add more tags
+            };
+            return tagMap[lessonCode] || 'fundamental, theory, analysis';
+        }
+
+        function getQuickTake(lessonCode) {
+            const quickTakeMap = {
+                'F3': 'Conservation laws applied to finite control volumes give integral momentum and energy equations. Essential for analysing jets, wakes, and engineering devices where detailed flow structure is less important than overall balances.',
+                'F4': 'The differential forms of conservation laws—continuity, Navier–Stokes, and energy equations—govern fluid motion at every point. These PDEs form the foundation for all fluid mechanics analysis.',
+                // Add more quick takes
+            };
+            return quickTakeMap[lessonCode] || 'Core concept in fluid mechanics with wide applications in engineering and natural phenomena.';
+        }
+
+        function getConcept(lessonCode) {
+            if (lessonCode === 'F3') {
+                return `
+                    <p>The integral approach to fluid mechanics applies conservation principles to finite <strong>control volumes</strong> (CV) rather than infinitesimal fluid elements. This macroscopic viewpoint is particularly powerful for engineering applications.</p>
+                    
+                    <p><strong>Key assumptions:</strong></p>
+                    <ul>
+                        <li>Continuum hypothesis holds</li>
+                        <li>Control volume boundaries are well-defined</li>
+                        <li>Properties uniform across inlet/outlet sections</li>
+                        <li>Steady flow (for most derivations)</li>
+                    </ul>
+                    
+                    <p>The <strong>Reynolds Transport Theorem</strong> (RTT) bridges Lagrangian (following particles) and Eulerian (fixed control volume) descriptions. For any extensive property $B = \\int \\rho b \\, dV$:</p>
+                    
+                    $$\\frac{DB}{Dt} = \\frac{\\partial}{\\partial t} \\int_{CV} \\rho b \\, dV + \\int_{CS} \\rho b (\\vec{V} \\cdot \\hat{n}) \\, dA$$
+                `;
+            }
+            return '<p>Detailed concept explanation for this topic...</p>';
+        }
+
+        function getGoverningEquations(lessonCode) {
+            if (lessonCode === 'F3') {
+                return `
+                    <p>Starting from Newton's second law for a system of particles:</p>
+                    $$\\sum \\vec{F} = \\frac{D}{Dt} \\int_{sys} \\rho \\vec{V} \\, dV$$
+                    
+                    <p>Apply RTT with $b = \\vec{V}$ (momentum per unit mass):</p>
+                    $$\\sum \\vec{F} = \\frac{\\partial}{\\partial t} \\int_{CV} \\rho \\vec{V} \\, dV + \\int_{CS} \\rho \\vec{V} (\\vec{V} \\cdot \\hat{n}) \\, dA$$
+                `;
+            }
+            return '<p>Governing equations for this topic...</p>';
+        }
+
+        function getDerivationSteps(lessonCode) {
+            if (lessonCode === 'F3') {
+                return `
+                    <ol>
+                        <li><strong>Identify forces:</strong> Body forces ($\\int \\rho \\vec{g} \\, dV$) and surface forces ($\\int \\vec{T} \\, dA$)</li>
+                        <li><strong>For steady flow:</strong> $\\frac{\\partial}{\\partial t} \\int_{CV} \\rho \\vec{V} \\, dV = 0$</li>
+                        <li><strong>Momentum flux:</strong> $\\int_{CS} \\rho \\vec{V} (\\vec{V} \\cdot \\hat{n}) \\, dA = \\sum \\dot{m}_{out} \\vec{V}_{out} - \\sum \\dot{m}_{in} \\vec{V}_{in}$</li>
+                        <li><strong>Final form:</strong> $\\sum \\vec{F} = \\sum \\dot{m}_{out} \\vec{V}_{out} - \\sum \\dot{m}_{in} \\vec{V}_{in}$</li>
+                    </ol>
+                `;
+            }
+            return '<p>Step-by-step derivation...</p>';
+        }
+
+        function getResultAndValidity(lessonCode) {
+            if (lessonCode === 'F3') {
+                return `
+                    <p><strong>Integral momentum equation:</strong></p>
+                    $$\\sum \\vec{F} = \\sum \\dot{m}_{out} \\vec{V}_{out} - \\sum \\dot{m}_{in} \\vec{V}_{in}$$
+                    
+                    <p><strong>Valid when:</strong></p>
+                    <ul>
+                        <li>Control volume is inertial</li>
+                        <li>Viscous stresses at CV boundary are known or negligible</li>
+                        <li>Flow properties uniform across inlet/outlet sections</li>
+                    </ul>
+                    
+                    <p><strong>Breaks down when:</strong> Significant viscous effects within CV, non-uniform velocity profiles, or accelerating reference frame.</p>
+                `;
+            }
+            return '<p>Results and validity conditions...</p>';
+        }
+
+        function getWorkedExample(lessonCode) {
+            if (lessonCode === 'F3') {
+                return `
+                    <p><strong>Problem.</strong> Water (ρ = 1000 kg/m³) flows through a reducing elbow from 10 cm diameter to 5 cm diameter. Inlet velocity is 2 m/s, inlet pressure 200 kPa. The elbow turns the flow 90°. Find the force required to hold the elbow in place.</p>
+                    
+                    <p><strong>Solution.</strong></p>
+                    <ol>
+                        <li><strong>Continuity:</strong> $V_2 = V_1 (D_1/D_2)^2 = 2 \\times (10/5)^2 = 8$ m/s</li>
+                        <li><strong>Mass flow:</strong> $\\dot{m} = \\rho V_1 A_1 = 1000 \\times 2 \\times \\pi(0.05)^2 = 15.71$ kg/s</li>
+                        <li><strong>Bernoulli (neglecting losses):</strong> $p_2 = p_1 + \\frac{1}{2}\\rho(V_1^2 - V_2^2) = 200000 + 500(4-64) = 170$ kPa</li>
+                        <li><strong>x-momentum:</strong> $F_x + p_1 A_1 = \\dot{m} V_1 \\Rightarrow F_x = 15.71 \\times 2 - 200000 \\times \\pi(0.05)^2 = -1539$ N</li>
+                        <li><strong>y-momentum:</strong> $F_y + p_2 A_2 = \\dot{m} V_2 \\Rightarrow F_y = 15.71 \\times 8 - 170000 \\times \\pi(0.025)^2 = -209$ N</li>
+                    </ol>
+                    
+                    <p>The elbow experiences forces of 1539 N leftward and 209 N downward, requiring equal and opposite reaction forces to remain stationary.</p>
+                `;
+            }
+            return '<p>Worked example for this topic...</p>';
+        }
+
+        function getCommonPitfalls(lessonCode) {
+            const pitfallsMap = {
+                'F3': `
+                    <ul>
+                        <li>Forgetting to include pressure forces on control volume surfaces</li>
+                        <li>Sign errors in momentum flux terms (inlet vs outlet convention)</li>
+                        <li>Assuming uniform velocity when profiles are significantly non-uniform</li>
+                        <li>Neglecting body forces (gravity) in vertical flows</li>
+                        <li>Confusing gauge vs absolute pressure in force calculations</li>
+                    </ul>
+                `,
+            };
+            return pitfallsMap[lessonCode] || '<ul><li>Common conceptual misunderstandings</li><li>Mathematical errors in derivations</li><li>Incorrect application of assumptions</li></ul>';
+        }
+
+        function getConnections(lessonCode) {
+            const connectionsMap = {
+                'F3': `
+                    <ul>
+                        <li><strong>F4:</strong> Differential forms derive from integral principles</li>
+                        <li><strong>I4:</strong> Minor losses analysed using momentum balances</li>
+                        <li><strong>B5:</strong> Drag calculations via momentum deficit in wakes</li>
+                        <li><strong>D1:</strong> RTT derivation from finite to differential</li>
+                    </ul>
+                `,
+            };
+            return connectionsMap[lessonCode] || '<ul><li>Related fundamental concepts</li><li>Applications in other modules</li><li>Mathematical connections</li></ul>';
+        }
+
+        function getCheckYourself(lessonCode) {
+            return `
+                <ol>
+                    <li>What is the physical meaning of each term in the integral momentum equation?</li>
+                    <li>Calculate the momentum flux for water flowing at 3 m/s through a 2 cm diameter pipe.</li>
+                    <li>When does the assumption of uniform velocity profiles break down?</li>
+                    <li>Predict qualitatively how the required holding force changes if the elbow angle increases from 90° to 180°.</li>
+                    <li>Derive the integral momentum equation starting from Newton's second law.</li>
+                </ol>
+            `;
+        }
+
+        function getAnswers(lessonCode) {
+            return `
+                <ol>
+                    <li>Left side: net force on control volume. Right side: rate of momentum change due to convection across boundaries.</li>
+                    <li>$\\dot{m}V = \\rho V A \\times V = 1000 \\times 3 \\times \\pi(0.01)^2 \\times 3 = 2.83$ N</li>
+                    <li>When boundary layer thickness approaches pipe radius, or in entrance regions where velocity profiles develop.</li>
+                    <li>180° turn would double the momentum change in one direction, significantly increasing holding force.</li>
+                    <li>Apply RTT to Newton's second law with momentum as the extensive property.</li>
+                </ol>
+            `;
+        }
+
+        function getKeyEquations(lessonCode) {
+            const equationsMap = {
+                'F3': `
+                    <ul>
+                        <li>$\\sum \\vec{F} = \\sum \\dot{m}_{out} \\vec{V}_{out} - \\sum \\dot{m}_{in} \\vec{V}_{in}$ — Integral momentum equation for steady flow</li>
+                        <li>$\\frac{DB}{Dt} = \\frac{\\partial}{\\partial t} \\int_{CV} \\rho b \\, dV + \\int_{CS} \\rho b (\\vec{V} \\cdot \\hat{n}) \\, dA$ — Reynolds Transport Theorem</li>
+                    </ul>
+                `,
+            };
+            return equationsMap[lessonCode] || '<ul><li>Key mathematical relationships</li><li>Important dimensionless numbers</li></ul>';
+        }
+
+        function getReferences(lessonCode) {
+            return `
+                <ul>
+                    <li>White, F.M. "Fluid Mechanics" (8th ed.), Ch. 3: Integral Relations</li>
+                    <li>Kundu, P.K. & Cohen, I.M. "Fluid Mechanics" (6th ed.), Ch. 4: Conservation Laws</li>
+                    <li>MIT OCW 2.06: "Fluid Dynamics" - Lecture Notes on Control Volume Analysis</li>
+                    <li>Anderson, J.D. "Fundamentals of Aerodynamics" (6th ed.), Ch. 2: Fundamental Principles</li>
+                </ul>
+            `;
+        }
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
