@@ -222,15 +222,19 @@
         }
 
         .lesson-viewer {
-            padding: 40px 32px;
-            max-width: 800px;
-            margin: 0 auto;
+            padding: 0;
+            max-width: none;
+            margin: 0;
+            height: calc(100vh - 61px);
+            overflow-y: auto;
         }
 
         .welcome-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: 60px 40px;
             color: #4a5568;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .welcome-state .icon {
@@ -302,11 +306,8 @@
 
         .lesson-content {
             background: white;
-            border-radius: 16px;
-            margin: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
             display: none;
-            overflow: hidden;
+            height: 100%;
         }
 
         .lesson-content.active {
@@ -314,218 +315,238 @@
         }
 
         .lesson-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1a202c;
             color: white;
-            padding: 32px 40px;
-            position: relative;
-        }
-
-        .lesson-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #3182ce, #38a169, #d69e2e, #805ad5);
+            padding: 24px 48px;
+            border-bottom: 3px solid #3182ce;
         }
 
         .lesson-header h1 {
             color: white;
             margin: 0;
             font-size: 1.8em;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-weight: 600;
+            font-family: 'Georgia', serif;
         }
 
         .lesson-body {
-            padding: 0;
+            padding: 40px 48px;
+            max-width: 1000px;
+            margin: 0 auto;
+            line-height: 1.8;
         }
 
-        .concept-section {
-            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
-            padding: 32px 40px;
-            border-bottom: 1px solid #e2e8f0;
+        .section {
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 2px solid #e2e8f0;
         }
 
-        .concept-section h2 {
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #cbd5e0;
+        }
+
+        .section-number {
+            background: #3182ce;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .section h2 {
             color: #2d3748;
             font-size: 1.4em;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
+            font-weight: 600;
+            margin: 0;
+            font-family: 'Georgia', serif;
         }
 
-        .concept-section h2::before {
-            content: "💡";
-            margin-right: 12px;
-            font-size: 1.2em;
+        .subsection {
+            margin: 32px 0;
         }
 
-        .concept-section h3 {
-            color: #4a5568;
-            font-size: 1.2em;
-            margin: 24px 0 16px 0;
-            padding-left: 20px;
-            border-left: 4px solid #3182ce;
-            background: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .concept-section h4 {
+        .subsection h3 {
             color: #2d3748;
-            font-size: 1.1em;
-            margin: 20px 0 12px 0;
-            padding: 8px 16px;
-            background: white;
-            border-radius: 6px;
-            border-left: 3px solid #38a169;
-        }
-
-        .concept-section p {
+            font-size: 1.2em;
+            font-weight: 600;
             margin-bottom: 16px;
-            line-height: 1.7;
+            padding: 12px 20px;
+            background: #f8fafc;
+            border-left: 4px solid #3182ce;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Georgia', serif;
+        }
+
+        .subsection h4 {
             color: #4a5568;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin: 24px 0 12px 0;
+            padding: 8px 16px;
+            background: #f1f5f9;
+            border-left: 3px solid #64748b;
+            border-radius: 0 6px 6px 0;
+            font-family: 'Georgia', serif;
         }
 
-        .concept-section ul, .concept-section ol {
-            margin: 16px 0 16px 24px;
+        .academic-text {
+            color: #374151;
+            font-size: 1em;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            text-align: justify;
         }
 
-        .concept-section li {
+        .academic-text strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        .academic-list {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .academic-list li {
             margin-bottom: 8px;
-            line-height: 1.6;
-            color: #4a5568;
+            color: #374151;
+            line-height: 1.7;
         }
 
-        .interactive-sections {
-            padding: 20px 40px 40px 40px;
-        }
-
-        details {
-            margin: 20px 0;
-            border-radius: 12px;
+        .expandable-section {
+            margin: 32px 0;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
             overflow: hidden;
-            background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
         }
 
-        details summary {
-            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
-            padding: 20px 24px;
+        .expandable-section summary {
+            background: #f9fafb;
+            padding: 16px 24px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 1.1em;
-            color: #2d3748;
-            transition: all 0.3s ease;
+            color: #374151;
+            border-bottom: 1px solid #d1d5db;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: between;
+            font-family: 'Georgia', serif;
         }
 
-        details summary::before {
-            content: "🔧";
-            margin-right: 12px;
-            font-size: 1.2em;
+        .expandable-section summary:hover {
+            background: #f3f4f6;
         }
 
-        details[open] summary::before {
-            content: "🔧";
+        .expandable-section[open] summary {
+            background: #f3f4f6;
         }
 
-        details summary::after {
-            content: "▼";
+        .expandable-section summary::marker {
+            content: '';
+        }
+
+        .expandable-section summary::after {
+            content: '▼';
+            margin-left: auto;
             font-size: 0.8em;
-            color: #718096;
-            transition: transform 0.3s ease;
+            color: #6b7280;
+            transition: transform 0.2s;
         }
 
-        details[open] summary::after {
+        .expandable-section[open] summary::after {
             transform: rotate(180deg);
         }
 
-        details summary:hover {
-            background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
-        }
-
-        details > div {
+        .expandable-content {
             padding: 24px;
-            background: #fafbfc;
+            background: white;
         }
 
-        details h3 {
-            color: #2d3748;
+        .expandable-content h3 {
+            color: #374151;
+            font-size: 1.1em;
+            font-weight: 600;
             margin-bottom: 16px;
             padding: 8px 16px;
-            background: white;
-            border-radius: 6px;
+            background: #f8fafc;
             border-left: 3px solid #3182ce;
+            border-radius: 0 6px 6px 0;
         }
 
-        .worked-example-details summary::before {
-            content: "💡";
+        .info-box {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-left: 4px solid #0284c7;
+            padding: 20px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
         }
 
-        .worked-example-details > div {
-            background: linear-gradient(135deg, #fffbf0 0%, #fef7e0 100%);
+        .info-box h2 {
+            color: #0c4a6e;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-family: 'Georgia', serif;
         }
 
-        .connections {
-            background: linear-gradient(135deg, #f0fff4 0%, #dcfce7 100%);
+        .connections-box {
+            background: #f0fdf4;
             border: 1px solid #bbf7d0;
-            border-left: 4px solid #22c55e;
-            padding: 24px;
+            border-left: 4px solid #16a34a;
+            padding: 20px;
             margin: 24px 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1);
+            border-radius: 0 8px 8px 0;
         }
 
-        .connections h2 {
-            color: #15803d;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-        }
-
-        .connections h2::before {
-            content: "🔗";
-            margin-right: 12px;
+        .connections-box h2 {
+            color: #14532d;
             font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-family: 'Georgia', serif;
         }
 
-        .key-equations {
-            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-            border: 1px solid #fbbf24;
-            border-left: 4px solid #f59e0b;
-            padding: 24px;
+        .equations-box {
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-left: 4px solid #d97706;
+            padding: 20px;
             margin: 24px 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+            border-radius: 0 8px 8px 0;
         }
 
-        .key-equations h2 {
-            color: #d97706;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-        }
-
-        .key-equations h2::before {
-            content: "📐";
-            margin-right: 12px;
+        .equations-box h2 {
+            color: #92400e;
             font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-family: 'Georgia', serif;
         }
 
-        .key-equations ul li {
+        .equation-item {
             background: white;
-            padding: 12px 16px;
-            margin: 8px 0;
-            border-radius: 8px;
-            border-left: 3px solid #f59e0b;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 16px 20px;
+            margin: 12px 0;
+            border-radius: 6px;
+            border-left: 3px solid #d97706;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         ol, ul {
@@ -1208,40 +1229,55 @@
                 </div>
 
                 <div class="lesson-body">
-                    <div class="concept-section">
-                        <h2>Concept</h2>
-                        ${getConcept(lesson.code)}
+                    <div class="section">
+                        <div class="section-header">
+                            <div class="section-number">1</div>
+                            <h2>Fundamental Concepts</h2>
+                        </div>
+                        <div class="academic-text">
+                            ${getConcept(lesson.code)}
+                        </div>
                     </div>
 
-                    <div class="interactive-sections">
-                        <details>
-                            <summary><strong>Derivation (full)</strong></summary>
-                            <div>
-                                <h3>Governing Equations & Set-up</h3>
+                    <details class="expandable-section">
+                        <summary>Mathematical Derivation</summary>
+                        <div class="expandable-content">
+                            <h3>Governing Equations & Set-up</h3>
+                            <div class="academic-text">
                                 ${getGoverningEquations(lesson.code)}
-                                
-                                <h3>Steps</h3>
+                            </div>
+                            
+                            <h3>Derivation Steps</h3>
+                            <div class="academic-text">
                                 ${getDerivationSteps(lesson.code)}
-                                
-                                <h3>Result & Validity</h3>
+                            </div>
+                            
+                            <h3>Result & Validity</h3>
+                            <div class="academic-text">
                                 ${getResultAndValidity(lesson.code)}
                             </div>
-                        </details>
+                        </div>
+                    </details>
 
-                        <details class="worked-example-details">
-                            <summary><strong>Worked Example</strong></summary>
-                            <div>
+                    <details class="expandable-section">
+                        <summary>Worked Example</summary>
+                        <div class="expandable-content">
+                            <div class="academic-text">
                                 ${getWorkedExample(lesson.code)}
                             </div>
-                        </details>
+                        </div>
+                    </details>
 
-                        <div class="connections">
-                            <h2>Connections</h2>
+                    <div class="connections-box">
+                        <h2>Connections to Other Topics</h2>
+                        <div class="academic-text">
                             ${getConnections(lesson.code)}
                         </div>
+                    </div>
 
-                        <div class="key-equations">
-                            <h2>Key Equations</h2>
+                    <div class="equations-box">
+                        <h2>Key Mathematical Relations</h2>
+                        <div class="academic-text">
                             ${getKeyEquations(lesson.code)}
                         </div>
                     </div>
