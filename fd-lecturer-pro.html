@@ -73,86 +73,208 @@
         }
 
         .course-section {
-            margin-bottom: 24px;
+            margin-bottom: 32px;
         }
 
         .course-level {
-            font-size: 0.75em;
-            font-weight: 600;
+            font-size: 0.8em;
+            font-weight: 700;
             text-transform: uppercase;
-            color: #718096;
-            margin-bottom: 8px;
+            color: #2d3748;
+            margin-bottom: 12px;
             letter-spacing: 0.5px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #edf2f7, #e2e8f0);
+            border-radius: 6px;
+            border-left: 4px solid #3182ce;
+        }
+
+        .learning-path-info {
+            font-size: 0.75em;
+            color: #718096;
+            margin-bottom: 16px;
+            padding: 8px 12px;
+            background: #f0fff4;
+            border-radius: 6px;
+            border-left: 3px solid #38a169;
         }
 
         .module-item {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            margin-bottom: 8px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 12px;
             overflow: hidden;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .module-item:hover {
-            border-color: #cbd5e0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-color: #3182ce;
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .module-number {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 24px;
+            height: 24px;
+            background: #3182ce;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75em;
+            font-weight: 700;
         }
 
         .module-header {
-            padding: 12px 16px;
+            padding: 16px 20px 16px 48px;
             cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             background: white;
+            position: relative;
         }
 
         .module-header.active {
-            background: #ebf8ff;
-            border-bottom: 1px solid #bee3f8;
+            background: #f7fafc;
+            border-bottom: 2px solid #3182ce;
+        }
+
+        .module-header.active::after {
+            content: "📖 Lessons expanded below";
+            position: absolute;
+            bottom: -20px;
+            left: 48px;
+            font-size: 0.7em;
+            color: #3182ce;
+            font-weight: 600;
+            background: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #bee3f8;
         }
 
         .module-title {
             font-weight: 600;
-            font-size: 0.9em;
+            font-size: 0.95em;
             color: #2d3748;
+            margin-bottom: 4px;
+            line-height: 1.3;
         }
 
         .module-code {
             font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: #4a5568;
             background: #edf2f7;
             padding: 2px 6px;
             border-radius: 4px;
+            display: inline-block;
+        }
+
+        .module-info {
+            font-size: 0.8em;
+            color: #718096;
+            margin-top: 4px;
+        }
+
+        .expand-indicator {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            color: #718096;
+            transition: transform 0.3s ease;
+        }
+
+        .module-header.active .expand-indicator {
+            transform: translateY(-50%) rotate(180deg);
         }
 
         .lesson-list {
             display: none;
-            padding: 8px;
+            padding: 16px;
             background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
         }
 
         .lesson-list.active {
             display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+
+        .lesson-list-header {
+            font-size: 0.8em;
+            color: #4a5568;
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-align: center;
+            padding: 8px;
+            background: #e2e8f0;
+            border-radius: 6px;
         }
 
         .lesson-item {
-            padding: 8px 12px;
-            margin: 4px 0;
-            border-radius: 6px;
+            padding: 10px 12px;
+            margin: 6px 0;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
             font-size: 0.85em;
+            border: 1px solid transparent;
+            background: white;
+            position: relative;
+            padding-left: 36px;
+        }
+
+        .lesson-item::before {
+            content: attr(data-lesson-number);
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            background: #e2e8f0;
+            color: #4a5568;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            font-weight: 600;
         }
 
         .lesson-item:hover {
-            background: #e2e8f0;
+            background: #ebf8ff;
+            border-color: #bee3f8;
+            transform: translateX(4px);
         }
 
         .lesson-item.selected {
             background: #3182ce;
+            color: white;
+            border-color: #2c5aa0;
+            transform: translateX(4px);
+        }
+
+        .lesson-item.selected::before {
+            background: #2c5aa0;
             color: white;
         }
 
@@ -160,6 +282,11 @@
             font-family: 'Monaco', 'Menlo', monospace;
             font-weight: 600;
             margin-right: 8px;
+            color: #805ad5;
+        }
+
+        .lesson-item.selected .lesson-code {
+            color: #e2e8f0;
         }
 
         .main-content {
@@ -468,11 +595,58 @@
         }
 
         /* Enhanced visual hierarchy */
-        .course-foundations { border-left: 4px solid #3182ce; }
-        .course-core { border-left: 4px solid #38a169; }
-        .course-advanced { border-left: 4px solid #d69e2e; }
-        .course-graduate { border-left: 4px solid #805ad5; }
-        .course-reference { border-left: 4px solid #718096; }
+        .course-foundations { 
+            border-left: 4px solid #3182ce; 
+        }
+        .course-foundations .module-number { 
+            background: #3182ce; 
+        }
+        
+        .course-core { 
+            border-left: 4px solid #38a169; 
+        }
+        .course-core .module-number { 
+            background: #38a169; 
+        }
+        
+        .course-advanced { 
+            border-left: 4px solid #d69e2e; 
+        }
+        .course-advanced .module-number { 
+            background: #d69e2e; 
+        }
+        
+        .course-graduate { 
+            border-left: 4px solid #805ad5; 
+        }
+        .course-graduate .module-number { 
+            background: #805ad5; 
+        }
+        
+        .course-reference { 
+            border-left: 4px solid #718096; 
+        }
+        .course-reference .module-number { 
+            background: #718096; 
+        }
+
+        /* Prerequisites indicator */
+        .has-prerequisites {
+            position: relative;
+        }
+
+        .has-prerequisites::before {
+            content: "⚠️ Requires prerequisites";
+            position: absolute;
+            top: -8px;
+            right: 8px;
+            font-size: 0.7em;
+            color: #d69e2e;
+            background: #fffbeb;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #fed7aa;
+        }
 
         .progress-indicator {
             position: fixed;
@@ -514,7 +688,49 @@
                 <div class="welcome-state" id="welcomeState">
                     <div class="icon">📚</div>
                     <h2>Choose Your Learning Path</h2>
-                    <p>Browse through our comprehensive fluid dynamics curriculum. From undergraduate foundations to advanced graduate topics, each lesson is designed for rapid comprehension with progressive disclosure.</p>
+                    <p>Browse through our comprehensive fluid dynamics curriculum. Each lesson is designed for rapid comprehension with progressive disclosure.</p>
+                    
+                    <div style="margin-top: 40px; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;">
+                        <h3 style="color: #2d3748; margin-bottom: 20px; text-align: center;">📍 Recommended Learning Sequence</h3>
+                        
+                        <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                            <div style="display: flex; align-items: center; margin-bottom: 16px; padding: 12px; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #3182ce;">
+                                <span style="font-size: 1.5em; margin-right: 12px;">1️⃣</span>
+                                <div>
+                                    <strong>Mathematical Foundations (M)</strong><br>
+                                    <small style="color: #718096;">Vector calculus, differential equations, dimensional analysis</small>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; margin-bottom: 16px; padding: 12px; background: #f0fff4; border-radius: 8px; border-left: 4px solid #38a169;">
+                                <span style="font-size: 1.5em; margin-right: 12px;">2️⃣</span>
+                                <div>
+                                    <strong>Fluid Mechanics I (FD101)</strong><br>
+                                    <small style="color: #718096;">Continuum, kinematics, conservation laws, Navier-Stokes</small>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; margin-bottom: 16px; padding: 12px; background: #fffbeb; border-radius: 8px; border-left: 4px solid #d69e2e;">
+                                <span style="font-size: 1.5em; margin-right: 12px;">3️⃣</span>
+                                <div>
+                                    <strong>Choose Your Track:</strong><br>
+                                    <small style="color: #718096;">FD201 (Boundary Layers) • CF231 (Compressible) • HMT241 (Heat Transfer)</small>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; padding: 12px; background: #faf5ff; border-radius: 8px; border-left: 4px solid #805ad5;">
+                                <span style="font-size: 1.5em; margin-right: 12px;">4️⃣</span>
+                                <div>
+                                    <strong>Advanced Topics</strong><br>
+                                    <small style="color: #718096;">Turbulence, CFD, experimental methods, specialized electives</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 24px; font-size: 0.9em; color: #718096;">
+                            💡 <strong>Tip:</strong> Click any course module (numbered circles) to see its lessons
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="lesson-content" id="lessonContent">
@@ -776,8 +992,16 @@
             });
 
             const levelOrder = ['foundations', 'core', 'advanced', 'graduate', 'reference'];
+            const levelDescriptions = {
+                'foundations': '📐 Start here - Mathematical tools and prerequisites',
+                'core': '🎯 Essential undergraduate fluid mechanics',
+                'advanced': '🔬 Advanced undergraduate and early graduate',
+                'graduate': '🎓 Specialized graduate-level topics',
+                'reference': '📋 Quick reference and derivations'
+            };
             
             sidebarContent.innerHTML = '';
+            let moduleCounter = 1;
             
             levelOrder.forEach(level => {
                 if (groupedModules[level]) {
@@ -789,9 +1013,16 @@
                     levelTitle.textContent = getCourseCategory(groupedModules[level][0].id);
                     section.appendChild(levelTitle);
                     
+                    // Add learning path info
+                    const pathInfo = document.createElement('div');
+                    pathInfo.className = 'learning-path-info';
+                    pathInfo.textContent = levelDescriptions[level];
+                    section.appendChild(pathInfo);
+                    
                     groupedModules[level].forEach(module => {
-                        const moduleItem = createModuleItem(module, level);
+                        const moduleItem = createModuleItem(module, level, moduleCounter);
                         section.appendChild(moduleItem);
+                        moduleCounter++;
                     });
                     
                     sidebarContent.appendChild(section);
@@ -799,25 +1030,54 @@
             });
         }
 
-        function createModuleItem(module, level) {
+        function createModuleItem(module, level, moduleNumber) {
             const moduleItem = document.createElement('div');
             moduleItem.className = `module-item course-${level}`;
             moduleItem.dataset.moduleId = module.id;
             
+            // Add prerequisites indicator for advanced courses
+            if (level !== 'foundations' && level !== 'reference') {
+                moduleItem.classList.add('has-prerequisites');
+            }
+            
+            // Add module number indicator
+            const moduleNumberEl = document.createElement('div');
+            moduleNumberEl.className = 'module-number';
+            moduleNumberEl.textContent = moduleNumber;
+            
             const moduleHeader = document.createElement('div');
             moduleHeader.className = 'module-header';
+            
+            // Get difficulty indicator
+            const difficultyEmoji = getDifficultyEmoji(level);
+            const progressionHint = getProgressionHint(module.id);
+            
             moduleHeader.innerHTML = `
-                <div class="module-title">${module.name}</div>
-                <div class="module-code">${module.id}</div>
+                <div class="module-title">${difficultyEmoji} ${module.name}</div>
+                <div class="module-info">
+                    <span class="module-code">${module.id}</span> • 
+                    ${module.lessons.length} lessons
+                    ${progressionHint ? ` • ${progressionHint}` : ''}
+                </div>
+                <div class="expand-indicator">▼</div>
             `;
             
             const lessonList = document.createElement('div');
             lessonList.className = 'lesson-list';
             
-            module.lessons.forEach(lesson => {
+            // Add header to lesson list with clear indication
+            const lessonListHeader = document.createElement('div');
+            lessonListHeader.className = 'lesson-list-header';
+            lessonListHeader.innerHTML = `
+                ⬇️ <strong>${module.lessons.length} Lessons in ${module.id}</strong> - Click any lesson to start learning
+            `;
+            lessonList.appendChild(lessonListHeader);
+            
+            module.lessons.forEach((lesson, index) => {
                 const lessonItem = document.createElement('div');
                 lessonItem.className = 'lesson-item';
                 lessonItem.dataset.lessonCode = lesson.code;
+                lessonItem.dataset.lessonNumber = index + 1;
                 lessonItem.innerHTML = `
                     <span class="lesson-code">${lesson.code}</span>
                     ${lesson.title}
@@ -829,16 +1089,41 @@
                 lessonList.appendChild(lessonItem);
             });
             
-            moduleHeader.addEventListener('click', () => toggleModule(moduleItem, lessonList));
+            moduleHeader.addEventListener('click', () => toggleModule(moduleItem, lessonList, moduleHeader));
             
+            moduleItem.appendChild(moduleNumberEl);
             moduleItem.appendChild(moduleHeader);
             moduleItem.appendChild(lessonList);
             
             return moduleItem;
         }
 
-        function toggleModule(moduleItem, lessonList) {
-            const moduleHeader = moduleItem.querySelector('.module-header');
+        function getDifficultyEmoji(level) {
+            const emojiMap = {
+                'foundations': '📐',
+                'core': '🎯', 
+                'advanced': '🔬',
+                'graduate': '🎓',
+                'reference': '📋'
+            };
+            return emojiMap[level] || '📚';
+        }
+
+        function getProgressionHint(moduleId) {
+            const hints = {
+                'M': 'Start here first',
+                'FD101': 'After M',
+                'FD201': 'After FD101',
+                'CF231': 'After FD101',
+                'HMT241': 'After FD101',
+                'FD301': 'After FD201',
+                'CFD311': 'After FD201',
+                'EXP321': 'After FD201'
+            };
+            return hints[moduleId] || '';
+        }
+
+        function toggleModule(moduleItem, lessonList, moduleHeader) {
             const isActive = lessonList.classList.contains('active');
             
             // Close all other modules
@@ -850,6 +1135,14 @@
             if (!isActive) {
                 lessonList.classList.add('active');
                 moduleHeader.classList.add('active');
+                
+                // Scroll the expanded module into view
+                setTimeout(() => {
+                    moduleItem.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'nearest' 
+                    });
+                }, 100);
             }
         }
 
