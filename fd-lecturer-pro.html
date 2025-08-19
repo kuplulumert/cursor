@@ -425,12 +425,46 @@
             color: #374151;
             font-size: 1.15em;
             font-weight: 600;
-            margin: 28px 0 16px 0;
+            margin: 32px 0 16px 0;
             padding: 12px 20px;
             background: #f9fafb;
             border-left: 4px solid #6b7280;
             border-radius: 0 6px 6px 0;
             font-family: 'Georgia', serif;
+            position: relative;
+        }
+
+        .concept-block h4::after {
+            content: '';
+            position: absolute;
+            top: -16px;
+            left: 20px;
+            right: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d1d5db, transparent);
+        }
+
+        .concept-block h4:first-of-type::after {
+            display: none;
+        }
+
+        .subsection-break {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+            margin: 24px 0;
+            position: relative;
+        }
+
+        .subsection-break::after {
+            content: "•";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: #d1d5db;
+            padding: 0 8px;
+            font-size: 0.8em;
         }
 
         .concept-block p {
@@ -1506,6 +1540,8 @@
                             <li><strong>Fluid Examples:</strong> Pressure ($p$), Temperature ($T$), and Density ($\\rho$).</li>
                         </ul>
                         
+                        <div class="subsection-break"></div>
+                        
                         <h4>Vectors: Magnitude and Direction</h4>
                         <p>A vector describes a quantity that has both a magnitude and a direction.</p>
                         <ul>
@@ -1513,6 +1549,8 @@
                             <li><strong>Fluid Examples:</strong> Velocity ($\\vec{u}$), Force ($\\vec{F}$), and the local rate of rotation, or Vorticity ($\\vec{\\omega}$).</li>
                             <li><strong>Notation:</strong> In Cartesian coordinates ($x, y, z$), we can write the velocity vector as $\\vec{u} = u_x\\hat{i} + u_y\\hat{j} + u_z\\hat{k}$, where $u_x, u_y, u_z$ are the velocity components and $\\hat{i}, \\hat{j}, \\hat{k}$ are the unit vectors.</li>
                         </ul>
+                        
+                        <div class="subsection-break"></div>
                         
                         <h4>Tensors: Handling Complex, Directional Relationships</h4>
                         <p>A second-rank tensor is a more complex object used to describe properties that have different values depending on the direction you're looking at.</p>
@@ -1545,6 +1583,8 @@
                             <li><strong>Mathematical Form:</strong> $\\nabla p = \\frac{\\partial p}{\\partial x}\\hat{i} + \\frac{\\partial p}{\\partial y}\\hat{j} + \\frac{\\partial p}{\\partial z}\\hat{k}$</li>
                         </ul>
                         
+                        <div class="subsection-break"></div>
+                        
                         <h4>2. The Divergence ($\\nabla \\cdot$): The "Source & Drain Finder"</h4>
                         <p>This tool measures whether a <strong>vector property</strong> (like velocity) is spreading out from or bunching up into a point.</p>
                         <ul>
@@ -1552,6 +1592,8 @@
                             <li><strong>Physical Significance:</strong> The divergence of velocity measures the rate of volume expansion. For an <strong>incompressible fluid</strong> like water, the velocity field must be divergence-free: $\\nabla \\cdot \\vec{u} = 0$. This is the mathematical statement of the <strong>conservation of mass</strong> for incompressible flows.</li>
                             <li><strong>Mathematical Form:</strong> $\\nabla \\cdot \\vec{u} = \\frac{\\partial u_x}{\\partial x} + \\frac{\\partial u_y}{\\partial y} + \\frac{\\partial u_z}{\\partial z}$</li>
                         </ul>
+                        
+                        <div class="subsection-break"></div>
                         
                         <h4>3. The Curl ($\\nabla \\times$): The "Vortex Meter"</h4>
                         <p>This tool measures the local spinning or rotational motion of the <strong>vector property</strong> (like velocity).</p>
