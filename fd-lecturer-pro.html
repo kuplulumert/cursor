@@ -377,65 +377,39 @@
             font-family: 'Georgia', serif;
         }
 
-        .subsection {
-            margin: 32px 0;
-            position: relative;
-            transition: all 0.3s ease;
+        .concept-block {
+            margin: 40px 0;
+            padding: 32px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        .subsection.completed {
-            opacity: 0.7;
+        .concept-block:last-child {
+            margin-bottom: 60px;
         }
 
-        .subsection.completed::after {
-            content: "✓ Completed";
-            position: absolute;
-            top: 8px;
-            right: 16px;
-            background: #10b981;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.75em;
+        .concept-block h3 {
+            color: #1f2937;
+            font-size: 1.3em;
             font-weight: 600;
-            animation: completionPulse 0.5s ease;
-        }
-
-        @keyframes completionPulse {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .subsection h3 {
-            color: #2d3748;
-            font-size: 1.2em;
-            font-weight: 600;
-            margin-bottom: 16px;
-            padding: 12px 20px 12px 60px;
-            background: #f8fafc;
-            border-left: 4px solid #3182ce;
-            border-radius: 0 8px 8px 0;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
             font-family: 'Georgia', serif;
             position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .subsection h3:hover {
-            background: #edf2f7;
-            transform: translateX(2px);
-        }
-
-        .subsection h3::before {
-            content: attr(data-step);
+        .concept-block h3::before {
+            content: counter(concept-counter);
+            counter-increment: concept-counter;
             position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 28px;
-            height: 28px;
-            background: #3182ce;
+            left: -16px;
+            top: -8px;
+            width: 32px;
+            height: 32px;
+            background: #374151;
             color: white;
             border-radius: 50%;
             display: flex;
@@ -443,63 +417,87 @@
             justify-content: center;
             font-size: 0.8em;
             font-weight: 600;
-            transition: all 0.3s ease;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        .subsection.completed h3::before {
-            background: #10b981;
-            content: "✓";
-            animation: checkmarkBounce 0.6s ease;
-        }
-
-        @keyframes checkmarkBounce {
-            0% { transform: translateY(-50%) scale(0); }
-            50% { transform: translateY(-50%) scale(1.2); }
-            100% { transform: translateY(-50%) scale(1); }
-        }
-
-        .subsection h4 {
-            color: #4a5568;
-            font-size: 1.1em;
+        .concept-block h4 {
+            color: #374151;
+            font-size: 1.15em;
             font-weight: 600;
-            margin: 24px 0 12px 0;
-            padding: 8px 16px 8px 48px;
-            background: #f1f5f9;
-            border-left: 3px solid #64748b;
+            margin: 28px 0 16px 0;
+            padding: 12px 20px;
+            background: #f9fafb;
+            border-left: 4px solid #6b7280;
             border-radius: 0 6px 6px 0;
             font-family: 'Georgia', serif;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .subsection h4:hover {
-            background: #e2e8f0;
-            transform: translateX(2px);
+        .concept-block p {
+            color: #374151;
+            font-size: 1.05em;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            text-align: justify;
         }
 
-        .subsection h4::before {
-            content: attr(data-substep);
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 20px;
-            height: 20px;
-            background: #64748b;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7em;
+        .concept-block ul, .concept-block ol {
+            margin: 20px 0 20px 32px;
+        }
+
+        .concept-block li {
+            margin-bottom: 12px;
+            color: #374151;
+            line-height: 1.7;
+            font-size: 1.05em;
+        }
+
+        .concept-block li strong {
+            color: #1f2937;
             font-weight: 600;
-            transition: all 0.3s ease;
         }
 
-        .subsection.completed h4::before {
-            background: #10b981;
-            content: "✓";
+        .section-break {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d1d5db, transparent);
+            margin: 48px 0;
+            position: relative;
+        }
+
+        .section-break::after {
+            content: "◆";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: #9ca3af;
+            padding: 0 16px;
+            font-size: 1.2em;
+        }
+
+        .lesson-body {
+            padding: 40px 48px 60px 48px;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.8;
+            counter-reset: concept-counter;
+        }
+
+        .reading-checkpoint {
+            margin: 32px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #4b5563;
+            text-align: center;
+        }
+
+        .reading-checkpoint::before {
+            content: "📖";
+            margin-right: 8px;
         }
 
         .progress-tracker {
@@ -1382,9 +1380,6 @@
                 const generatedContent = generateLessonContent(selectedModule, selectedLesson);
                 lessonContent.innerHTML = generatedContent;
                 
-                // Initialize interactive learning features
-                initializeLearningProgress();
-                
                 // Re-render MathJax
                 if (window.MathJax) {
                     MathJax.typesetPromise([lessonContent]).catch(function (err) {
@@ -1395,180 +1390,6 @@
                 // Scroll to top of content
                 document.querySelector('.lesson-viewer').scrollTop = 0;
             }, 1000);
-        }
-
-        // Interactive learning progress system
-        let completedSections = new Set();
-        let totalSections = 4; // concepts, derivation, example, connections
-        let sectionTimers = {};
-
-        function initializeLearningProgress() {
-            completedSections.clear();
-            sectionTimers = {};
-            
-            // Add scroll tracking for automatic completion
-            const lessonViewer = document.querySelector('.lesson-viewer');
-            if (lessonViewer) {
-                lessonViewer.addEventListener('scroll', trackReadingProgress);
-            }
-            
-            // Add click tracking for expandable sections
-            const expandableSections = document.querySelectorAll('details[data-section]');
-            expandableSections.forEach(section => {
-                section.addEventListener('toggle', function() {
-                    if (this.open) {
-                        startSectionTimer(this.getAttribute('data-section'));
-                    }
-                });
-            });
-            
-            // Track visible sections
-            observeSections();
-        }
-
-        function trackReadingProgress() {
-            const sections = document.querySelectorAll('[data-section]');
-            sections.forEach(section => {
-                if (isElementInViewport(section) && !completedSections.has(section.getAttribute('data-section'))) {
-                    startSectionTimer(section.getAttribute('data-section'));
-                }
-            });
-        }
-
-        function startSectionTimer(sectionId) {
-            if (sectionTimers[sectionId]) return; // Already tracking
-            
-            sectionTimers[sectionId] = setTimeout(() => {
-                completeSection(sectionId);
-            }, 3000); // Complete after 3 seconds of viewing
-        }
-
-        function completeSection(sectionId) {
-            if (completedSections.has(sectionId)) return;
-            
-            completedSections.add(sectionId);
-            
-            // Visual feedback
-            const section = document.querySelector(`[data-section="${sectionId}"]`);
-            if (section) {
-                section.classList.add('completed');
-                
-                // Add subsection completion indicators for the M1 concept section
-                if (sectionId === 'concepts') {
-                    addSubsectionCompletionIndicators(section);
-                }
-            }
-            
-            // Update progress
-            updateLearningProgress();
-            
-            // Show achievement popup
-            showAchievementPopup(sectionId);
-            
-            // Clear timer
-            if (sectionTimers[sectionId]) {
-                clearTimeout(sectionTimers[sectionId]);
-                delete sectionTimers[sectionId];
-            }
-        }
-
-        function addSubsectionCompletionIndicators(conceptSection) {
-            // Add step numbers to M1 subsections
-            const h3Elements = conceptSection.querySelectorAll('h3');
-            const h4Elements = conceptSection.querySelectorAll('h4');
-            
-            h3Elements.forEach((h3, index) => {
-                if (!h3.hasAttribute('data-step')) {
-                    h3.setAttribute('data-step', index + 1);
-                    h3.parentElement.classList.add('subsection');
-                }
-            });
-            
-            h4Elements.forEach((h4, index) => {
-                if (!h4.hasAttribute('data-substep')) {
-                    h4.setAttribute('data-substep', String.fromCharCode(97 + index)); // a, b, c...
-                    if (!h4.parentElement.classList.contains('subsection')) {
-                        h4.parentElement.classList.add('subsection');
-                    }
-                }
-            });
-            
-            // Mark all subsections as completed
-            setTimeout(() => {
-                const subsections = conceptSection.querySelectorAll('.subsection');
-                subsections.forEach((subsection, index) => {
-                    setTimeout(() => {
-                        subsection.classList.add('completed');
-                    }, index * 500); // Stagger the completion animations
-                });
-            }, 1000);
-        }
-
-        function updateLearningProgress() {
-            const progressFill = document.querySelector('.progress-fill');
-            const progressStats = document.querySelector('.progress-stats');
-            
-            if (progressFill && progressStats) {
-                const percentage = Math.round((completedSections.size / totalSections) * 100);
-                progressFill.style.width = percentage + '%';
-                progressStats.innerHTML = `
-                    <span>${completedSections.size}/${totalSections} completed</span>
-                    <span>${percentage}%</span>
-                `;
-            }
-        }
-
-        function showAchievementPopup(sectionId) {
-            const popup = document.getElementById('achievementPopup');
-            const messages = {
-                'concepts': { title: 'Concepts Mastered!', text: 'You now understand the three levels of description in fluid dynamics.' },
-                'derivation': { title: 'Math Skills Unlocked!', text: 'You\'ve worked through the mathematical derivation.' },
-                'example': { title: 'Problem Solver!', text: 'You\'ve completed a practical worked example.' },
-                'connections': { title: 'Connections Made!', text: 'You see how this connects to other topics.' },
-                'equations': { title: 'Equations Learned!', text: 'You\'ve mastered the key mathematical relations.' }
-            };
-            
-            const message = messages[sectionId] || { title: 'Section Completed!', text: 'Great progress!' };
-            
-            popup.querySelector('.achievement-title').textContent = message.title;
-            popup.querySelector('.achievement-text').textContent = message.text;
-            popup.classList.add('show');
-            
-            // Auto-close after 3 seconds
-            setTimeout(() => {
-                popup.classList.remove('show');
-            }, 3000);
-        }
-
-        function closeAchievement() {
-            const popup = document.getElementById('achievementPopup');
-            popup.classList.remove('show');
-        }
-
-        function isElementInViewport(el) {
-            const rect = el.getBoundingClientRect();
-            const viewHeight = window.innerHeight || document.documentElement.clientHeight;
-            return rect.top < viewHeight * 0.8 && rect.bottom > viewHeight * 0.2;
-        }
-
-        function observeSections() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-                        const sectionId = entry.target.getAttribute('data-section');
-                        if (sectionId && !completedSections.has(sectionId)) {
-                            startSectionTimer(sectionId);
-                        }
-                    }
-                });
-            }, {
-                threshold: [0.5],
-                rootMargin: '-10% 0px -10% 0px'
-            });
-            
-            // Observe all sections
-            const sections = document.querySelectorAll('[data-section]');
-            sections.forEach(section => observer.observe(section));
         }
 
         function updateProgress() {
@@ -1601,40 +1422,16 @@
             // Sample lesson for demonstration
             
             return `
-                <div class="progress-tracker">
-                    <div class="progress-header">Learning Progress</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 0%"></div>
-                    </div>
-                    <div class="progress-stats">
-                        <span>0/4 completed</span>
-                        <span>0%</span>
-                    </div>
-                </div>
-
-                <div class="achievement-popup" id="achievementPopup">
-                    <div class="achievement-icon">🎉</div>
-                    <div class="achievement-title">Section Completed!</div>
-                    <div class="achievement-text">Great job! You've mastered another concept.</div>
-                    <button class="achievement-button" onclick="closeAchievement()">Continue Learning</button>
-                </div>
-
                 <div class="lesson-header">
                     <h1>${lesson.title}</h1>
                 </div>
 
                 <div class="lesson-body">
-                    <div class="section">
-                        <div class="section-header">
-                            <div class="section-number">1</div>
-                            <h2>Fundamental Concepts</h2>
-                        </div>
-                        <div class="academic-text" data-section="concepts">
-                            ${getConcept(lesson.code)}
-                        </div>
-                    </div>
+                    ${formatConceptContent(lesson.code)}
+                    
+                    <div class="section-break"></div>
 
-                    <details class="expandable-section" data-section="derivation">
+                    <details class="expandable-section">
                         <summary>Mathematical Derivation</summary>
                         <div class="expandable-content">
                             <h3>Governing Equations & Set-up</h3>
@@ -1654,7 +1451,9 @@
                         </div>
                     </details>
 
-                    <details class="expandable-section" data-section="example">
+                    <div class="section-break"></div>
+
+                    <details class="expandable-section">
                         <summary>Worked Example</summary>
                         <div class="expandable-content">
                             <div class="academic-text">
@@ -1663,129 +1462,114 @@
                         </div>
                     </details>
 
-                    <div class="connections-box" data-section="connections">
+                    <div class="section-break"></div>
+
+                    <div class="connections-box">
                         <h2>Connections to Other Topics</h2>
                         <div class="academic-text">
                             ${getConnections(lesson.code)}
                         </div>
                     </div>
 
-                    <div class="equations-box" data-section="equations">
+                    <div class="section-break"></div>
+
+                    <div class="equations-box">
                         <h2>Key Mathematical Relations</h2>
                         <div class="academic-text">
                             ${getKeyEquations(lesson.code)}
                         </div>
                     </div>
+
+                    <div class="reading-checkpoint">
+                        Lesson completed. You have successfully learned the fundamental concepts of ${lesson.title}.
+                    </div>
                 </div>
             `;
         }
 
-        // Helper functions for lesson content generation
-
-        function getConcept(lessonCode) {
+        function formatConceptContent(lessonCode) {
             if (lessonCode === 'M1') {
                 return `
-                    <h3><strong>The Language of Flow: Describing Pushes and Swirls</strong></h3>
-                    
-                    <p>Fluid dynamics sounds complicated, but it's just about describing how stuff like air and water moves. To do that, we need a few special words and tools to talk about the properties of the flow.</p>
-                    
-                    <h3><strong>1. The Three Levels of Description</strong></h3>
-                    
-                    <p>Imagine you're describing the air in a room. You can be simple or you can be detailed.</p>
-                    
-                    <h4><strong>Scalars: Just a Number</strong></h4>
-                    <p>A scalar is the simplest property. It's just a single number at any given point.</p>
-                    <ul>
-                        <li><strong>Analogy:</strong> The <strong>temperature</strong> in the room. At the spot where you're standing, it might be 20°C. That's it. Just one number. ✅</li>
-                    </ul>
-                    
-                    <h4><strong>Vectors: A Number and a Direction</strong></h4>
-                    <p>A vector is a step up. It tells you two things: "how much?" and "which way?"</p>
-                    <ul>
-                        <li><strong>Analogy:</strong> The <strong>wind</strong> in the room. At your spot, there might be a 2 mph breeze blowing towards the window. A vector is like an arrow ➡️ that shows both the speed and the direction.</li>
-                    </ul>
-                    
-                    <h4><strong>Tensors: Describing Complex Pushes</strong></h4>
-                    <p>This is the most advanced concept. A tensor handles complex, multi-directional forces or properties.</p>
-                    <ul>
-                        <li><strong>Analogy:</strong> Imagine a cube of Jell-O. The forces acting on it are complex. You can <strong>poke</strong> it (a straight push), <strong>squeeze</strong> it from all sides (pressure), or <strong>smear</strong> it by dragging your finger across the top (a shear force). A <strong>tensor</strong> is a super-tool that describes all these different pokes, squeezes, and smears on all faces of the Jell-O cube at once. In fluids, it helps us understand stress and strain.</li>
-                    </ul>
-                    
-                    <h3><strong>2. The Fluid Dynamics "Swiss Army Knife" ($\\nabla$)</strong></h3>
-                    
-                    <p>There's a magic operator in fluid dynamics called "Del" (written as $\\nabla$). Think of it as a Swiss Army Knife. It has different tools that ask different questions about the flow.</p>
-                    
-                    <h4><strong>Tool 1: The Gradient ($\\nabla$) - The "Uphill Finder"</strong></h4>
-                    <p>The gradient finds the steepest direction.</p>
-                    <ul>
-                        <li><strong>Analogy:</strong> Imagine you're on a hill in a thick fog. You can't see, but you want to find the fastest way up. The gradient is a magic compass that always points straight uphill.</li>
-                        <li><strong>How Fluids Use It:</strong> Fluids feel a pressure "hill." The pressure gradient points toward higher pressure. But just like a ball rolls <em>down</em> a hill, fluid gets pushed from high pressure to low pressure, in the <strong>opposite</strong> direction of the gradient. This push is what makes wind blow! 💨</li>
-                    </ul>
-                    
-                    <h4><strong>Tool 2: The Divergence ($\\nabla \\cdot$) - The "Spreader Detector"</strong></h4>
-                    <p>The divergence checks if the fluid is spreading out or bunching up.</p>
-                    <ul>
-                        <li><strong>Analogy:</strong> Think of a sprinkler head on a lawn. Water is spreading out from it. That spot has a <strong>positive divergence</strong> (it's a source). Now think of the drain in your sink. Water is bunching up to flow into it. That spot has a <strong>negative divergence</strong> (it's a sink).</li>
-                        <li><strong>How Fluids Use It:</strong> Liquids like water can't really be squished or stretched. So, at any point in the water, the amount flowing in must equal the amount flowing out. This means for water, the divergence is <strong>zero</strong> everywhere! This simple rule is incredibly powerful. 💧</li>
-                    </ul>
-                    
-                    <h4><strong>Tool 3: The Curl ($\\nabla \\times$) - The "Spin Meter"</strong></h4>
-                    <p>The curl checks for local rotation in the fluid.</p>
-                    <ul>
-                        <li><strong>Analogy:</strong> If you placed a tiny pinwheel in a river, would it spin? The curl is a tool that measures how fast it would spin and which way. A whirlpool would have a huge curl value. A perfectly smooth, straight flow would have zero curl.</li>
-                        <li><strong>How Fluids Use It:</strong> The curl of the velocity tells us the <strong>vorticity</strong> of the flow. Vorticity is just a fancy word for this local spinning motion, which is crucial for understanding things like airplane lift and turbulence. 🌪️</li>
-                    </ul>
-                    
-                    <h3><strong>3. Keeping Track: Following a Fluid Particle</strong></h3>
-                    
-                    <p>Imagine you're trying to measure the temperature change of a single particle of air.</p>
-                    
-                    <p>That particle's temperature can change for two reasons:</p>
-                    <ol>
-                        <li><strong>The weather is changing:</strong> A cold front is moving in, making <em>all</em> the air colder over time.</li>
-                        <li><strong>The particle is moving:</strong> The particle gets blown up a mountain, where the air is naturally colder.</li>
-                    </ol>
-                    
-                    <p>The <strong>Material Derivative</strong> is a special calculation that adds both of these effects together to find the <em>total</em> change that the particle actually experiences. It's how we correctly measure a fluid particle's real acceleration.</p>
+                    <div class="concept-block">
+                        <h3>The Language of Flow: Describing Pushes and Swirls</h3>
+                        <p>Fluid dynamics sounds complicated, but it's just about describing how stuff like air and water moves. To do that, we need a few special words and tools to talk about the properties of the flow.</p>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>The Three Levels of Description</h3>
+                        <p>Imagine you're describing the air in a room. You can be simple or you can be detailed.</p>
+                        
+                        <h4>Scalars: Just a Number</h4>
+                        <p>A scalar is the simplest property. It's just a single number at any given point.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> The <strong>temperature</strong> in the room. At the spot where you're standing, it might be 20°C. That's it. Just one number. ✅</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-block">
+                        <h4>Vectors: A Number and a Direction</h4>
+                        <p>A vector is a step up. It tells you two things: "how much?" and "which way?"</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> The <strong>wind</strong> in the room. At your spot, there might be a 2 mph breeze blowing towards the window. A vector is like an arrow ➡️ that shows both the speed and the direction.</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-block">
+                        <h4>Tensors: Describing Complex Pushes</h4>
+                        <p>This is the most advanced concept. A tensor handles complex, multi-directional forces or properties.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> Imagine a cube of Jell-O. The forces acting on it are complex. You can <strong>poke</strong> it (a straight push), <strong>squeeze</strong> it from all sides (pressure), or <strong>smear</strong> it by dragging your finger across the top (a shear force). A <strong>tensor</strong> is a super-tool that describes all these different pokes, squeezes, and smears on all faces of the Jell-O cube at once. In fluids, it helps us understand stress and strain.</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>The Fluid Dynamics "Swiss Army Knife" ($\\nabla$)</h3>
+                        <p>There's a magic operator in fluid dynamics called "Del" (written as $\\nabla$). Think of it as a Swiss Army Knife. It has different tools that ask different questions about the flow.</p>
+                        
+                        <h4>Tool 1: The Gradient ($\\nabla$) - The "Uphill Finder"</h4>
+                        <p>The gradient finds the steepest direction.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> Imagine you're on a hill in a thick fog. You can't see, but you want to find the fastest way up. The gradient is a magic compass that always points straight uphill.</li>
+                            <li><strong>How Fluids Use It:</strong> Fluids feel a pressure "hill." The pressure gradient points toward higher pressure. But just like a ball rolls <em>down</em> a hill, fluid gets pushed from high pressure to low pressure, in the <strong>opposite</strong> direction of the gradient. This push is what makes wind blow! 💨</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-block">
+                        <h4>Tool 2: The Divergence ($\\nabla \\cdot$) - The "Spreader Detector"</h4>
+                        <p>The divergence checks if the fluid is spreading out or bunching up.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> Think of a sprinkler head on a lawn. Water is spreading out from it. That spot has a <strong>positive divergence</strong> (it's a source). Now think of the drain in your sink. Water is bunching up to flow into it. That spot has a <strong>negative divergence</strong> (it's a sink).</li>
+                            <li><strong>How Fluids Use It:</strong> Liquids like water can't really be squished or stretched. So, at any point in the water, the amount flowing in must equal the amount flowing out. This means for water, the divergence is <strong>zero</strong> everywhere! This simple rule is incredibly powerful. 💧</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-block">
+                        <h4>Tool 3: The Curl ($\\nabla \\times$) - The "Spin Meter"</h4>
+                        <p>The curl checks for local rotation in the fluid.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> If you placed a tiny pinwheel in a river, would it spin? The curl is a tool that measures how fast it would spin and which way. A whirlpool would have a huge curl value. A perfectly smooth, straight flow would have zero curl.</li>
+                            <li><strong>How Fluids Use It:</strong> The curl of the velocity tells us the <strong>vorticity</strong> of the flow. Vorticity is just a fancy word for this local spinning motion, which is crucial for understanding things like airplane lift and turbulence. 🌪️</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>Keeping Track: Following a Fluid Particle</h3>
+                        <p>Imagine you're trying to measure the temperature change of a single particle of air.</p>
+                        <p>That particle's temperature can change for two reasons:</p>
+                        <ol>
+                            <li><strong>The weather is changing:</strong> A cold front is moving in, making <em>all</em> the air colder over time.</li>
+                            <li><strong>The particle is moving:</strong> The particle gets blown up a mountain, where the air is naturally colder.</li>
+                        </ol>
+                        <p>The <strong>Material Derivative</strong> is a special calculation that adds both of these effects together to find the <em>total</em> change that the particle actually experiences. It's how we correctly measure a fluid particle's real acceleration.</p>
+                    </div>
                 `;
             }
-            if (lessonCode === 'FD101-4') {
-                return `
-                    <p>The integral approach to fluid mechanics applies conservation principles to finite <strong>control volumes</strong> (CV) rather than infinitesimal fluid elements. This macroscopic viewpoint is particularly powerful for engineering applications.</p>
-                    
-                    <p><strong>Key assumptions:</strong></p>
-                    <ul>
-                        <li>Continuum hypothesis holds</li>
-                        <li>Control volume boundaries are well-defined</li>
-                        <li>Properties uniform across inlet/outlet sections</li>
-                        <li>Steady flow (for most derivations)</li>
-                    </ul>
-                    
-                    <p>The <strong>Reynolds Transport Theorem</strong> (RTT) bridges Lagrangian (following particles) and Eulerian (fixed control volume) descriptions. For any extensive property $B = \\int \\rho b \\, dV$:</p>
-                    
-                    $$\\frac{DB}{Dt} = \\frac{\\partial}{\\partial t} \\int_{CV} \\rho b \\, dV + \\int_{CS} \\rho b (\\vec{V} \\cdot \\hat{n}) \\, dA$$
-                `;
-            }
-            if (lessonCode === 'FD101-5') {
-                return `
-                    <p>The differential forms of conservation laws govern fluid motion at every point in the flow field. These partial differential equations form the mathematical foundation for all fluid mechanics analysis.</p>
-                    
-                    <p><strong>Key assumptions for Navier–Stokes:</strong></p>
-                    <ul>
-                        <li>Continuum hypothesis</li>
-                        <li>Newtonian fluid (linear stress-strain relationship)</li>
-                        <li>Constant fluid properties (for incompressible form)</li>
-                        <li>No-slip boundary condition at solid walls</li>
-                    </ul>
-                    
-                    <p>The <strong>continuity equation</strong> expresses mass conservation:</p>
-                    $$\\frac{\\partial \\rho}{\\partial t} + \\nabla \\cdot (\\rho \\vec{V}) = 0$$
-                    
-                    <p>For incompressible flow: $\\nabla \\cdot \\vec{V} = 0$</p>
-                `;
-            }
-            return '<p>Detailed concept explanation for this topic...</p>';
+            return '<div class="concept-block"><p>Detailed concept explanation for this topic...</p></div>';
         }
+
+        // Helper functions for lesson content generation
+
+
 
         function getGoverningEquations(lessonCode) {
             if (lessonCode === 'M1') {
