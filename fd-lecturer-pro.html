@@ -1085,28 +1085,10 @@
 
         function generateSampleLesson(module, lesson) {
             // Sample lesson for demonstration
-            const prerequisites = getPrerequisites(lesson.code);
-            const outcomes = getOutcomes(lesson.code);
-            const tags = getTags(lesson.code);
             
             return `
                 <div class="lesson-header">
                     <h1>${lesson.title}</h1>
-                    <div class="lesson-meta">
-                        <strong>Module:</strong> ${module.id} · <strong>Lesson:</strong> ${lesson.code} · <strong>Prerequisites:</strong> ${prerequisites}<br>
-                        <strong>Time:</strong> ~5 minutes · <strong>Tags:</strong> ${tags}
-                    </div>
-                    <div class="lesson-meta">
-                        <strong>Outcomes:</strong>
-                        <ul>
-                            ${outcomes.map(outcome => `<li>${outcome}</li>`).join('')}
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="quick-take">
-                    <h2>Quick Take</h2>
-                    ${getQuickTake(lesson.code)}
                 </div>
 
                 <h2>Concept</h2>
@@ -1133,108 +1115,19 @@
                     </div>
                 </details>
 
-                <div class="pitfalls">
-                    <h2>Common Pitfalls</h2>
-                    ${getCommonPitfalls(lesson.code)}
-                </div>
-
                 <div class="connections">
                     <h2>Connections</h2>
                     ${getConnections(lesson.code)}
-                </div>
-
-                <div class="check-yourself">
-                    <h2>Check Yourself</h2>
-                    ${getCheckYourself(lesson.code)}
-                    
-                    <details>
-                        <summary>Answers</summary>
-                        <div>
-                            ${getAnswers(lesson.code)}
-                        </div>
-                    </details>
                 </div>
 
                 <div class="key-equations">
                     <h2>Key Equations</h2>
                     ${getKeyEquations(lesson.code)}
                 </div>
-
-                <h2>References & Further Reading</h2>
-                ${getReferences(lesson.code)}
             `;
         }
 
         // Helper functions for lesson content generation
-        function getPrerequisites(lessonCode) {
-            const prereqMap = {
-                'FD101-4': 'M1, M2, FD101-1, FD101-3',
-                'FD101-5': 'M1, M2, FD101-4',
-                'FD201-1': 'FD101-5, FD101-7',
-                'FD301-1': 'FD101-5, FD201-1',
-                'CF231-1': 'FD101-5, Thermodynamics',
-                'HMT241-1': 'FD101-5, Heat Transfer',
-                // Add more as needed
-            };
-            return prereqMap[lessonCode] || 'Basic calculus, vector analysis';
-        }
-
-        function getOutcomes(lessonCode) {
-            const outcomeMap = {
-                'FD101-4': [
-                    'Apply conservation principles to finite control volumes',
-                    'Derive integral momentum equation from first principles',
-                    'Solve practical engineering problems using integral balances',
-                    'Understand limitations and assumptions of integral approaches'
-                ],
-                'FD101-5': [
-                    'Derive continuity and Navier–Stokes equations',
-                    'Understand physical meaning of each term',
-                    'Apply appropriate boundary conditions',
-                    'Recognise when simplifications are valid'
-                ],
-                'FD201-1': [
-                    'Define boundary layer thickness measures',
-                    'Understand viscous vs inviscid flow regions',
-                    'Apply boundary layer approximations',
-                    'Estimate when boundary layer theory breaks down'
-                ],
-                // Add more lesson-specific outcomes
-            };
-            return outcomeMap[lessonCode] || [
-                'Understand the fundamental concept',
-                'Apply mathematical techniques',
-                'Solve representative problems',
-                'Connect to broader fluid mechanics principles'
-            ];
-        }
-
-        function getTags(lessonCode) {
-            const tagMap = {
-                'FD101-4': 'conservation, control volume, integral, momentum',
-                'FD101-5': 'differential, Navier-Stokes, continuity, energy',
-                'FD201-1': 'boundary layer, viscous, external flow',
-                'FD301-1': 'turbulence, Reynolds number, transition',
-                'CF231-1': 'compressible, thermodynamics, speed of sound',
-                'HMT241-1': 'energy equation, dissipation, heat transfer',
-                // Add more tags
-            };
-            return tagMap[lessonCode] || 'fundamental, theory, analysis';
-        }
-
-        function getQuickTake(lessonCode) {
-            const quickTakeMap = {
-                'M1': 'Vector calculus provides the mathematical language for fluid dynamics. Scalars describe properties like temperature, vectors describe velocity and forces, and tensors describe complex stress states. The Del operator ($\\nabla$) is your Swiss Army knife for analyzing flow fields.',
-                'FD101-4': 'Conservation laws applied to finite control volumes give integral momentum and energy equations. Essential for analysing jets, wakes, and engineering devices where detailed flow structure is less important than overall balances.',
-                'FD101-5': 'The differential forms of conservation laws—continuity, Navier–Stokes, and energy equations—govern fluid motion at every point. These PDEs form the foundation for all fluid mechanics analysis.',
-                'FD201-1': 'Boundary layers are thin viscous regions near walls where velocity changes from zero to free-stream. Understanding thickness scales and approximations enables practical analysis of external flows.',
-                'FD301-1': 'Turbulence is irregular, three-dimensional, unsteady flow characterised by enhanced mixing and energy dissipation. Reynolds number and flow geometry determine onset and characteristics.',
-                'CF231-1': 'Compressible effects become important when flow speeds approach the speed of sound. Thermodynamic properties couple with fluid motion through pressure waves and density changes.',
-                'HMT241-1': 'Energy conservation in flowing fluids includes kinetic energy, internal energy, and viscous dissipation. Temperature fields couple with velocity through buoyancy and property variations.',
-                // Add more quick takes
-            };
-            return quickTakeMap[lessonCode] || 'Core concept in fluid mechanics with wide applications in engineering and natural phenomena.';
-        }
 
         function getConcept(lessonCode) {
             if (lessonCode === 'M1') {
@@ -1502,38 +1395,7 @@
             return '<p>Worked example for this topic...</p>';
         }
 
-        function getCommonPitfalls(lessonCode) {
-            const pitfallsMap = {
-                'M1': `
-                    <ul>
-                        <li>Confusing gradient direction with flow direction (gradient points uphill, flow goes downhill)</li>
-                        <li>Thinking divergence measures speed rather than spreading/compression</li>
-                        <li>Forgetting that curl measures local rotation, not overall circulation</li>
-                        <li>Using partial derivatives when material derivative is needed for moving particles</li>
-                        <li>Mixing up tensor indices and coordinate systems</li>
-                    </ul>
-                `,
-                'FD101-4': `
-                    <ul>
-                        <li>Forgetting to include pressure forces on control volume surfaces</li>
-                        <li>Sign errors in momentum flux terms (inlet vs outlet convention)</li>
-                        <li>Assuming uniform velocity when profiles are significantly non-uniform</li>
-                        <li>Neglecting body forces (gravity) in vertical flows</li>
-                        <li>Confusing gauge vs absolute pressure in force calculations</li>
-                    </ul>
-                `,
-                'FD101-5': `
-                    <ul>
-                        <li>Forgetting the material derivative includes convective acceleration</li>
-                        <li>Applying incompressible form to high-speed flows (Ma > 0.3)</li>
-                        <li>Incorrect boundary condition specification (especially no-slip)</li>
-                        <li>Dimensional inconsistency in pressure gradient terms</li>
-                        <li>Assuming steady flow when unsteady effects are significant</li>
-                    </ul>
-                `,
-            };
-            return pitfallsMap[lessonCode] || '<ul><li>Common conceptual misunderstandings</li><li>Mathematical errors in derivations</li><li>Incorrect application of assumptions</li></ul>';
-        }
+
 
         function getConnections(lessonCode) {
             const connectionsMap = {
@@ -1565,29 +1427,7 @@
             return connectionsMap[lessonCode] || '<ul><li>Related fundamental concepts</li><li>Applications in other modules</li><li>Mathematical connections</li></ul>';
         }
 
-        function getCheckYourself(lessonCode) {
-            return `
-                <ol>
-                    <li>What is the physical meaning of each term in the integral momentum equation?</li>
-                    <li>Calculate the momentum flux for water flowing at 3 m/s through a 2 cm diameter pipe.</li>
-                    <li>When does the assumption of uniform velocity profiles break down?</li>
-                    <li>Predict qualitatively how the required holding force changes if the elbow angle increases from 90° to 180°.</li>
-                    <li>Derive the integral momentum equation starting from Newton's second law.</li>
-                </ol>
-            `;
-        }
 
-        function getAnswers(lessonCode) {
-            return `
-                <ol>
-                    <li>Left side: net force on control volume. Right side: rate of momentum change due to convection across boundaries.</li>
-                    <li>$\\dot{m}V = \\rho V A \\times V = 1000 \\times 3 \\times \\pi(0.01)^2 \\times 3 = 2.83$ N</li>
-                    <li>When boundary layer thickness approaches pipe radius, or in entrance regions where velocity profiles develop.</li>
-                    <li>180° turn would double the momentum change in one direction, significantly increasing holding force.</li>
-                    <li>Apply RTT to Newton's second law with momentum as the extensive property.</li>
-                </ol>
-            `;
-        }
 
         function getKeyEquations(lessonCode) {
             const equationsMap = {
@@ -1616,16 +1456,7 @@
             return equationsMap[lessonCode] || '<ul><li>Key mathematical relationships</li><li>Important dimensionless numbers</li></ul>';
         }
 
-        function getReferences(lessonCode) {
-            return `
-                <ul>
-                    <li>White, F.M. "Fluid Mechanics" (8th ed.), Ch. 3: Integral Relations</li>
-                    <li>Kundu, P.K. & Cohen, I.M. "Fluid Mechanics" (6th ed.), Ch. 4: Conservation Laws</li>
-                    <li>MIT OCW 2.06: "Fluid Dynamics" - Lecture Notes on Control Volume Analysis</li>
-                    <li>Anderson, J.D. "Fundamentals of Aerodynamics" (6th ed.), Ch. 2: Fundamental Principles</li>
-                </ul>
-            `;
-        }
+
 
         // Initialize the application when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
