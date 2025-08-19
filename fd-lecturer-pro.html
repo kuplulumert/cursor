@@ -1491,76 +1491,98 @@
             if (lessonCode === 'M1') {
                 return `
                     <div class="concept-block">
-                        <h3>The Language of Flow: Describing Pushes and Swirls</h3>
-                        <p>Fluid dynamics sounds complicated, but it's just about describing how stuff like air and water moves. To do that, we need a few special words and tools to talk about the properties of the flow.</p>
+                        <h3>Introduction</h3>
+                        <p>To properly describe fluid motion, we need a precise mathematical language. This lesson covers the essential objects and operations used to model the complex world of flow, from simple properties like temperature to the intricate forces acting within a fluid.</p>
                     </div>
 
                     <div class="concept-block">
-                        <h3>The Three Levels of Description</h3>
-                        <p>Imagine you're describing the air in a room. You can be simple or you can be detailed.</p>
+                        <h3>The Building Blocks: Scalars, Vectors, and Tensors</h3>
+                        <p>We use different mathematical objects to describe fluid properties based on their complexity.</p>
                         
                         <h4>Scalars: Just a Number</h4>
-                        <p>A scalar is the simplest property. It's just a single number at any given point.</p>
+                        <p>A scalar is a quantity defined by a single value, or <strong>magnitude</strong>, at any point in space and time.</p>
                         <ul>
-                            <li><strong>Analogy:</strong> The <strong>temperature</strong> in the room. At the spot where you're standing, it might be 20°C. That's it. Just one number. ✅</li>
+                            <li><strong>Analogy:</strong> The <strong>temperature</strong> in a room. At any specific point, it's just one number (e.g., 20°C).</li>
+                            <li><strong>Fluid Examples:</strong> Pressure ($p$), Temperature ($T$), and Density ($\\rho$).</li>
                         </ul>
-                    </div>
-
-                    <div class="concept-block">
-                        <h4>Vectors: A Number and a Direction</h4>
-                        <p>A vector is a step up. It tells you two things: "how much?" and "which way?"</p>
-                        <ul>
-                            <li><strong>Analogy:</strong> The <strong>wind</strong> in the room. At your spot, there might be a 2 mph breeze blowing towards the window. A vector is like an arrow ➡️ that shows both the speed and the direction.</li>
-                        </ul>
-                    </div>
-
-                    <div class="concept-block">
-                        <h4>Tensors: Describing Complex Pushes</h4>
-                        <p>This is the most advanced concept. A tensor handles complex, multi-directional forces or properties.</p>
-                        <ul>
-                            <li><strong>Analogy:</strong> Imagine a cube of Jell-O. The forces acting on it are complex. You can <strong>poke</strong> it (a straight push), <strong>squeeze</strong> it from all sides (pressure), or <strong>smear</strong> it by dragging your finger across the top (a shear force). A <strong>tensor</strong> is a super-tool that describes all these different pokes, squeezes, and smears on all faces of the Jell-O cube at once. In fluids, it helps us understand stress and strain.</li>
-                        </ul>
-                    </div>
-
-                    <div class="concept-block">
-                        <h3>The Fluid Dynamics "Swiss Army Knife" ($\\nabla$)</h3>
-                        <p>There's a magic operator in fluid dynamics called "Del" (written as $\\nabla$). Think of it as a Swiss Army Knife. It has different tools that ask different questions about the flow.</p>
                         
-                        <h4>Tool 1: The Gradient ($\\nabla$) - The "Uphill Finder"</h4>
-                        <p>The gradient finds the steepest direction.</p>
+                        <h4>Vectors: Magnitude and Direction</h4>
+                        <p>A vector describes a quantity that has both a magnitude and a direction.</p>
                         <ul>
-                            <li><strong>Analogy:</strong> Imagine you're on a hill in a thick fog. You can't see, but you want to find the fastest way up. The gradient is a magic compass that always points straight uphill.</li>
-                            <li><strong>How Fluids Use It:</strong> Fluids feel a pressure "hill." The pressure gradient points toward higher pressure. But just like a ball rolls <em>down</em> a hill, fluid gets pushed from high pressure to low pressure, in the <strong>opposite</strong> direction of the gradient. This push is what makes wind blow! 💨</li>
+                            <li><strong>Analogy:</strong> The <strong>wind</strong> in a room. At any point, the air is moving at a certain speed <em>and</em> in a specific direction. A vector is like an arrow ➡️ that captures both.</li>
+                            <li><strong>Fluid Examples:</strong> Velocity ($\\vec{u}$), Force ($\\vec{F}$), and the local rate of rotation, or Vorticity ($\\vec{\\omega}$).</li>
+                            <li><strong>Notation:</strong> In Cartesian coordinates ($x, y, z$), we can write the velocity vector as $\\vec{u} = u_x\\hat{i} + u_y\\hat{j} + u_z\\hat{k}$, where $u_x, u_y, u_z$ are the velocity components and $\\hat{i}, \\hat{j}, \\hat{k}$ are the unit vectors.</li>
+                        </ul>
+                        
+                        <h4>Tensors: Handling Complex, Directional Relationships</h4>
+                        <p>A second-rank tensor is a more complex object used to describe properties that have different values depending on the direction you're looking at.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> Imagine a cube of Jell-O. The forces acting on it are complex. You can <strong>poke</strong> it (a normal force) or <strong>smear</strong> it by dragging your finger across the top (a shear force). A <strong>tensor</strong> is the mathematical tool that describes all the pokes and smears on all the faces of the cube simultaneously.</li>
+                        </ul>
+                        
+                        <p><strong>A Deeper Look at the Stress Tensor:</strong> The most important tensor in fluid mechanics is the <strong>Stress Tensor</strong> ($\\boldsymbol{\\sigma}$ or $\\tau_{ij}$), which describes the internal forces that fluid parcels exert on each other.</p>
+                        <ul>
+                            <li><strong>Index Notation:</strong> The notation $\\tau_{ij}$ is a powerful shorthand. The first index <strong>'$i$'</strong> tells you which <strong>face</strong> of the cube you're on (e.g., the face whose outward-pointing arrow is in the x-direction). The second index <strong>'$j$'</strong> tells you the <strong>direction of the force</strong> itself.</li>
+                            <li><strong>Normal vs. Shear Stress:</strong>
+                                <ul>
+                                    <li>When the indices are the same (e.g., $\\tau_{xx}, \\tau_{yy}$), it represents a <strong>normal stress</strong>—a direct push or pull on a face. Pressure is a type of normal stress.</li>
+                                    <li>When the indices are different (e.g., $\\tau_{xy}, \\tau_{xz}$), it represents a <strong>shear stress</strong>—a tangential, smearing, or sliding force. Viscosity is the fluid property that creates shear stresses.</li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
 
                     <div class="concept-block">
-                        <h4>Tool 2: The Divergence ($\\nabla \\cdot$) - The "Spreader Detector"</h4>
-                        <p>The divergence checks if the fluid is spreading out or bunching up.</p>
+                        <h3>The Operator Toolkit: The Flow Inspector's $\\nabla$</h3>
+                        <p>The <strong>Del operator ($\\nabla$)</strong> is a single, powerful tool that acts like a flow inspector's complete toolkit. It's designed to answer one basic question in three different ways: <strong>"How is a fluid property changing as I move away from this exact spot?"</strong></p>
+                        <p>Your toolkit ($\\nabla$) has three main functions, each answering a different kind of question about the flow.</p>
+                        
+                        <h4>1. The Gradient ($\\nabla$): The "Steepness Detector"</h4>
+                        <p>This tool measures how fast a <strong>scalar property</strong> (like pressure) is changing and finds the direction of the steepest change.</p>
                         <ul>
-                            <li><strong>Analogy:</strong> Think of a sprinkler head on a lawn. Water is spreading out from it. That spot has a <strong>positive divergence</strong> (it's a source). Now think of the drain in your sink. Water is bunching up to flow into it. That spot has a <strong>negative divergence</strong> (it's a sink).</li>
-                            <li><strong>How Fluids Use It:</strong> Liquids like water can't really be squished or stretched. So, at any point in the water, the amount flowing in must equal the amount flowing out. This means for water, the divergence is <strong>zero</strong> everywhere! This simple rule is incredibly powerful. 💧</li>
+                            <li><strong>Analogy:</strong> You're on a pressure "hill," but it's foggy. You use the Gradient tool. It's a magic compass that instantly points you straight up the steepest part of the hill. The arrow it shows is a <strong>vector</strong> that tells you both the direction of the greatest increase and how steep it is. 🏔️</li>
+                            <li><strong>Physical Significance:</strong> The <strong>pressure gradient</strong>, $\\nabla p$, is a force per unit volume that pushes fluid from high pressure to low pressure (in the direction of $-\\nabla p$).</li>
+                            <li><strong>Mathematical Form:</strong> $\\nabla p = \\frac{\\partial p}{\\partial x}\\hat{i} + \\frac{\\partial p}{\\partial y}\\hat{j} + \\frac{\\partial p}{\\partial z}\\hat{k}$</li>
+                        </ul>
+                        
+                        <h4>2. The Divergence ($\\nabla \\cdot$): The "Source & Drain Finder"</h4>
+                        <p>This tool measures whether a <strong>vector property</strong> (like velocity) is spreading out from or bunching up into a point.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> You put the Divergence tool at a point in the flow. If fluid is secretly being added there (like from a hidden spring), the tool gives a positive reading. If fluid is disappearing (like into a hidden drain), it gives a negative reading. For a liquid like water, which can't be created or destroyed, the reading is zero. 💧</li>
+                            <li><strong>Physical Significance:</strong> The divergence of velocity measures the rate of volume expansion. For an <strong>incompressible fluid</strong> like water, the velocity field must be divergence-free: $\\nabla \\cdot \\vec{u} = 0$. This is the mathematical statement of the <strong>conservation of mass</strong> for incompressible flows.</li>
+                            <li><strong>Mathematical Form:</strong> $\\nabla \\cdot \\vec{u} = \\frac{\\partial u_x}{\\partial x} + \\frac{\\partial u_y}{\\partial y} + \\frac{\\partial u_z}{\\partial z}$</li>
+                        </ul>
+                        
+                        <h4>3. The Curl ($\\nabla \\times$): The "Vortex Meter"</h4>
+                        <p>This tool measures the local spinning or rotational motion of the <strong>vector property</strong> (like velocity).</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> You drop an imaginary, microscopic pinwheel into the flow at one point. If the fluid is swirling right there, the pinwheel will spin. The Curl tool measures this spin by creating a <strong>new vector</strong> that points along the axis of the pinwheel's rotation. 🌪️</li>
+                            <li><strong>Physical Significance:</strong> The curl of the velocity is a quantity called <strong>vorticity</strong> ($\\vec{\\omega} = \\nabla \\times \\vec{u}$), which is equal to twice the local angular velocity of a fluid particle.</li>
+                            <li><strong>Mathematical Form:</strong> $\\nabla \\times \\vec{u} = \\left(\\frac{\\partial u_z}{\\partial y} - \\frac{\\partial u_y}{\\partial z}\\right)\\hat{i} + \\left(\\frac{\\partial u_x}{\\partial z} - \\frac{\\partial u_z}{\\partial x}\\right)\\hat{j} + \\left(\\frac{\\partial u_y}{\\partial x} - \\frac{\\partial u_x}{\\partial y}\\right)\\hat{k}$</li>
                         </ul>
                     </div>
 
                     <div class="concept-block">
-                        <h4>Tool 3: The Curl ($\\nabla \\times$) - The "Spin Meter"</h4>
-                        <p>The curl checks for local rotation in the fluid.</p>
+                        <h3>Following the Flow: The Material Derivative</h3>
+                        <p>How does a property of a fluid particle (like its temperature or velocity) change over time? We need to account for two effects.</p>
+                        
                         <ul>
-                            <li><strong>Analogy:</strong> If you placed a tiny pinwheel in a river, would it spin? The curl is a tool that measures how fast it would spin and which way. A whirlpool would have a huge curl value. A perfectly smooth, straight flow would have zero curl.</li>
-                            <li><strong>How Fluids Use It:</strong> The curl of the velocity tells us the <strong>vorticity</strong> of the flow. Vorticity is just a fancy word for this local spinning motion, which is crucial for understanding things like airplane lift and turbulence. 🌪️</li>
+                            <li><strong>Analogy:</strong> You're in a car driving up a mountain with a thermometer. The temperature you feel can change for two reasons:
+                                <ol>
+                                    <li><strong>Local Change:</strong> A cold front is moving in, making the air everywhere on the mountain colder over time.</li>
+                                    <li><strong>Convective Change:</strong> You are physically <em>moving</em> from a lower, warmer altitude to a higher, colder one.</li>
+                                </ol>
+                            </li>
                         </ul>
-                    </div>
-
-                    <div class="concept-block">
-                        <h3>Keeping Track: Following a Fluid Particle</h3>
-                        <p>Imagine you're trying to measure the temperature change of a single particle of air.</p>
-                        <p>That particle's temperature can change for two reasons:</p>
-                        <ol>
-                            <li><strong>The weather is changing:</strong> A cold front is moving in, making <em>all</em> the air colder over time.</li>
-                            <li><strong>The particle is moving:</strong> The particle gets blown up a mountain, where the air is naturally colder.</li>
-                        </ol>
-                        <p>The <strong>Material Derivative</strong> is a special calculation that adds both of these effects together to find the <em>total</em> change that the particle actually experiences. It's how we correctly measure a fluid particle's real acceleration.</p>
+                        
+                        <p>The <strong>Material Derivative</strong> ($D/Dt$) combines both effects to give the total rate of change experienced by the moving particle.</p>
+                        
+                        <ul>
+                            <li><strong>Mathematical Form:</strong>
+                                $$\\frac{D\\phi}{Dt} = \\underbrace{\\frac{\\partial \\phi}{\\partial t}}_{\\text{Local Change}} + \\underbrace{(\\vec{u} \\cdot \\nabla)\\phi}_{\\text{Convective Change}}$$
+                            </li>
+                            <li><strong>Physical Significance:</strong> This is the single most important operator for applying Newton's laws to fluids. The true <strong>acceleration of a fluid particle</strong> is not just its local change in velocity ($\\partial \\vec{u}/\\partial t$) but its full material derivative, $a = D\\vec{u}/Dt$. This term is the heart of the Navier-Stokes equations.</li>
+                        </ul>
                     </div>
                 `;
             }
