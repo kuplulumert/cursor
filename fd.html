@@ -1758,3 +1758,84 @@
     </script>
 </body>
 </html>
+<script>
+// Patch for FD101-1 - Add missing function cases
+(function() {
+    // Override getDerivationSteps to include FD101-1
+    const originalGetDerivationSteps = window.getDerivationSteps;
+    window.getDerivationSteps = function(lessonCode) {
+        if (lessonCode === 'FD101-1') {
+            return `
+                <ol>
+                    <li><strong>Establish continuum assumption:</strong> Verify Knudsen number Kn = λ/L < 0.1 for the flow scale</li>
+                    <li><strong>Define density:</strong> Take limit as volume approaches zero while containing many molecules: $\\rho = \\lim_{V \\to 0} \\frac{m}{V}$</li>
+                    <li><strong>Pressure from molecular motion:</strong> Statistical mechanics gives pressure as momentum transfer rate per unit area</li>
+                    <li><strong>Viscosity from Newton's law:</strong> Relate shear stress to velocity gradient: $\\tau = \\mu \\frac{du}{dy}$</li>
+                    <li><strong>Surface tension from intermolecular forces:</strong> Energy minimization leads to curved interfaces with pressure jump</li>
+                    <li><strong>Bernoulli's principle:</strong> Energy conservation in steady flow gives total pressure relationship</li>
+                </ol>
+            `;
+        }
+        return originalGetDerivationSteps ? originalGetDerivationSteps(lessonCode) : '<p>Step-by-step derivation...</p>';
+    };
+
+    // Override getWorkedExample to include FD101-1
+    const originalGetWorkedExample = window.getWorkedExample;
+    window.getWorkedExample = function(lessonCode) {
+        if (lessonCode === 'FD101-1') {
+            return `
+                <p><strong>Problem.</strong> Water at 20°C flows through a pipe. At a measurement point, the static pressure is 150 kPa and the velocity is 3 m/s. Calculate: (a) the dynamic pressure, (b) the total pressure, and (c) determine if the continuum assumption is valid if the pipe diameter is 0.1 m.</p>
+                
+                <p><strong>Given:</strong> T = 20°C, p_static = 150 kPa, V = 3 m/s, D = 0.1 m</p>
+                <p><strong>Properties:</strong> ρ_water = 998 kg/m³, λ ≈ 10⁻⁹ m (molecular mean free path)</p>
+                
+                <p><strong>Solution.</strong></p>
+                <ol>
+                    <li><strong>Dynamic pressure:</strong> $q = \\frac{1}{2}\\rho V^2 = \\frac{1}{2}(998)(3^2) = 4491$ Pa = 4.49 kPa</li>
+                    <li><strong>Total pressure:</strong> $p_{total} = p_{static} + q = 150 + 4.49 = 154.49$ kPa</li>
+                    <li><strong>Knudsen number:</strong> $Kn = \\frac{\\lambda}{L} = \\frac{10^{-9}}{0.1} = 10^{-8} << 0.1$ ✓</li>
+                    <li><strong>Continuum validity:</strong> Since Kn << 0.1, the continuum assumption is excellent</li>
+                </ol>
+                
+                <p>This example shows how the kinetic energy of flow contributes to total pressure and confirms that typical engineering flows satisfy the continuum assumption.</p>
+            `;
+        }
+        return originalGetWorkedExample ? originalGetWorkedExample(lessonCode) : '<p>Worked example...</p>';
+    };
+
+    // Override getConnections to include FD101-1
+    const originalGetConnections = window.getConnections;
+    window.getConnections = function(lessonCode) {
+        if (lessonCode === 'FD101-1') {
+            return `
+                <ul>
+                    <li><strong>FD101-2:</strong> Hydrostatic pressure builds on pressure concepts introduced here</li>
+                    <li><strong>FD101-4:</strong> Integral balances use density and continuum properties</li>
+                    <li><strong>FD101-5:</strong> Navier-Stokes equations assume continuum and use viscosity</li>
+                    <li><strong>FD201-1:</strong> Boundary layer theory relies on no-slip condition from viscosity</li>
+                    <li><strong>M1:</strong> Mathematical tools needed for continuum field descriptions</li>
+                </ul>
+            `;
+        }
+        return originalGetConnections ? originalGetConnections(lessonCode) : '<ul><li>Related concepts...</li></ul>';
+    };
+
+    // Override getKeyEquations to include FD101-1
+    const originalGetKeyEquations = window.getKeyEquations;
+    window.getKeyEquations = function(lessonCode) {
+        if (lessonCode === 'FD101-1') {
+            return `
+                <ul>
+                    <li>$\\rho = \\frac{m}{V}$ — Density definition</li>
+                    <li>$Kn = \\frac{\\lambda}{L} < 0.1$ — Continuum validity criterion</li>
+                    <li>$p_{total} = p_{static} + \\frac{1}{2}\\rho V^2$ — Total pressure (Bernoulli)</li>
+                    <li>$\\tau = \\mu \\frac{du}{dy}$ — Newton's law of viscosity</li>
+                    <li>$\\nu = \\frac{\\mu}{\\rho}$ — Kinematic viscosity</li>
+                    <li>$\\Delta p = \\frac{2\\sigma}{R}$ — Pressure jump across curved interface</li>
+                </ul>
+            `;
+        }
+        return originalGetKeyEquations ? originalGetKeyEquations(lessonCode) : '<ul><li>Key equations...</li></ul>';
+    };
+})();
+</script>
