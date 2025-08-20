@@ -1,1 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FD-Lecturer-Pro: Fluid Dynamics Micro-Lessons</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background: #ffffff;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 320px;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #1a202c;
+        }
+
+        .sidebar-header p {
+            font-size: 0.85em;
+            color: #718096;
+        }
+
+        .sidebar-content {
+            padding: 16px;
+        }
+
+        .course-section {
+            margin-bottom: 24px;
+        }
+
+        .course-level {
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #4a5568;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .module-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .module-item:hover {
+            border-color: #3182ce;
+            box-shadow: 0 2px 8px rgba(49, 130, 206, 0.1);
+        }
+
+        .module-header {
+            padding: 16px;
+            cursor: pointer;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .module-header.active {
+            background: #f7fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .module-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: #3182ce;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .module-title {
+            font-weight: 500;
+            font-size: 0.9em;
+            color: #2d3748;
+            line-height: 1.3;
+        }
+
+        .expand-icon {
+            font-size: 0.8em;
+            color: #a0aec0;
+            transition: transform 0.2s ease;
+        }
+
+        .module-header.active .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .lesson-list {
+            display: none;
+            background: #f8fafc;
+        }
+
+        .lesson-list.active {
+            display: block;
+        }
+
+        .lesson-item {
+            padding: 12px 16px 12px 52px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85em;
+            border-bottom: 1px solid #edf2f7;
+            color: #4a5568;
+        }
+
+        .lesson-item:last-child {
+            border-bottom: none;
+        }
+
+        .lesson-item:hover {
+            background: #edf2f7;
+            color: #2d3748;
+        }
+
+        .lesson-item.selected {
+            background: #3182ce;
+            color: white;
+        }
+
+        .lesson-code {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-weight: 500;
+            margin-right: 8px;
+            font-size: 0.8em;
+        }
+
+        .main-content {
+            margin-left: 320px;
+            flex: 1;
+            background: #f8fafc;
+        }
+
+        .content-header {
+            background: white;
+            padding: 20px 32px;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .breadcrumb {
+            font-size: 0.8em;
+            color: #a0aec0;
+            margin-bottom: 4px;
+        }
+
+        .content-title {
+            font-size: 1.6em;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 4px;
+        }
+
+        .content-subtitle {
+            color: #718096;
+            font-size: 0.9em;
+        }
+
+        .lesson-viewer {
+            padding: 0;
+            max-width: none;
+            margin: 0;
+            height: calc(100vh - 61px);
+            overflow-y: auto;
+        }
+
+        .welcome-state {
+            text-align: center;
+            padding: 60px 40px;
+            color: #4a5568;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .welcome-state .icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            opacity: 0.4;
+        }
+
+        .welcome-state h2 {
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .welcome-state p {
+            font-size: 1em;
+            max-width: 400px;
+            margin: 0 auto 32px auto;
+            color: #718096;
+        }
+
+        .learning-steps {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .learning-step {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .learning-step:last-child {
+            border-bottom: none;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            background: #3182ce;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 2px;
+        }
+
+        .step-content p {
+            font-size: 0.8em;
+            color: #718096;
+            margin: 0;
+        }
+
+        .lesson-content {
+            background: white;
+            display: none;
+            height: 100%;
+        }
+
+        .lesson-content.active {
+            display: block;
+        }
+
+        .lesson-header {
+            background: #1a202c;
+            color: white;
+            padding: 24px 0;
+            text-align: center;
+        }
+
+        .lesson-header h1 {
+            color: white;
+            margin: 0;
+            font-size: 1.8em;
+            font-weight: 600;
+            font-family: 'Georgia', serif;
+        }
+
+        .lesson-body {
+            padding: 0;
+            max-width: none;
+            margin: 0;
+            line-height: 1.8;
+            counter-reset: concept-counter;
+        }
+
+        .concept-block {
+            margin: 0;
+            padding: 50px 80px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        /* Soft, faded background colors for each section */
+        .concept-block:nth-child(1) {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        .concept-block:nth-child(2) {
+            background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+        }
+
+        .concept-block:nth-child(3) {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+
+        .concept-block:nth-child(4) {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+        }
+
+        .concept-block:nth-child(5) {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+
+        .concept-block:nth-child(6) {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+        }
+
+        .concept-block h3 {
+            color: #1f2937;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+            font-family: 'Georgia', serif;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .concept-block h3::before {
+            content: counter(concept-counter);
+            counter-increment: concept-counter;
+            width: 36px;
+            height: 36px;
+            background: #374151;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            font-weight: 600;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+
+        .concept-block h4 {
+            color: #374151;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin: 32px 0 16px 0;
+            padding: 16px 24px;
+            background: rgba(255,255,255,0.7);
+            border-left: 4px solid #6b7280;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Georgia', serif;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .concept-block p {
+            color: #374151;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .concept-block ul, .concept-block ol {
+            margin: 20px 0 20px 32px;
+        }
+
+        .concept-block li {
+            margin-bottom: 12px;
+            color: #374151;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+
+        .concept-block li strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        .subsection-break {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+            margin: 28px 0;
+            position: relative;
+        }
+
+        .subsection-break::after {
+            content: "•";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.9);
+            color: #9ca3af;
+            padding: 0 12px;
+            font-size: 1em;
+        }
+
+        .section-break {
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d1d5db, transparent);
+            margin: 0;
+            position: relative;
+        }
+
+        .section-break::after {
+            content: "◆";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: #9ca3af;
+            padding: 0 20px;
+            font-size: 1.4em;
+        }
+
+        .expandable-section {
+            margin: 0;
+            border-bottom: 1px solid #e5e7eb;
+            overflow: hidden;
+            background: #fafafa;
+        }
+
+        .expandable-section summary {
+            background: #f9fafb;
+            padding: 24px 80px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'Georgia', serif;
+            font-size: 1.2em;
+        }
+
+        .expandable-section summary:hover {
+            background: #f3f4f6;
+        }
+
+        .expandable-section[open] summary {
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .expandable-section summary::marker {
+            content: '';
+        }
+
+        .expandable-section summary::after {
+            content: '▼';
+            font-size: 0.8em;
+            color: #6b7280;
+            transition: transform 0.2s;
+        }
+
+        .expandable-section[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .expandable-content {
+            padding: 40px 80px;
+            background: #fefefe;
+        }
+
+        .expandable-content h3 {
+            color: #374151;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.8);
+            border-left: 3px solid #3182ce;
+            border-radius: 0 6px 6px 0;
+            font-family: 'Georgia', serif;
+        }
+
+        .connections-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-left: 4px solid #16a34a;
+            padding: 40px 80px;
+            margin: 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .connections-box h2 {
+            color: #14532d;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-family: 'Georgia', serif;
+        }
+
+        .equations-box {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-left: 4px solid #d97706;
+            padding: 40px 80px;
+            margin: 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .equations-box h2 {
+            color: #92400e;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-family: 'Georgia', serif;
+        }
+
+        .reading-checkpoint {
+            margin: 0;
+            padding: 40px 80px;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            border-left: 4px solid #64748b;
+            font-style: italic;
+            color: #4b5563;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .reading-checkpoint::before {
+            content: "📖";
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        .academic-text {
+            color: #374151;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+
+        .academic-text strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            background: #3182ce;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                width: 280px;
+            }
+            
+            .sidebar.mobile-visible {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .content-header {
+                padding: 16px 20px;
+                padding-left: 60px;
+            }
+            
+            .concept-block {
+                padding: 30px 20px !important;
+            }
+            
+            .expandable-content {
+                padding: 30px 20px !important;
+            }
+            
+            .connections-box, .equations-box, .reading-checkpoint {
+                padding: 30px 20px !important;
+            }
+        }
+
+        /* Simple color coding */
+        .course-foundations .step-number { background: #3182ce; }
+        .course-core .step-number { background: #38a169; }
+        .course-advanced .step-number { background: #d69e2e; }
+        .course-graduate .step-number { background: #805ad5; }
+        .course-reference .step-number { background: #718096; }
+
+        .progress-indicator {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            font-size: 0.9em;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #718096;
+            font-style: italic;
+        }
+
+        .loading::before {
+            content: "⚡";
+            font-size: 2em;
+            display: block;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-toggle" id="mobileToggle">☰</button>
+    
+    <div class="app-container">
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>FD-Lecturer-Pro</h1>
+                <p>Fluid Dynamics Micro-Lessons</p>
+            </div>
+            
+            <div class="sidebar-content" id="sidebarContent">
+                <!-- Course modules will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="main-content" id="mainContent">
+            <div class="content-header">
+                <div class="breadcrumb" id="breadcrumb">Fluid Dynamics Learning Platform</div>
+                <div class="content-title" id="contentTitle">Welcome to FD-Lecturer-Pro</div>
+                <div class="content-subtitle" id="contentSubtitle">Select a lesson from the sidebar to begin</div>
+            </div>
+            
+            <div class="lesson-viewer">
+                <div class="welcome-state" id="welcomeState">
+                    <div class="icon">��</div>
+                    <h2>Fluid Dynamics Learning Platform</h2>
+                    <p>Select a course from the sidebar to begin your journey through fluid mechanics.</p>
+                    
+                    <div class="learning-steps">
+                        <div class="learning-step">
+                            <div class="step-icon">1</div>
+                            <div class="step-content">
+                                <h4>Start with Mathematical Foundations</h4>
+                                <p>Vector calculus and differential equations</p>
+                            </div>
+                        </div>
+                        
+                        <div class="learning-step">
+                            <div class="step-icon">2</div>
+                            <div class="step-content">
+                                <h4>Learn Fluid Mechanics I</h4>
+                                <p>Core principles and governing equations</p>
+                            </div>
+                        </div>
+                        
+                        <div class="learning-step">
+                            <div class="step-icon">3</div>
+                            <div class="step-content">
+                                <h4>Choose Your Specialization</h4>
+                                <p>Boundary layers, compressible flow, or heat transfer</p>
+                            </div>
+                        </div>
+                        
+                        <div class="learning-step">
+                            <div class="step-icon">4</div>
+                            <div class="step-content">
+                                <h4>Explore Advanced Topics</h4>
+                                <p>Turbulence, CFD, and specialized applications</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-content" id="lessonContent">
+                    <!-- Generated lesson content will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="progress-indicator" id="progressIndicator" style="display: none;">
+        Lesson Progress: <span id="progressText">0/0</span>
+    </div>
+
+    <script>
+        // Coverage Map - Complete Fluid Dynamics Syllabus
+        const coverageMap = {
+            "modules": [
+                {
+                    "id": "M",
+                    "name": "Mathematical & Physical Foundations (Pre/Coreq)",
+                    "lessons": [
+                        {"code":"M1","title":"Vector & Tensor Calculus"},
+                        {"code":"M2","title":"Integral Theorems & Reynolds Transport"},
+                        {"code":"M3","title":"Differential Equations & Similarity"},
+                        {"code":"M4","title":"Dimensional Analysis & Π-Groups"},
+                        {"code":"M5","title":"Transforms & Spectra"},
+                        {"code":"M6","title":"Probability & Statistics for Fluids"}
+                    ]
+                },
+                {
+                    "id": "FD101",
+                    "name": "Fluid Mechanics I (Undergraduate Core)",
+                    "lessons": [
+                        {"code":"FD101-1","title":"Continuum Hypothesis & Properties"},
+                        {"code":"FD101-2","title":"Hydrostatics & Buoyancy"},
+                        {"code":"FD101-3","title":"Kinematics: Stream/Path/Streaklines, Vorticity"},
+                        {"code":"FD101-4","title":"Integral Balances: Mass, Momentum, Energy"},
+                        {"code":"FD101-5","title":"Differential Form: Continuity & Navier–Stokes"},
+                        {"code":"FD101-6","title":"Bernoulli from Navier–Stokes (Assumptions Explicit)"},
+                        {"code":"FD101-7","title":"Exact Laminar Solutions: Couette, Poiseuille, Stokes' First Problem"},
+                        {"code":"FD101-8","title":"Dimensional Analysis & Similitude (with scaling examples)"}
+                    ]
+                },
+                {
+                    "id": "FD201",
+                    "name": "Fluid Mechanics II (Undergraduate Core)",
+                    "lessons": [
+                        {"code":"FD201-1","title":"Boundary-Layer Concept & Thicknesses"},
+                        {"code":"FD201-2","title":"Blasius Flat-Plate Similarity"},
+                        {"code":"FD201-3","title":"Pressure Gradients & Falkner–Skan"},
+                        {"code":"FD201-4","title":"Separation & Control Concepts"},
+                        {"code":"FD201-5","title":"External Flows: Lift, Drag, Wakes (Kutta–Joukowski)"},
+                        {"code":"FD201-6","title":"Internal Flows: Laminar/Turbulent, Wall Laws"},
+                        {"code":"FD201-7","title":"Minor (Form) Losses via Momentum Balance"},
+                        {"code":"FD201-8","title":"Unsteady Internal Flows & Womersley Number"},
+                        {"code":"FD201-9","title":"Intro to Turbulence & Transition"}
+                    ]
+                },
+                {
+                    "id": "CF231",
+                    "name": "Compressible Flow (Upper-Undergrad / Mixed Core)",
+                    "lessons": [
+                        {"code":"CF231-1","title":"Thermo Refresher & Speed of Sound"},
+                        {"code":"CF231-2","title":"Isentropic Relations & Area–Mach"},
+                        {"code":"CF231-3","title":"Normal & Oblique Shocks (Rankine–Hugoniot)"},
+                        {"code":"CF231-4","title":"Prandtl–Meyer Expansions & Shock–Expansion"},
+                        {"code":"CF231-5","title":"Nozzles & Diffusers (Quasi-1D)"},
+                        {"code":"CF231-6","title":"Fanno & Rayleigh Flows"},
+                        {"code":"CF231-7","title":"High-Speed Boundary Layers & Shock/BL Interaction"}
+                    ]
+                },
+                {
+                    "id": "HMT241",
+                    "name": "Convection, Heat & Mass Transfer in Fluids (Undergrad Core in Thermo-Fluids)",
+                    "lessons": [
+                        {"code":"HMT241-1","title":"Energy Equation & Viscous Dissipation"},
+                        {"code":"HMT241-2","title":"Dimensionless Groups: Pr, Nu, Sc, Le"},
+                        {"code":"HMT241-3","title":"Forced Convection: Internal"},
+                        {"code":"HMT241-4","title":"Forced Convection: External"},
+                        {"code":"HMT241-5","title":"Natural & Mixed Convection"},
+                        {"code":"HMT241-6","title":"Species Transport & Sherwood Analogues"}
+                    ]
+                },
+                {
+                    "id": "FD301",
+                    "name": "Turbulence (Advanced Core)",
+                    "lessons": [
+                        {"code":"FD301-1","title":"Defining Turbulence, Re & Intermittency"},
+                        {"code":"FD301-2","title":"Reynolds Averaging & RANS Equations"},
+                        {"code":"FD301-3","title":"Free Shear Flows: Jets, Wakes, Mixing Layers"},
+                        {"code":"FD301-4","title":"Wall-Bounded Turbulence: Inner/Outer Scaling, Roughness"},
+                        {"code":"FD301-5","title":"Spectra & Cascades: Kolmogorov −5/3"},
+                        {"code":"FD301-6","title":"Transition Mechanisms & Stability Link"},
+                        {"code":"FD301-7","title":"Coherent Structures & Vortex Dynamics"}
+                    ]
+                },
+                {
+                    "id": "CFD311",
+                    "name": "Computational Fluid Dynamics (Content-Only Theory, Advanced Core)",
+                    "lessons": [
+                        {"code":"CFD311-1","title":"PDE Classes & Characteristics in Fluids"},
+                        {"code":"CFD311-2","title":"Discretisation: Consistency, Stability, Convergence"},
+                        {"code":"CFD311-3","title":"Pressure–Velocity Coupling & Projection Methods"},
+                        {"code":"CFD311-4","title":"Shock-Capturing Concepts & Riemann Problems"},
+                        {"code":"CFD311-5","title":"Turbulence-Modelling Theory: RANS, LES, DES, DNS"},
+                        {"code":"CFD311-6","title":"Verification, Validation & Uncertainty (GCI)"}
+                    ]
+                },
+                {
+                    "id": "EXP321",
+                    "name": "Experimental Methods in Fluids (Advanced Core)",
+                    "lessons": [
+                        {"code":"EXP321-1","title":"Measurement Principles & Flow Visualisation"},
+                        {"code":"EXP321-2","title":"Wind/Water Tunnel Testing & Similarity"},
+                        {"code":"EXP321-3","title":"Particle-Image Velocimetry (PIV)"},
+                        {"code":"EXP321-4","title":"Laser Doppler Velocimetry (LDV)"},
+                        {"code":"EXP321-5","title":"Uncertainty & Error Propagation"}
+                    ]
+                },
+                {
+                    "id": "MPH401",
+                    "name": "Multiphase, Free-Surface & Interfacial (Graduate Elective)",
+                    "lessons": [
+                        {"code":"MPH401-1","title":"Interfacial Balance Laws & Jump Conditions"},
+                        {"code":"MPH401-2","title":"Capillarity, Wetting & Marangoni"},
+                        {"code":"MPH401-3","title":"Free-Surface & Shallow-Water Equations"},
+                        {"code":"MPH401-4","title":"Dispersed Flows: Drag, Slip & Terminal Velocity"},
+                        {"code":"MPH401-5","title":"Population Balances: Break-up & Coalescence"},
+                        {"code":"MPH401-6","title":"Cavitation & Rayleigh–Plesset"},
+                        {"code":"MPH401-7","title":"Two-Fluid/Two-Phase Continuum Models"}
+                    ]
+                },
+                {
+                    "id": "RHE411",
+                    "name": "Non-Newtonian & Rheology (Graduate Elective)",
+                    "lessons": [
+                        {"code":"RHE411-1","title":"Material Classes & Flow Regimes"},
+                        {"code":"RHE411-2","title":"Generalised Newtonian: Power-Law, Carreau–Yasuda"},
+                        {"code":"RHE411-3","title":"Linear Viscoelasticity: Maxwell/Jeffreys"},
+                        {"code":"RHE411-4","title":"Oldroyd-B, Normal Stresses & Elastic Effects"},
+                        {"code":"RHE411-5","title":"Instabilities: Elastic Turbulence, Rod-Climbing"},
+                        {"code":"RHE411-6","title":"Microfluidics with Complex Fluids"}
+                    ]
+                },
+                {
+                    "id": "GEO421",
+                    "name": "Rotating, Stratified & Geophysical (Graduate Elective)",
+                    "lessons": [
+                        {"code":"GEO421-1","title":"Rotating Frames, Coriolis & Rossby"},
+                        {"code":"GEO421-2","title":"Geostrophic & Hydrostatic Balance"},
+                        {"code":"GEO421-3","title":"Ekman Layers & Secondary Flows"},
+                        {"code":"GEO421-4","title":"Stratification, Buoyancy Frequency & Internal Waves"},
+                        {"code":"GEO421-5","title":"Barotropic/Baroclinic Instability (Overview)"}
+                    ]
+                },
+                {
+                    "id": "STA431",
+                    "name": "Stability, Waves & Acoustics (Graduate Elective)",
+                    "lessons": [
+                        {"code":"STA431-1","title":"Linear Stability & Orr–Sommerfeld"},
+                        {"code":"STA431-2","title":"Shear-Flow Instabilities: TS & KH"},
+                        {"code":"STA431-3","title":"Weakly Nonlinear: Landau Amplitude Eqn"},
+                        {"code":"STA431-4","title":"Surface/Gravity/Capillary Waves"},
+                        {"code":"STA431-5","title":"Aeroacoustics Primer: Lighthill's Analogy"}
+                    ]
+                },
+                {
+                    "id": "BIO451",
+                    "name": "Biofluids & Micro/Nano (Graduate Elective)",
+                    "lessons": [
+                        {"code":"BIO451-1","title":"Haemodynamics & Womersley"},
+                        {"code":"BIO451-2","title":"Microfluidics: Slip/Knudsen, Electrokinetics (Concepts)"},
+                        {"code":"BIO451-3","title":"MHD & Hartmann Flow (Optional Extension)"}
+                    ]
+                },
+                {
+                    "id": "D",
+                    "name": "Canonical Derivation Library (Cross-Course)",
+                    "lessons": [
+                        {"code":"D1","title":"RTT: Finite → Differential"},
+                        {"code":"D2","title":"Navier–Stokes from Cauchy Momentum"},
+                        {"code":"D3","title":"Bernoulli from NS (Assumption Audit)"},
+                        {"code":"D4","title":"Blasius & Falkner–Skan Reductions"},
+                        {"code":"D5","title":"Stokes' First Problem (Error-Function)"},
+                        {"code":"D6","title":"Hagen–Poiseuille Relation"},
+                        {"code":"D7","title":"Potential Flow Around Cylinder & Kutta–Joukowski"},
+                        {"code":"D8","title":"Orr–Sommerfeld Equation"},
+                        {"code":"D9","title":"Normal/Oblique Shock Relations"},
+                        {"code":"D10","title":"Lighthill's Acoustic Analogy"}
+                    ]
+                },
+                {
+                    "id": "A",
+                    "name": "Reference Sheets",
+                    "lessons": [
+                        {"code":"A1","title":"Coordinate Operators & Identities"},
+                        {"code":"A2","title":"Dimensionless Numbers (Definitions & Ranges)"},
+                        {"code":"A3","title":"Common Assumptions & Where They Break"},
+                        {"code":"A4","title":"Fluid Properties (Typical Ranges)"}
+                    ]
+                }
+            ]
+        };
+
+        // State management
+        let selectedModule = null;
+        let selectedLesson = null;
+
+        // Initialize the application
+        function init() {
+            renderSidebar();
+            setupEventListeners();
+        }
+
+        function getCourseLevel(moduleId) {
+            if (moduleId === 'M') return 'foundations';
+            if (['FD101', 'FD201', 'CF231', 'HMT241'].includes(moduleId)) return 'core';
+            if (['FD301', 'CFD311', 'EXP321'].includes(moduleId)) return 'advanced';
+            if (['MPH401', 'RHE411', 'GEO421', 'STA431', 'BIO451'].includes(moduleId)) return 'graduate';
+            return 'reference';
+        }
+
+        function getCourseCategory(moduleId) {
+            const categories = {
+                'foundations': 'Prerequisites & Foundations',
+                'core': 'Undergraduate Core',
+                'advanced': 'Advanced Core',
+                'graduate': 'Graduate Electives',
+                'reference': 'Reference & Tools'
+            };
+            return categories[getCourseLevel(moduleId)] || 'Other';
+        }
+
+        function renderSidebar() {
+            const sidebarContent = document.getElementById('sidebarContent');
+            
+            // Group modules by course level
+            const groupedModules = {};
+            coverageMap.modules.forEach(module => {
+                const level = getCourseLevel(module.id);
+                if (!groupedModules[level]) {
+                    groupedModules[level] = [];
+                }
+                groupedModules[level].push(module);
+            });
+
+            const levelOrder = ['foundations', 'core', 'advanced', 'graduate', 'reference'];
+            
+            sidebarContent.innerHTML = '';
+            let moduleCounter = 1;
+            
+            levelOrder.forEach(level => {
+                if (groupedModules[level]) {
+                    const section = document.createElement('div');
+                    section.className = 'course-section';
+                    
+                    const levelTitle = document.createElement('div');
+                    levelTitle.className = 'course-level';
+                    levelTitle.textContent = getCourseCategory(groupedModules[level][0].id);
+                    section.appendChild(levelTitle);
+                    
+                    groupedModules[level].forEach(module => {
+                        const moduleItem = createModuleItem(module, level, moduleCounter);
+                        section.appendChild(moduleItem);
+                        moduleCounter++;
+                    });
+                    
+                    sidebarContent.appendChild(section);
+                }
+            });
+        }
+
+        function createModuleItem(module, level, moduleNumber) {
+            const moduleItem = document.createElement('div');
+            moduleItem.className = `module-item course-${level}`;
+            moduleItem.dataset.moduleId = module.id;
+            
+            const moduleHeader = document.createElement('div');
+            moduleHeader.className = 'module-header';
+            
+            moduleHeader.innerHTML = `
+                <div class="module-left">
+                    <div class="step-number">${moduleNumber}</div>
+                    <div class="module-title">${module.name}</div>
+                </div>
+                <div class="expand-icon">▼</div>
+            `;
+            
+            const lessonList = document.createElement('div');
+            lessonList.className = 'lesson-list';
+            
+            module.lessons.forEach((lesson, index) => {
+                const lessonItem = document.createElement('div');
+                lessonItem.className = 'lesson-item';
+                lessonItem.dataset.lessonCode = lesson.code;
+                lessonItem.innerHTML = `
+                    <span class="lesson-code">${lesson.code}</span>
+                    ${lesson.title}
+                `;
+                lessonItem.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    selectLesson(module, lesson);
+                });
+                lessonList.appendChild(lessonItem);
+            });
+            
+            moduleHeader.addEventListener('click', () => toggleModule(moduleItem, lessonList, moduleHeader));
+            
+            moduleItem.appendChild(moduleHeader);
+            moduleItem.appendChild(lessonList);
+            
+            return moduleItem;
+        }
+
+        function toggleModule(moduleItem, lessonList, moduleHeader) {
+            const isActive = lessonList.classList.contains('active');
+            
+            // Close all other modules
+            document.querySelectorAll('.lesson-list.active').forEach(list => {
+                list.classList.remove('active');
+                list.parentElement.querySelector('.module-header').classList.remove('active');
+            });
+            
+            if (!isActive) {
+                lessonList.classList.add('active');
+                moduleHeader.classList.add('active');
+                
+                // Scroll the expanded module into view
+                setTimeout(() => {
+                    moduleItem.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'nearest' 
+                    });
+                }, 100);
+            }
+        }
+
+        function selectLesson(module, lesson) {
+            // Update UI
+            document.querySelectorAll('.lesson-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelector(`[data-lesson-code="${lesson.code}"]`).classList.add('selected');
+            
+            selectedModule = module;
+            selectedLesson = lesson;
+            
+            // Update header
+            updateContentHeader(module, lesson);
+            
+            // Generate lesson immediately
+            generateLesson();
+        }
+
+        function updateContentHeader(module, lesson) {
+            document.getElementById('breadcrumb').textContent = `${module.id} > ${lesson.code}`;
+            document.getElementById('contentTitle').textContent = lesson.title;
+            document.getElementById('contentSubtitle').textContent = module.name;
+            
+            // Hide welcome state
+            document.getElementById('welcomeState').style.display = 'none';
+        }
+
+        function setupEventListeners() {
+            // Mobile toggle
+            document.getElementById('mobileToggle').addEventListener('click', () => {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('mobile-visible');
+            });
+            
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                const sidebar = document.getElementById('sidebar');
+                const mobileToggle = document.getElementById('mobileToggle');
+                
+                if (window.innerWidth <= 768 && 
+                    !sidebar.contains(e.target) && 
+                    !mobileToggle.contains(e.target)) {
+                    sidebar.classList.remove('mobile-visible');
+                }
+            });
+        }
+
+        // Lesson generation function
+        function generateLesson() {
+            if (!selectedModule || !selectedLesson) return;
+            
+            const lessonContent = document.getElementById('lessonContent');
+            lessonContent.innerHTML = '<div class="loading">Generating lesson content...</div>';
+            lessonContent.classList.add('active');
+            
+            // Show progress indicator
+            document.getElementById('progressIndicator').style.display = 'block';
+            updateProgress();
+            
+            // Simulate lesson generation (in real implementation, this would call the AI)
+            setTimeout(() => {
+                const generatedContent = generateLessonContent(selectedModule, selectedLesson);
+                lessonContent.innerHTML = generatedContent;
+                
+                // Re-render MathJax
+                if (window.MathJax) {
+                    MathJax.typesetPromise([lessonContent]).catch(function (err) {
+                        console.log('MathJax typeset failed: ' + err.message);
+                    });
+                }
+                
+                // Scroll to top of content
+                document.querySelector('.lesson-viewer').scrollTop = 0;
+            }, 1000);
+        }
+
+        function updateProgress() {
+            const totalLessons = coverageMap.modules.reduce((sum, module) => sum + module.lessons.length, 0);
+            const currentIndex = getCurrentLessonIndex();
+            document.getElementById('progressText').textContent = `${currentIndex}/${totalLessons}`;
+        }
+
+        function getCurrentLessonIndex() {
+            if (!selectedLesson) return 0;
+            
+            let index = 0;
+            for (const module of coverageMap.modules) {
+                for (const lesson of module.lessons) {
+                    index++;
+                    if (lesson.code === selectedLesson.code) {
+                        return index;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        function generateLessonContent(module, lesson) {
+            return generateSampleLesson(module, lesson);
+        }
+
+        function generateSampleLesson(module, lesson) {
+            return `
+                <div class="lesson-header">
+                    <h1>${lesson.title}</h1>
+                </div>
+
+                <div class="lesson-body">
+                    ${formatConceptContent(lesson.code)}
+                    
+                    <div class="section-break"></div>
+
+                    <details class="expandable-section">
+                        <summary>Mathematical Derivation</summary>
+                        <div class="expandable-content">
+                            <h3>Governing Equations & Set-up</h3>
+                            <div class="academic-text">
+                                ${getGoverningEquations(lesson.code)}
+                            </div>
+                            
+                            <h3>Derivation Steps</h3>
+                            <div class="academic-text">
+                                ${getDerivationSteps(lesson.code)}
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="section-break"></div>
+
+                    <details class="expandable-section">
+                        <summary>Worked Example</summary>
+                        <div class="expandable-content">
+                            <div class="academic-text">
+                                ${getWorkedExample(lesson.code)}
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="section-break"></div>
+
+                    <div class="connections-box">
+                        <h2>Connections to Other Topics</h2>
+                        <div class="academic-text">
+                            ${getConnections(lesson.code)}
+                        </div>
+                    </div>
+
+                    <div class="section-break"></div>
+
+                    <div class="equations-box">
+                        <h2>Key Mathematical Relations</h2>
+                        <div class="academic-text">
+                            ${getKeyEquations(lesson.code)}
+                        </div>
+                    </div>
+
+                    <div class="reading-checkpoint">
+                        Lesson completed. You have successfully learned the fundamental concepts of ${lesson.title}.
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatConceptContent(lessonCode) {
+            if (lessonCode === 'M1') {
+                return `
+                    <div class="concept-block">
+                        <h3>Chapter Outline</h3>
+                        <p>This lesson covers the mathematical foundations essential for fluid dynamics analysis. By the end, you will understand:</p>
+                        <ol>
+                            <li><strong>Mathematical Objects:</strong> How scalars, vectors, and tensors describe different types of fluid properties</li>
+                            <li><strong>The Del Operator ($\\nabla$):</strong> Three essential tools for analyzing flow fields—gradient, divergence, and curl</li>
+                            <li><strong>Material Derivative:</strong> How to track changes in fluid particle properties as they move through space</li>
+                            <li><strong>Stress Tensor:</strong> Understanding the mathematical description of forces within fluids</li>
+                        </ol>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>Introduction</h3>
+                        <p>To properly describe fluid motion, we need a precise mathematical language. This lesson covers the essential objects and operations used to model the complex world of flow, from simple properties like temperature to the intricate forces acting within a fluid.</p>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>The Building Blocks: Scalars, Vectors, and Tensors</h3>
+                        <p>We use different mathematical objects to describe fluid properties based on their complexity.</p>
+                        
+                        <h4>Scalars: Just a Number</h4>
+                        <p>A scalar is a quantity defined by a single value, or <strong>magnitude</strong>, at any point in space and time.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> The <strong>temperature</strong> in a room. At any specific point, it's just one number (e.g., 20°C).</li>
+                            <li><strong>Fluid Examples:</strong> Pressure ($p$), Temperature ($T$), and Density ($\\rho$).</li>
+                        </ul>
+                        
+                        <div class="subsection-break"></div>
+                        
+                        <h4>Vectors: Magnitude and Direction</h4>
+                        <p>A vector describes a quantity that has both a magnitude and a direction.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> The <strong>wind</strong> in a room. At any point, the air is moving at a certain speed <em>and</em> in a specific direction. A vector is like an arrow ➡️ that captures both.</li>
+                            <li><strong>Fluid Examples:</strong> Velocity ($\\vec{u}$), Force ($\\vec{F}$), and the local rate of rotation, or Vorticity ($\\vec{\\omega}$).</li>
+                            <li><strong>Notation:</strong> In Cartesian coordinates ($x, y, z$), we can write the velocity vector as $\\vec{u} = u_x\\hat{i} + u_y\\hat{j} + u_z\\hat{k}$, where $u_x, u_y, u_z$ are the velocity components and $\\hat{i}, \\hat{j}, \\hat{k}$ are the unit vectors.</li>
+                        </ul>
+                        
+                        <div class="subsection-break"></div>
+                        
+                        <h4>Tensors: Handling Complex, Directional Relationships</h4>
+                        <p>A second-rank tensor is a more complex object used to describe properties that have different values depending on the direction you're looking at.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> Imagine a cube of Jell-O. The forces acting on it are complex. You can <strong>poke</strong> it (a normal force) or <strong>smear</strong> it by dragging your finger across the top (a shear force). A <strong>tensor</strong> is the mathematical tool that describes all the pokes and smears on all the faces of the cube simultaneously.</li>
+                        </ul>
+                        
+                        <p><strong>A Deeper Look at the Stress Tensor:</strong> The most important tensor in fluid mechanics is the <strong>Stress Tensor</strong> ($\\boldsymbol{\\sigma}$ or $\\tau_{ij}$), which describes the internal forces that fluid parcels exert on each other.</p>
+                        <ul>
+                            <li><strong>Index Notation:</strong> The notation $\\tau_{ij}$ is a powerful shorthand. The first index <strong>'$i$'</strong> tells you which <strong>face</strong> of the cube you're on (e.g., the face whose outward-pointing arrow is in the x-direction). The second index <strong>'$j$'</strong> tells you the <strong>direction of the force</strong> itself.</li>
+                            <li><strong>Normal vs. Shear Stress:</strong>
+                                <ul>
+                                    <li>When the indices are the same (e.g., $\\tau_{xx}, \\tau_{yy}$), it represents a <strong>normal stress</strong>—a direct push or pull on a face. Pressure is a type of normal stress.</li>
+                                    <li>When the indices are different (e.g., $\\tau_{xy}, \\tau_{xz}$), it represents a <strong>shear stress</strong>—a tangential, smearing, or sliding force. Viscosity is the fluid property that creates shear stresses.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>The Operator Toolkit: The Flow Inspector's $\\nabla$</h3>
+                        <p>The <strong>Del operator ($\\nabla$)</strong> is a single, powerful tool that acts like a flow inspector's complete toolkit. It's designed to answer one basic question in three different ways: <strong>"How is a fluid property changing as I move away from this exact spot?"</strong></p>
+                        <p>Your toolkit ($\\nabla$) has three main functions, each answering a different kind of question about the flow.</p>
+                        
+                        <h4>1. The Gradient ($\\nabla$): The "Steepness Detector"</h4>
+                        <p>This tool measures how fast a <strong>scalar property</strong> (like pressure) is changing and finds the direction of the steepest change.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> You're on a pressure "hill," but it's foggy. You use the Gradient tool. It's a magic compass that instantly points you straight up the steepest part of the hill. The arrow it shows is a <strong>vector</strong> that tells you both the direction of the greatest increase and how steep it is. 🏔️</li>
+                            <li><strong>Physical Significance:</strong> The <strong>pressure gradient</strong>, $\\nabla p$, is a force per unit volume that pushes fluid from high pressure to low pressure (in the direction of $-\\nabla p$).</li>
+                            <li><strong>Mathematical Form:</strong> $\\nabla p = \\frac{\\partial p}{\\partial x}\\hat{i} + \\frac{\\partial p}{\\partial y}\\hat{j} + \\frac{\\partial p}{\\partial z}\\hat{k}$</li>
+                        </ul>
+                        
+                        <div class="subsection-break"></div>
+                        
+                        <h4>2. The Divergence ($\\nabla \\cdot$): The "Source & Drain Finder"</h4>
+                        <p>This tool measures whether a <strong>vector property</strong> (like velocity) is spreading out from or bunching up into a point.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> You put the Divergence tool at a point in the flow. If fluid is secretly being added there (like from a hidden spring), the tool gives a positive reading. If fluid is disappearing (like into a hidden drain), it gives a negative reading. For a liquid like water, which can't be created or destroyed, the reading is zero. 💧</li>
+                            <li><strong>Physical Significance:</strong> The divergence of velocity measures the rate of volume expansion. For an <strong>incompressible fluid</strong> like water, the velocity field must be divergence-free: $\\nabla \\cdot \\vec{u} = 0$. This is the mathematical statement of the <strong>conservation of mass</strong> for incompressible flows.</li>
+                            <li><strong>Mathematical Form:</strong> $\\nabla \\cdot \\vec{u} = \\frac{\\partial u_x}{\\partial x} + \\frac{\\partial u_y}{\\partial y} + \\frac{\\partial u_z}{\\partial z}$</li>
+                        </ul>
+                        
+                        <div class="subsection-break"></div>
+                        
+                        <h4>3. The Curl ($\\nabla \\times$): The "Vortex Meter"</h4>
+                        <p>This tool measures the local spinning or rotational motion of the <strong>vector property</strong> (like velocity).</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> You drop an imaginary, microscopic pinwheel into the flow at one point. If the fluid is swirling right there, the pinwheel will spin. The Curl tool measures this spin by creating a <strong>new vector</strong> that points along the axis of the pinwheel's rotation. 🌪️</li>
+                            <li><strong>Physical Significance:</strong> The curl of the velocity is a quantity called <strong>vorticity</strong> ($\\vec{\\omega} = \\nabla \\times \\vec{u}$), which is equal to twice the local angular velocity of a fluid particle.</li>
+                            <li><strong>Mathematical Form:</strong> $\\nabla \\times \\vec{u} = \\left(\\frac{\\partial u_z}{\\partial y} - \\frac{\\partial u_y}{\\partial z}\\right)\\hat{i} + \\left(\\frac{\\partial u_x}{\\partial z} - \\frac{\\partial u_z}{\\partial x}\\right)\\hat{j} + \\left(\\frac{\\partial u_y}{\\partial x} - \\frac{\\partial u_x}{\\partial y}\\right)\\hat{k}$</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>Following the Flow: The Material Derivative</h3>
+                        <p>How does a property of a fluid particle (like its temperature or velocity) change over time? We need to account for two effects.</p>
+                        <ul>
+                            <li><strong>Analogy:</strong> You're in a car driving up a mountain with a thermometer. The temperature you feel can change for two reasons:
+                                <ol>
+                                    <li><strong>Local Change:</strong> A cold front is moving in, making the air everywhere on the mountain colder over time.</li>
+                                    <li><strong>Convective Change:</strong> You are physically <em>moving</em> from a lower, warmer altitude to a higher, colder one.</li>
+                                </ol>
+                            </li>
+                        </ul>
+                        
+                        <p>The <strong>Material Derivative</strong> ($D/Dt$) combines both effects to give the total rate of change experienced by the moving particle.</p>
+                        
+                        <ul>
+                            <li><strong>Mathematical Form:</strong>
+                                $$\\frac{D\\phi}{Dt} = \\underbrace{\\frac{\\partial \\phi}{\\partial t}}_{\\text{Local Change}} + \\underbrace{(\\vec{u} \\cdot \\nabla)\\phi}_{\\text{Convective Change}}$$
+                            </li>
+                            <li><strong>Physical Significance:</strong> This is the single most important operator for applying Newton's laws to fluids. The true <strong>acceleration of a fluid particle</strong> is not just its local change in velocity ($\\partial \\vec{u}/\\partial t$) but its full material derivative, $a = D\\vec{u}/Dt$. This term is the heart of the Navier-Stokes equations.</li>
+                        </ul>
+                    </div>
+                `;
+            }
+            if (lessonCode === 'M2') {
+                return `
+                    <div class="concept-block">
+                        <h3>Chapter Outline</h3>
+                        <p>This lesson introduces the Reynolds Transport Theorem, the formal bridge between the Lagrangian description of a fluid system and the Eulerian framework of a control volume. By the end, you will understand:</p>
+                        <ol>
+                            <li><strong>Two Viewpoints:</strong> System (Lagrangian) vs. Control Volume (Eulerian) approaches</li>
+                            <li><strong>The Reynolds Transport Theorem:</strong> Mathematical bridge between the two frameworks</li>
+                            <li><strong>Special Cases:</strong> Steady flow and discrete inlet/outlet applications</li>
+                            <li><strong>Foundation for Analysis:</strong> How RTT enables practical integral conservation laws</li>
+                        </ol>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>Introduction</h3>
+                        <p>In the previous lesson, we established the differential language of fluid dynamics. Now, we develop the critical tool for creating integral balances. This lesson introduces the Reynolds Transport Theorem, the formal bridge between the Lagrangian description of a fluid system and the Eulerian framework of a control volume. This theorem is the foundation for deriving the conservation laws in their practical, integral forms.</p>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>The Two Viewpoints: System vs. Control Volume</h3>
+                        <p>To apply fundamental physical laws, we must first define what we are observing. In fluid mechanics, there are two distinct perspectives.</p>
+                        
+                        <h4>The System (Lagrangian Approach)</h4>
+                        <p>A system is a collection of matter of fixed identity. It is a specific, identifiable mass that moves and deforms with the flow. The fundamental conservation laws (e.g., conservation of mass, Newton's second law) are defined for such a system.</p>
+                        
+                        <p><strong>Analogy: A Patch of Dyed Water 🔴</strong></p>
+                        <p>Imagine releasing a specific patch of red dye into a river. This collection of dyed water molecules is our system. If we want to track the total mass of dye, we must follow this exact patch as it moves and stretches downstream.</p>
+                        
+                        <p><strong>Conceptual Challenge:</strong> While conceptually pure, tracking the complex, time-varying boundary of a deforming fluid system is practically untenable for most real-world analyses. Following that specific patch of dye is nearly impossible.</p>
+                        
+                        <div class="subsection-break"></div>
+                        
+                        <h4>The Control Volume (Eulerian Approach)</h4>
+                        <p>A control volume (CV) is an arbitrary, fixed region in space through which fluid flows. The boundary of this region is known as the control surface (CS). We do not track individual fluid particles, but rather analyze the properties of the fluid field within and across the boundaries of this fixed volume.</p>
+                        
+                        <p><strong>Analogy: A Section of the River 🌊</strong></p>
+                        <p>Instead of following the patch, we can just watch a fixed 100-meter section of the river between two bridges. This river section is our control volume. We can place instruments on the bridges to measure the dye concentration of the water entering and leaving. This is much easier.</p>
+                        
+                        <p>The primary task of this lesson is to relate the laws written for the moving patch of dye to the practical measurements we can make on the fixed river section.</p>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>The Bridge: The Reynolds Transport Theorem (RTT)</h3>
+                        <p>The Reynolds Transport Theorem (RTT) provides the formal mathematical connection between the rate of change of an extensive property for a system and the changes occurring within and across the boundaries of a control volume.</p>
+                        
+                        <h4>Conceptual Derivation using the Control Volume</h4>
+                        <p>Let's derive the relationship by considering an extensive property B (e.g., mass of dye) and its corresponding intensive property b (dye concentration).</p>
+                        
+                        <p><strong>At time t:</strong> We define our control volume (the river section) and select a system (the dye patch) that exactly fills the section at that instant.</p>
+                        
+                        <p><strong>At time t + dt:</strong> The dye patch has moved downstream. Some of it has flowed past the second bridge (exiting into Region III), while the main part is still inside (Region II). The area the patch used to occupy at the first bridge has been filled by new river water (Region I).</p>
+                        
+                        <p><strong>The Logic in Simple Terms:</strong> Common sense tells us that the change in the total mass of dye in our specific patch is equal to the change in the total mass of dye inside the entire river section, plus all the dye that flowed out past the second bridge, minus all the dye that flowed in past the first bridge.</p>
+                        
+                        <div class="subsection-break"></div>
+                        
+                        <h4>The General Form of the RTT</h4>
+                        <p>This derivation leads to the integral form of the theorem, which precisely quantifies the accumulation and flux terms:</p>
+                        
+                        $$\\frac{dB_{sys}}{dt} = \\frac{\\partial}{\\partial t} \\iiint_{CV} \\rho b \\, dV + \\iint_{CS} \\rho b (\\vec{u} \\cdot \\hat{n}) \\, dS$$
+                        
+                        <p>Let's translate this equation using our river analogy:</p>
+                        
+                        <ul>
+                            <li><strong>Term 1: $\\frac{dB_{sys}}{dt}$ (The Dye Patch's Change):</strong> This is the rate of change of dye for your specific patch. Is the dye undergoing a chemical reaction and disappearing? This is where a fundamental law applies (e.g., a "reaction rate" law). If the dye is conserved, this term is zero.</li>
+                            
+                            <li><strong>Term 2: $\\frac{\\partial}{\\partial t} \\iiint_{CV} \\rho b \\, dV$ (Change Inside the River Section):</strong> This is the rate of accumulation of dye inside the fixed river section. Is the water between the bridges getting more or less dyed overall? If an upstream factory just started releasing dye, this term is positive.</li>
+                            
+                            <li><strong>Term 3: $\\iint_{CS} \\rho b (\\vec{u} \\cdot \\hat{n}) \\, dS$ (Flow Past the Bridges):</strong> This is the net flow rate (flux) of dye past the bridges. It automatically calculates (Dye Flow Rate Out) - (Dye Flow Rate In).</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>Important Special Cases</h3>
+                        
+                        <h4>Steady Flow</h4>
+                        <p>If the flow is steady, all properties within the control volume are constant with time.</p>
+                        
+                        <p><strong>Analogy: A Calm River Day 🏞️</strong></p>
+                        <p>The river's flow rate is constant, and the dye source is releasing at a steady rate. The concentration of dye at any point between the bridges stays the same over time. The accumulation term is zero. Any change for our dye patch (like it flowing downstream) is balanced solely by the flow of dye past the bridges.</p>
+                        
+                        <p>The RTT simplifies to:</p>
+                        $$\\frac{dB_{sys}}{dt} = \\iint_{CS} \\rho b (\\vec{u} \\cdot \\hat{n}) \\, dS$$
+                        
+                        <div class="subsection-break"></div>
+                        
+                        <h4>Control Volume with Discrete Inlets and Outlets</h4>
+                        <p>For many applications like pipes and nozzles, the flow occurs through well-defined openings.</p>
+                        
+                        <p><strong>Analogy: A Pipe Junction 💧</strong></p>
+                        <p>Instead of a wide river, imagine a junction where Pipe A and Pipe B merge into Pipe C. We can simply measure the flow at the cross-section of each pipe.</p>
+                        
+                        <p>The surface integral simplifies to a simple sum:</p>
+                        $$\\text{Net Flow Out} = \\sum (\\text{mass flow rate} \\times b)_{out} - \\sum (\\text{mass flow rate} \\times b)_{in}$$
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>Application: The Foundation of Integral Analysis</h3>
+                        <p>The RTT is a master key. By choosing what property to track (our "dye"), we can solve different problems.</p>
+                        
+                        <ul>
+                            <li><strong>Conservation of Mass (Tracking Water Itself):</strong> Water isn't created or destroyed in the river section. On a steady day, the mass of water flowing in past the first bridge per second must equal the mass flowing out past the second.</li>
+                            
+                            <li><strong>Linear Momentum (Tracking "Pushiness"):</strong> The total force the river exerts on a bridge pier is related to the rate at which the water's "pushiness" (momentum) flows into and out of a control volume drawn around the pier.</li>
+                            
+                            <li><strong>Energy (Tracking Potential to do Work):</strong> The change in the total energy of the water in a control volume around a hydroelectric turbine is related to the work extracted by the turbine blades plus the net flow of energy carried by the water into and out of that section.</li>
+                        </ul>
+                    </div>
+                `;
+            }
+            return '<div class="concept-block"><p>Detailed concept explanation for this topic...</p></div>';
+        }
+
+        function getGoverningEquations(lessonCode) {
+            if (lessonCode === 'M1') {
+                return `
+                    <p><strong>The Del Operator in Different Coordinate Systems:</strong></p>
+                    
+                    <p><strong>Cartesian coordinates:</strong></p>
+                    $$\\nabla = \\frac{\\partial}{\\partial x}\\mathbf{i} + \\frac{\\partial}{\\partial y}\\mathbf{j} + \\frac{\\partial}{\\partial z}\\mathbf{k}$$
+                    
+                    <p><strong>The three operations:</strong></p>
+                    <ul>
+                        <li><strong>Gradient:</strong> $\\nabla f$ - finds steepest increase direction</li>
+                        <li><strong>Divergence:</strong> $\\nabla \\cdot \\vec{V}$ - measures spreading/bunching</li>
+                        <li><strong>Curl:</strong> $\\nabla \\times \\vec{V}$ - measures local rotation</li>
+                    </ul>
+                `;
+            }
+            if (lessonCode === 'M2') {
+                return `
+                    <p><strong>The Reynolds Transport Theorem - General Form:</strong></p>
+                    $$\\frac{dB_{sys}}{dt} = \\frac{\\partial}{\\partial t} \\iiint_{CV} \\rho b \\, dV + \\iint_{CS} \\rho b (\\vec{u} \\cdot \\hat{n}) \\, dS$$
+                    
+                    <p><strong>Where:</strong></p>
+                    <ul>
+                        <li>$B_{sys}$ = extensive property of the system</li>
+                        <li>$b$ = intensive property (B per unit mass)</li>
+                        <li>$CV$ = control volume, $CS$ = control surface</li>
+                        <li>$\\hat{n}$ = outward unit normal to control surface</li>
+                    </ul>
+                `;
+            }
+            return '<p>Governing equations for this topic...</p>';
+        }
+
+        function getDerivationSteps(lessonCode) {
+            if (lessonCode === 'M1') {
+                return `
+                    <ol>
+                        <li><strong>Define the Del operator:</strong> $\\nabla = \\frac{\\partial}{\\partial x}\\mathbf{i} + \\frac{\\partial}{\\partial y}\\mathbf{j} + \\frac{\\partial}{\\partial z}\\mathbf{k}$</li>
+                        <li><strong>Apply to scalar field:</strong> $\\nabla f$ gives the gradient vector pointing towards steepest increase</li>
+                        <li><strong>Dot product with vector:</strong> $\\nabla \\cdot \\vec{V} = \\frac{\\partial u}{\\partial x} + \\frac{\\partial v}{\\partial y} + \\frac{\\partial w}{\\partial z}$ measures divergence</li>
+                        <li><strong>Cross product with vector:</strong> $\\nabla \\times \\vec{V}$ gives the curl (vorticity) vector</li>
+                        <li><strong>Material derivative:</strong> $\\frac{D}{Dt} = \\frac{\\partial}{\\partial t} + \\vec{V} \\cdot \\nabla$ follows a moving particle</li>
+                    </ol>
+                `;
+            }
+            if (lessonCode === 'M2') {
+                return `
+                    <ol>
+                        <li><strong>Define system and control volume:</strong> At time $t$, choose a system that exactly coincides with the control volume</li>
+                        <li><strong>Track system evolution:</strong> At time $t + dt$, the system has moved and deformed</li>
+                        <li><strong>Decompose regions:</strong> System = (CV at $t+dt$) + (outflow region) - (inflow region)</li>
+                        <li><strong>Apply fundamental law:</strong> $\\frac{dB_{sys}}{dt}$ equals the net change in property B for the system</li>
+                        <li><strong>Express in CV terms:</strong> Relate system change to accumulation + net flux across control surface</li>
+                        <li><strong>Take limit:</strong> As $dt \\to 0$, obtain the RTT integral form</li>
+                    </ol>
+                `;
+            }
+            return '<p>Step-by-step derivation...</p>';
+        }
+
+        function getWorkedExample(lessonCode) {
+            if (lessonCode === 'M1') {
+                return `
+                    <p><strong>Problem.</strong> A temperature field is given by $T(x,y) = 100 - 2x^2 - y^2$ (°C). At point (1, 2), find: (a) the temperature gradient, and (b) the direction of steepest temperature increase.</p>
+                    
+                    <p><strong>Solution.</strong></p>
+                    <ol>
+                        <li><strong>Calculate gradient:</strong> $\\nabla T = \\frac{\\partial T}{\\partial x}\\mathbf{i} + \\frac{\\partial T}{\\partial y}\\mathbf{j} = -4x\\mathbf{i} - 2y\\mathbf{j}$</li>
+                        <li><strong>At point (1, 2):</strong> $\\nabla T|_{(1,2)} = -4(1)\\mathbf{i} - 2(2)\\mathbf{j} = -4\\mathbf{i} - 4\\mathbf{j}$ °C/m</li>
+                        <li><strong>Magnitude:</strong> $|\\nabla T| = \\sqrt{(-4)^2 + (-4)^2} = 4\\sqrt{2} = 5.66$ °C/m</li>
+                        <li><strong>Direction of steepest increase:</strong> $\\hat{n} = \\frac{\\nabla T}{|\\nabla T|} = \\frac{-4\\mathbf{i} - 4\\mathbf{j}}{5.66} = -0.707\\mathbf{i} - 0.707\\mathbf{j}$</li>
+                        <li><strong>Interpretation:</strong> Temperature increases most rapidly in the direction 45° below the negative x-axis (towards the southwest).</li>
+                    </ol>
+                    
+                    <p>This shows how the gradient vector always points towards the steepest increase, like a compass pointing uphill on a temperature "mountain."</p>
+                `;
+            }
+            if (lessonCode === 'M2') {
+                return `
+                    <p><strong>Problem.</strong> A cylindrical tank (radius = 2 m) is being filled with water at 0.1 m³/s while simultaneously draining at the bottom at 0.05 m³/s. The water level is currently rising. Use RTT to find the rate of change of water volume in the tank.</p>
+                    
+                    <p><strong>Solution.</strong></p>
+                    <ol>
+                        <li><strong>Define the system:</strong> All water currently in the tank (this is our "dye patch")</li>
+                        <li><strong>Define control volume:</strong> Fixed cylindrical volume of the tank</li>
+                        <li><strong>Choose property:</strong> $B = $ total volume of water, $b = 1/\\rho$ (specific volume)</li>
+                        <li><strong>Apply RTT for steady inflow/outflow:</strong> $\\frac{dV_{sys}}{dt} = \\frac{\\partial V_{CV}}{\\partial t} + \\dot{V}_{out} - \\dot{V}_{in}$</li>
+                        <li><strong>Substitute values:</strong> $\\frac{dV_{sys}}{dt} = \\frac{\\partial V_{CV}}{\\partial t} + 0.05 - 0.1 = \\frac{\\partial V_{CV}}{\\partial t} - 0.05$</li>
+                        <li><strong>Conservation of mass:</strong> For the water system, $\\frac{dV_{sys}}{dt} = 0$ (water is incompressible)</li>
+                        <li><strong>Result:</strong> $0 = \\frac{\\partial V_{CV}}{\\partial t} - 0.05 \\Rightarrow \\frac{\\partial V_{CV}}{\\partial t} = 0.05$ m³/s</li>
+                    </ol>
+                    
+                    <p>The volume of water in the tank increases at 0.05 m³/s, which makes physical sense: more water comes in (0.1) than goes out (0.05).</p>
+                `;
+            }
+            return '<p>Step-by-step derivation...</p>';
+        }
+
+        function getConnections(lessonCode) {
+            const connectionsMap = {
+                'M1': `
+                    <ul>
+                        <li><strong>M2:</strong> Integral theorems use these vector operations extensively</li>
+                        <li><strong>FD101-5:</strong> Navier-Stokes equations built using Del operator</li>
+                        <li><strong>FD101-3:</strong> Vorticity defined as curl of velocity field</li>
+                        <li><strong>A1:</strong> Complete coordinate system reference for all operators</li>
+                    </ul>
+                `,
+                'M2': `
+                    <ul>
+                        <li><strong>M1:</strong> Uses vector calculus operations for mathematical framework</li>
+                        <li><strong>FD101-4:</strong> Integral balances derived directly from RTT</li>
+                        <li><strong>D1:</strong> Complete mathematical derivation of RTT</li>
+                        <li><strong>FD101-5:</strong> Differential forms obtained by shrinking control volume to point</li>
+                    </ul>
+                `,
+            };
+            return connectionsMap[lessonCode] || '<ul><li>Related fundamental concepts</li><li>Applications in other modules</li><li>Mathematical connections</li></ul>';
+        }
+
+        function getKeyEquations(lessonCode) {
+            const equationsMap = {
+                'M1': `
+                    <ul>
+                        <li>$\\nabla f$ — Gradient: points towards steepest increase of scalar field f</li>
+                        <li>$\\nabla \\cdot \\vec{V}$ — Divergence: measures spreading (>0) or compression (<0) of vector field</li>
+                        <li>$\\nabla \\times \\vec{V}$ — Curl: measures local rotation (vorticity) of vector field</li>
+                        <li>$\\frac{D}{Dt} = \\frac{\\partial}{\\partial t} + \\vec{V} \\cdot \\nabla$ — Material derivative: follows moving particle</li>
+                    </ul>
+                `,
+                'M2': `
+                    <ul>
+                        <li>$\\frac{dB_{sys}}{dt} = \\frac{\\partial}{\\partial t} \\iiint_{CV} \\rho b \\, dV + \\iint_{CS} \\rho b (\\vec{u} \\cdot \\hat{n}) \\, dS$ — Reynolds Transport Theorem (general form)</li>
+                        <li>$\\frac{dB_{sys}}{dt} = \\iint_{CS} \\rho b (\\vec{u} \\cdot \\hat{n}) \\, dS$ — RTT for steady flow (accumulation = 0)</li>
+                        <li>$\\text{Net Flux} = \\sum \\dot{m}_{out} b_{out} - \\sum \\dot{m}_{in} b_{in}$ — RTT for discrete inlets/outlets</li>
+                    </ul>
+                `,
+            };
+            return equationsMap[lessonCode] || '<ul><li>Key mathematical relationships</li><li>Important dimensionless numbers</li></ul>';
+        }
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
