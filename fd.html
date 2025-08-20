@@ -1471,6 +1471,123 @@
                     </div>
                 `;
             }
+            if (lessonCode === 'FD101-1') {
+                return `
+                    <div class="concept-block">
+                        <h3>Introduction</h3>
+                        <p>Welcome to the first core lesson in fluid mechanics. Before we can analyze the motion of fluids, we must first agree on a fundamental assumption about what a "fluid" is from a mathematical perspective. This lesson introduces the continuum hypothesis, the foundational idea that allows us to treat fluids as smooth, continuous substances, and then explores the key properties that arise from this viewpoint.</p>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>The Big Assumption: The Continuum Hypothesis</h3>
+                        <p>We know that fluids, like all matter, are composed of discrete molecules. If you could zoom in far enough on a drop of water, you would see vast empty spaces between individual H₂O molecules whizzing about. Analyzing the motion of trillions of individual molecules is computationally impossible for most practical problems. So, we make a powerful simplification.</p>
+                        
+                        <p>The <strong>continuum hypothesis</strong> is the assumption that we can ignore the molecular nature of a fluid and treat it as a continuous substance, or a <strong>continuum</strong>. This means we can define properties like density and pressure as smooth, continuous functions at any point in space, no matter how small.</p>
+                        
+                        <h4>Analogy: Ink Diffusing in Water 💧</h4>
+                        <p>Imagine a drop of ink released into a glass of still water. From a distance, you see a smooth, continuous cloud of color that slowly expands and fades. You can describe the shape and average color of this cloud. This is the continuum view. However, if you could zoom in to the molecular level, you would see individual ink molecules chaotically colliding with water molecules. For the purpose of describing the overall mixing process, treating the ink cloud as a smooth, continuous substance is a perfectly valid and useful assumption.</p>
+                        
+                        <div class="subsection-break"></div>
+                        
+                        <h4>When does it work? The Knudsen Number</h4>
+                        <p>This assumption holds true as long as the volume of fluid we are considering is large enough to contain a huge number of molecules. We can quantify this using the <strong>Knudsen number (Kn)</strong>, the ratio of the molecular mean free path, λ (the average distance a molecule travels before hitting another), to a characteristic length scale of the flow, L.</p>
+                        
+                        $$Kn = \\frac{\\lambda}{L}$$
+                        
+                        <p>For the continuum model to be valid, we require <strong>Kn < 0.1</strong>. For almost all engineering applications, this is an excellent assumption.</p>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>Key Properties of the Fluid Continuum</h3>
+                        <p>Once we assume a fluid is a continuum, we can define several essential properties that describe its state and behavior.</p>
+                        
+                        <h4>1. Density (ρ) and Related Properties</h4>
+                        <p>Density is the mass, m, of the fluid contained within a very small volume, V.</p>
+                        $$\\rho = \\frac{m}{V}$$
+                        
+                        <p>Two related properties are common in hydrostatics:</p>
+                        <ul>
+                            <li><strong>Specific Weight (γ):</strong> The weight of the fluid per unit volume.
+                                $$\\gamma = \\rho g$$
+                                where g is the acceleration due to gravity.
+                            </li>
+                            <li><strong>Specific Gravity (SG):</strong> The ratio of the fluid's density to the density of a reference fluid (usually water at 4°C, ρ_{H₂O} ≈ 1000 kg/m³).
+                                $$SG = \\frac{\\rho}{\\rho_{H_2O}}$$
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>2. Pressure (p)</h3>
+                        <p>Pressure is the normal force, F, exerted by a fluid per unit area, A.</p>
+                        $$p = \\frac{F}{A}$$
+                        
+                        <h4>Analogy: A Submerged Submarine</h4>
+                        <p>Imagine a deep-sea submersible. The water exerts an immense force on its hull from every direction. This omnidirectional, inward-pushing force is a direct visualization of fluid pressure.</p>
+                        
+                        <h4>Types of Pressure</h4>
+                        <p>The relationship between absolute pressure (p_{abs}), gauge pressure (p_{gauge}), and atmospheric pressure (p_{atm}) is:</p>
+                        $$p_{abs} = p_{gauge} + p_{atm}$$
+                        
+                        <div class="subsection-break"></div>
+                        
+                        <h4>Static, Dynamic, and Total Pressure</h4>
+                        <p>When a fluid is in motion, its pressure can be broken down into two components.</p>
+                        
+                        <p><strong>Analogy: Pressure in a River</strong></p>
+                        <p>Imagine you are in a boat on a flowing river.</p>
+                        <ul>
+                            <li><strong>Static Pressure (p_{static}):</strong> The pressure you would measure with a sensor that is drifting along with the current. It is the thermodynamic pressure caused by the random motion of water molecules and is felt equally in all directions.</li>
+                            <li><strong>Dynamic Pressure (q):</strong> The additional pressure you feel on your hand if you stick it in the water to stop the flow. It represents the kinetic energy per unit volume.
+                                $$q = \\frac{1}{2}\\rho V^2$$
+                            </li>
+                            <li><strong>Total Pressure (p_{total}):</strong> What you would measure at a point where the fluid has been brought to a complete stop (a stagnation point), like at the very front tip of a bridge pier.</li>
+                        </ul>
+                        
+                        <p>This relationship is a cornerstone of fluid dynamics, derived from Bernoulli's principle:</p>
+                        $$p_{total} = p_{static} + \\frac{1}{2}\\rho V^2$$
+                        
+                        <p>This equation shows that in a moving fluid, there is a trade-off: where the velocity is high (high dynamic pressure), the static pressure must be lower, and vice-versa.</p>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>3. Viscosity (μ)</h3>
+                        <p>Viscosity is the property of a fluid that measures its resistance to being deformed or "sheared."</p>
+                        
+                        <h4>Analogy: Stirring Honey vs. Water 🍯</h4>
+                        <p>The significant resistance you feel when stirring honey is a direct result of its high viscosity. This internal "stickiness" resists the sliding motion of one layer of honey over another.</p>
+                        
+                        <h4>The No-Slip Condition</h4>
+                        <p>A crucial consequence of viscosity is the <strong>no-slip condition</strong>: a fluid will have zero relative velocity to a solid surface it touches.</p>
+                        
+                        <h4>Newton's Law of Viscosity</h4>
+                        <p>For Newtonian fluids, the shear stress, τ, is linearly proportional to the velocity gradient, du/dy.</p>
+                        $$\\tau = \\mu \\frac{du}{dy}$$
+                        
+                        <h4>Kinematic Viscosity (ν)</h4>
+                        <p>This is the ratio of dynamic (or absolute) viscosity to density. It represents the fluid's resistance to flow under gravity.</p>
+                        $$\\nu = \\frac{\\mu}{\\rho}$$
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>4. Surface Tension (σ)</h3>
+                        <p>Surface tension is a property of liquids that causes the surface to behave like a thin, elastic sheet. It is a force per unit length.</p>
+                        
+                        <h4>Analogy: A Water Strider on a Pond</h4>
+                        <p>An insect can stand on a pond because its weight is balanced by the force from surface tension, which acts like a stretched membrane on the water's surface.</p>
+                        
+                        <h4>Droplet Pressure</h4>
+                        <p>Surface tension causes the pressure inside a spherical droplet to be higher than the pressure outside. The pressure difference, Δp, is given by:</p>
+                        $$\\Delta p = p_{inside} - p_{outside} = \\frac{2\\sigma}{R}$$
+                        <p>where R is the radius of the droplet. For a soap bubble, which has two surfaces, this difference is doubled (Δp = 4σ/R).</p>
+                    </div>
+
+                    <div class="concept-block">
+                        <h3>Application: The Starting Point of Analysis</h3>
+                        <p>The continuum hypothesis is our license to apply the tools of calculus to fluid mechanics. By defining smooth, continuous properties and their relationships through these formulas, we can formulate the differential equations that govern fluid motion.</p>
+                    </div>
+                `;
+            }
             return '<div class="concept-block"><p>Detailed concept explanation for this topic...</p></div>';
         }
 
@@ -1502,6 +1619,27 @@
                         <li>$CV$ = control volume, $CS$ = control surface</li>
                         <li>$\\hat{n}$ = outward unit normal to control surface</li>
                     </ul>
+                `;
+            }
+            if (lessonCode === 'FD101-1') {
+                return `
+                    <p><strong>Fundamental Equations for Fluid Properties:</strong></p>
+                    
+                    <p><strong>Density and Related Properties:</strong></p>
+                    $$\\rho = \\frac{m}{V}, \\quad \\gamma = \\rho g, \\quad SG = \\frac{\\rho}{\\rho_{H_2O}}$$
+                    
+                    <p><strong>Pressure Relationships:</strong></p>
+                    $$p = \\frac{F}{A}, \\quad p_{abs} = p_{gauge} + p_{atm}$$
+                    $$p_{total} = p_{static} + \\frac{1}{2}\\rho V^2$$
+                    
+                    <p><strong>Viscosity:</strong></p>
+                    $$\\tau = \\mu \\frac{du}{dy}, \\quad \\nu = \\frac{\\mu}{\\rho}$$
+                    
+                    <p><strong>Surface Tension:</strong></p>
+                    $$\\Delta p = \\frac{2\\sigma}{R} \\text{ (spherical droplet)}$$
+                    
+                    <p><strong>Knudsen Number:</strong></p>
+                    $$Kn = \\frac{\\lambda}{L} < 0.1 \\text{ (continuum validity)}$$
                 `;
             }
             return '<p>Governing equations for this topic...</p>';
